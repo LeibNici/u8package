@@ -121,6 +121,7 @@ namespace Xinchuan.U8Bridge.U8
         private static IEnumerable<string> GetProbeDirectories(BridgeOptions options)
         {
             yield return AppDomain.CurrentDomain.BaseDirectory;
+            yield return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "U8APIFramework");
             yield return Environment.GetEnvironmentVariable("U8_API_DLL_DIR");
             yield return options?.U8ApiDllDirectory;
             yield return @"C:\U8SOFT\UFMOM\U8APIFramework";
