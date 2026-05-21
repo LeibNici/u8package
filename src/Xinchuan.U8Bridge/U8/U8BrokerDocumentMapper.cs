@@ -204,6 +204,11 @@ namespace Xinchuan.U8Bridge.U8
             return row;
         }
 
+        private static void Put(U8BoObject bo, params object[] items)
+        {
+            Put(bo.Rows[0], items);
+        }
+
         private static void Put(IDictionary<string, object> row, params object[] items)
         {
             for (int i = 0; i + 1 < items.Length; i += 2)

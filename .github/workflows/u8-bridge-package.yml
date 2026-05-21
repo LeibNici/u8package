@@ -96,6 +96,37 @@ jobs:
           path: ${{ env.buildLog }}
           if-no-files-found: ignore
 
+      - name: Summarize build failure
+        if: steps.build.outcome != 'success'
+        run: |
+          $log = "${{ env.buildLog }}"
+          Add-Content $env:GITHUB_STEP_SUMMARY "## MSBuild failed"
+          Add-Content $env:GITHUB_STEP_SUMMARY ""
+          Add-Content $env:GITHUB_STEP_SUMMARY "Download artifact `msbuild-log-${{ github.run_number }}` for the full log."
+          Add-Content $env:GITHUB_STEP_SUMMARY ""
+
+          if (Test-Path $log) {
+            $matches = Select-String -Path $log -Pattern " error |: error |MSB[0-9]+|CS[0-9]+" | Select-Object -First 80
+            if ($matches) {
+              Add-Content $env:GITHUB_STEP_SUMMARY "### Error summary"
+              Add-Content $env:GITHUB_STEP_SUMMARY '```text'
+              foreach ($match in $matches) {
+                $line = $match.Line.Trim()
+                Add-Content $env:GITHUB_STEP_SUMMARY $line
+                Write-Host "::error::$line"
+              }
+              Add-Content $env:GITHUB_STEP_SUMMARY '```'
+            }
+
+            Add-Content $env:GITHUB_STEP_SUMMARY ""
+            Add-Content $env:GITHUB_STEP_SUMMARY "### Log tail"
+            Add-Content $env:GITHUB_STEP_SUMMARY '```text'
+            Get-Content $log -Tail 120 | Add-Content $env:GITHUB_STEP_SUMMARY
+            Add-Content $env:GITHUB_STEP_SUMMARY '```'
+          } else {
+            Add-Content $env:GITHUB_STEP_SUMMARY "MSBuild log was not found: $log"
+          }
+
       - name: Stop if build failed
         if: steps.build.outcome != 'success'
         run: |
