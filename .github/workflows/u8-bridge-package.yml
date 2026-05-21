@@ -73,11 +73,31 @@ jobs:
           nuget restore $solution -PackagesDirectory $packages
 
       - name: Build
+        id: build
+        continue-on-error: true
         run: |
+          $buildLog = Join-Path "${{ github.workspace }}" "msbuild.log"
           msbuild "${{ steps.bridge.outputs.solution }}" `
             /p:Configuration="${{ env.BUILD_CONFIGURATION }}" `
             /p:Platform="Any CPU" `
-            /m
+            /m `
+            /fl `
+            /flp:logfile="$buildLog";verbosity=diagnostic
+
+          "buildLog=$buildLog" >> $env:GITHUB_ENV
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: msbuild-log-${{ github.run_number }}
+          path: ${{ env.buildLog }}
+          if-no-files-found: ignore
+
+      - name: Stop if build failed
+        if: steps.build.outcome != 'success'
+        run: |
+          throw "MSBuild failed. Download artifact msbuild-log-${{ github.run_number }} for details."
 
       - name: Assemble package
         run: |
