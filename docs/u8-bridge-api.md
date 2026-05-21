@@ -126,7 +126,9 @@ Bridge 必须按业务单号做幂等，避免重复生成 U8 单据。
 | 销售发货单新增 | `deliveryNo` |
 | 销售出库单新增 | `outboundNo` |
 | 材料出库单新增 | `materialOutNo` |
+| 领料申请单新增 | `applicationNo` |
 | 生产订单新增 | `moCode` |
+| 主数据、库存、价格查询 | 不做幂等，按 `requestId` 追踪 |
 
 重复请求处理：
 
@@ -143,6 +145,15 @@ GET /health
 ```
 
 用途：检查 Bridge 进程是否存活，不调用 U8。
+
+接口文档：
+
+```http
+GET /openapi.yaml
+GET /swagger
+```
+
+`/openapi.yaml` 可导入 Swagger Editor、Apifox、Postman；`/swagger` 是 Bridge 自带的 Swagger UI 页面。
 
 成功响应：
 
@@ -186,7 +197,48 @@ POST /api/u8/login-test
 
 失败响应中 `rawMessage` 应包含 `u8Login.ShareString` 或等效错误信息。
 
-### 8.3 销售订单新增
+### 8.3 主数据、库存、价格查询
+
+统一原则：业务系统只调用 Bridge，不再直接连接 U8 SQL Server。以下接口当前已作为稳定 REST 契约暴露；在拿到官方 U8API 示例前，会返回 `U8_API_NOT_SUPPORTED`，不会猜测 U8 表结构。
+
+| 接口 | 用途 | 当前状态 | 缺少资料 |
+| --- | --- | --- | --- |
+| `POST /api/u8/customers/query` | 客户主数据同步 | 占位 | 客户档案查询官方 U8API 示例 |
+| `POST /api/u8/materials/query` | 物料主数据同步 | 占位 | 存货档案查询官方 U8API 示例 |
+| `POST /api/u8/suppliers/query` | 供应商主数据同步 | 占位 | 供应商档案查询官方 U8API 示例 |
+| `POST /api/u8/inventory/query` | 库存现存量查询 | 占位 | 现存量/可用量查询官方 U8API 示例 |
+| `POST /api/u8/in-transit/query` | 采购在途查询 | 占位 | 采购在途查询官方 U8API 示例 |
+| `POST /api/u8/material-price/query` | 物料价格查询 | 占位 | 价格表/客户价/供应商价查询官方 U8API 示例 |
+
+通用主数据查询请求：
+
+```json
+{
+  "requestId": "U8-MASTER-QUERY-001",
+  "profileName": "prod-100",
+  "updatedFrom": "2026-05-01T00:00:00",
+  "updatedTo": "2026-05-21T23:59:59",
+  "keyword": "",
+  "pageNo": 1,
+  "pageSize": 200
+}
+```
+
+未补官方示例前的稳定响应：
+
+```json
+{
+  "success": false,
+  "requestId": "U8-MASTER-QUERY-001",
+  "u8Code": null,
+  "u8Id": null,
+  "message": "U8 客户主数据查询官方 API 示例未提供，系统不再直连 U8 数据库",
+  "errorCode": "U8_API_NOT_SUPPORTED",
+  "rawMessage": null
+}
+```
+
+### 8.4 销售订单新增
 
 ```http
 POST /api/u8/sales-order/save
@@ -244,7 +296,7 @@ POST /api/u8/sales-order/save
 }
 ```
 
-### 8.4 销售订单审核
+### 8.5 销售订单审核
 
 ```http
 POST /api/u8/sales-order/audit
@@ -269,7 +321,7 @@ POST /api/u8/sales-order/audit
 * `verify=true` 表示审核。
 * `verify=false` 表示弃审，是否允许由业务和 U8 权限决定。
 
-### 8.5 销售发货单新增
+### 8.6 销售发货单新增
 
 ```http
 POST /api/u8/consignment/save
@@ -281,7 +333,7 @@ POST /api/u8/consignment/save
 
 请求字段与销售出库相近，但 U8 字段映射不同，详见 `u8-bridge-field-mapping.md`。是否首期启用需业务确认。
 
-### 8.6 销售发货单审核
+### 8.7 销售发货单审核
 
 ```http
 POST /api/u8/consignment/audit
@@ -289,7 +341,7 @@ POST /api/u8/consignment/audit
 
 内部 U8 API：`U8API/Consignment/Audit`
 
-### 8.7 销售出库单新增
+### 8.8 销售出库单新增
 
 ```http
 POST /api/u8/saleout/add
@@ -331,7 +383,7 @@ POST /api/u8/saleout/add
 }
 ```
 
-### 8.8 销售出库单审核
+### 8.9 销售出库单审核
 
 ```http
 POST /api/u8/saleout/audit
@@ -352,7 +404,7 @@ POST /api/u8/saleout/audit
 }
 ```
 
-### 8.9 材料出库单新增
+### 8.10 材料出库单新增
 
 ```http
 POST /api/u8/material-out/add
@@ -393,7 +445,7 @@ POST /api/u8/material-out/add
 }
 ```
 
-### 8.10 材料出库单审核
+### 8.11 材料出库单审核
 
 ```http
 POST /api/u8/material-out/audit
@@ -403,7 +455,7 @@ POST /api/u8/material-out/audit
 
 备注：当前提供的“材料出库单审核”示例文件中 API 地址疑似为 `U8API/saleout/Audit`，这可能是示例复制问题，不能直接按该地址实施。
 
-### 8.11 领料申请单新增
+### 8.12 领料申请单新增
 
 ```http
 POST /api/u8/material-app/add
@@ -413,7 +465,7 @@ POST /api/u8/material-app/add
 
 是否需要取决于客户 U8 流程。若 U8 要求“先申请、再材料出库”，此接口应在材料出库前调用。
 
-### 8.12 领料申请单审核
+### 8.13 领料申请单审核
 
 ```http
 POST /api/u8/material-app/audit
@@ -421,7 +473,7 @@ POST /api/u8/material-app/audit
 
 内部 U8 API：`U8API/materialapp/Audit`
 
-### 8.13 生产订单新增
+### 8.14 生产订单新增
 
 ```http
 POST /api/u8/morder/add
@@ -431,7 +483,7 @@ POST /api/u8/morder/add
 
 是否首期实施取决于 APS/MES 是否要求将生产订单回写 U8。
 
-### 8.14 生产订单审核
+### 8.15 生产订单审核
 
 ```http
 POST /api/u8/morder/audit
@@ -439,21 +491,59 @@ POST /api/u8/morder/audit
 
 内部 U8 API：`U8API/MOrder/MOrderAuditing`
 
-## 9. 首期范围建议
+### 8.16 入库单新增
 
-首期只建议纳入：
+```http
+POST /api/u8/inbound/add
+```
+
+当前状态：稳定占位，返回 `U8_API_NOT_SUPPORTED`。
+
+缺少资料：采购入库、产成品入库、其他入库分别对应的官方 U8API 示例，以及业务应使用哪一种入库类型。
+
+### 8.17 生产计划发布
+
+```http
+POST /api/u8/production-plan/publish
+```
+
+当前状态：稳定占位，返回 `U8_API_NOT_SUPPORTED`。
+
+缺少资料：生产计划发布到 U8 的官方接口路径、字段模板和业务触发时点。
+
+### 8.18 生产报工回写
+
+```http
+POST /api/u8/work-report/save
+```
+
+当前状态：稳定占位，返回 `U8_API_NOT_SUPPORTED`。
+
+缺少资料：报工/完工汇报/工序汇报在客户 U8 中使用的官方 API 示例。
+
+### 8.19 生产退料回写
+
+```http
+POST /api/u8/material-return/add
+```
+
+当前状态：稳定占位，返回 `U8_API_NOT_SUPPORTED`。
+
+缺少资料：生产退料对应红字材料出库、退料申请或其他 U8 单据的官方 API 示例。
+
+## 9. 联调范围建议
+
+对外接口可以一次性按本文档接入，但真实联调建议分批：
 
 1. `login-test`
-2. `sales-order/save`
-3. `sales-order/audit`
-4. `saleout/add` 或 `consignment/save` 二选一
-5. 与所选出库/发货路径对应的审核接口
-
-生产领料、生产订单、入库类接口放到第二阶段，避免首期范围过大。
+2. 主数据查询接口：客户、物料、供应商
+3. 销售链路：`sales-order/save`、`sales-order/audit`、`saleout/add` 或 `consignment/save`
+4. 生产领料链路：`material-app/add`、`material-app/audit`、`material-out/add`
+5. 生产、入库、报工、退料等需等官方示例补齐后再联调
 
 ## 10. Java 后端调用建议
 
-Java 后端保留 `U8Adapter` 抽象，写类方法通过 Bridge HTTP API 实现。
+Java 后端保留 `U8Adapter` 抽象，所有 U8 读写方法都通过 Bridge HTTP API 实现。
 
 建议配置：
 
@@ -467,7 +557,7 @@ xinchuan:
         X-API-KEY: ${U8_BRIDGE_API_KEY}
 ```
 
-当前 U8 数据库只读链路继续使用 `xinchuan.u8.datasource.*`。
+系统不再保留 `xinchuan.u8.datasource.*` 这类 U8 数据库直连配置。即使底层未来由 Bridge 内部采用某种读取方式，对业务系统也只暴露本文档中的 REST API。
 
 ## 11. 安全要求
 
@@ -484,4 +574,7 @@ xinchuan:
 * OMS 订单确认后是否自动审核 U8 销售订单。
 * WMS 发货后生成“销售发货单”“销售出库单”还是两者都生成。
 * U8 部门、仓库、销售类型、出库类别、制单人、币种、税率等基础档案编码。
+* 客户、物料、供应商、库存、采购在途、价格查询的官方 U8API 示例。
 * 入库类单据对应的官方 U8API 示例。
+* 生产计划、生产报工、生产退料对应的官方 U8API 示例。
+* 生产订单新增示例中的 `extbo` 结构是否固定，以及是否允许 Bridge 按当前模板实现。

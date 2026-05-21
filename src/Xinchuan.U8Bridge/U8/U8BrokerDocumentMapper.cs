@@ -26,6 +26,12 @@ namespace Xinchuan.U8Bridge.U8
                         call.DocumentType == "material-out-audit" ? "11" : "32");
                 case "U8API/MaterialOut/Add":
                     return MapMaterialOut((MaterialOutAddRequest)call.Payload);
+                case "U8API/materialapp/Add":
+                    return U8AdvancedDocumentMapper.MapMaterialApp((MaterialAppAddRequest)call.Payload);
+                case "U8API/materialapp/Audit":
+                    return U8AdvancedDocumentMapper.MapMaterialAppAudit((StockAuditRequest)call.Payload);
+                case "U8API/MOrder/MOrderAuditing":
+                    return U8AdvancedDocumentMapper.MapManufactureOrderAudit((ManufactureOrderAuditRequest)call.Payload);
                 default:
                     throw new InvalidOperationException("Unsupported U8 API address: " + call.ApiAddress);
             }

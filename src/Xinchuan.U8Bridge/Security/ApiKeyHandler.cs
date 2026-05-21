@@ -69,7 +69,7 @@ namespace Xinchuan.U8Bridge.Security
         private static bool IsAnonymous(HttpRequestMessage request)
         {
             string path = request.RequestUri.AbsolutePath.TrimEnd('/').ToLowerInvariant();
-            return path == "/health" || path == "/openapi.yaml";
+            return path == "/health" || path == "/openapi.yaml" || path == "/swagger";
         }
 
         private static string GetRequestId(HttpRequestMessage request)

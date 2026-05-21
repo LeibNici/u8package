@@ -7,6 +7,7 @@
 ## 2. 通用规则
 
 * 信川系统传业务语义字段，Bridge 负责转换为 U8 字段名。
+* 信川业务系统不直接读取或写入 U8 数据库，所有 U8 能力统一通过 Bridge API 暴露。
 * U8 基础档案编码必须传编码，不传显示名称作为主键。
 * 名称字段可作为辅助字段传入，但不能替代编码字段。
 * 单据明细必须支持多行。
@@ -222,7 +223,43 @@
 
 是否启用取决于客户 U8 是否要求“先领料申请，再材料出库”。
 
-关键映射待 U8 顾问确认后补齐。
+### 10.1 普通参数
+
+| U8 参数 | 建议值 | 说明 |
+| --- | --- | --- |
+| `sVouchType` | `64` | 官方示例说明领料申请单类型为 64 |
+| `domPosition` | 空对象 | 货位，首期不启用货位时传空 |
+| `cnnFrom` | 空连接 | 内部事务模式 |
+| `VouchId` | 空字符串 | INOUT，成功后读取 |
+| `domMsg` | XMLDOM | OUT，接收 U8 消息 |
+| `bCheck` | `true` | 是否控制可用量 |
+| `bBeforCheckStock` | `true` | 是否检查可用量 |
+| `bIsRedVouch` | `false` | 是否红字单据 |
+| `sAddedState` | 空字符串 | 按官方示例传空 |
+| `bReMote` | `false` | 是否远程 |
+
+### 10.2 表头映射
+
+| 信川字段 | U8 字段 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `applicationNo` | `DomHead[0]["ccode"]` | 是 | 领料申请单号 |
+| `applicationDate` | `DomHead[0]["ddate"]` | 是 | 申请日期 |
+| `rdCode` | `DomHead[0]["crdcode"]` | 建议 | 出库类别编码 |
+| `departmentCode` | `DomHead[0]["cdepcode"]` | 建议 | 部门编码 |
+| `maker` | `DomHead[0]["cmaker"]` | 是 | 制单人 |
+| `memo` | `DomHead[0]["cmemo"]` | 否 | 备注 |
+
+### 10.3 表体映射
+
+| 信川字段 | U8 字段 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `items[].lineNo` | `domBody[i]["irowno"]` | 是 | 行号 |
+| `items[].materialCode` | `domBody[i]["cinvcode"]` | 是 | 存货编码 |
+| `items[].materialName` | `domBody[i]["cinvname"]` | 建议 | 存货名称 |
+| `items[].unit` | `domBody[i]["cinvm_unit"]` | 建议 | 主计量单位 |
+| `items[].batchNo` | `domBody[i]["cbatch"]` | 否 | 批号 |
+| `items[].quantity` | `domBody[i]["iquantity"]` | 是 | 申请数量 |
+| `items[].dueDate` | `domBody[i]["dduedate"]` | 否 | 需求日期 |
 
 ## 11. 生产订单新增
 

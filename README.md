@@ -52,15 +52,15 @@ xinchuan-u8-bridge/
 
 ## 对接边界
 
-* 读数据：现阶段继续由 Java 后端通过 U8 SQL Server 只读账号查询客户、物料、供应商、库存、在途、价格等数据。
-* 写数据：必须通过本 Bridge 调 U8 官方 API，不直接写 U8 数据库表。
+* 读写数据：统一由 Java 后端调用本 Bridge REST API，不再让业务系统直连 U8 SQL Server。
+* Bridge 底层只接 U8 官方 API / U8 客户端组件；缺官方示例的接口先返回 `U8_API_NOT_SUPPORTED`，不猜 U8 表结构。
 * 登录参数：Bridge 使用配置化 U8 Profile，`server` 值应来自 U8 客户端登录界面的服务器/数据源下拉框，并通过 `login-test` 接口验证。
-* 对外接口：Bridge 必须提供 OpenAPI/Swagger 文档，后端按文档调用。
+* 对外接口：Bridge 提供 `GET /openapi.yaml` 与 `GET /swagger`，后端按文档调用。
 
 ## 当前资料
 
 * [REST API 对接文档](./docs/u8-bridge-api.md)
-* [OpenAPI 合同](./docs/u8-bridge-openapi.yaml)
+* [OpenAPI/Swagger 合同](./docs/u8-bridge-openapi.yaml)
 * [字段映射](./docs/u8-bridge-field-mapping.md)
 * [错误码与联调约定](./docs/u8-bridge-error-codes.md)
 
@@ -71,6 +71,7 @@ xinchuan-u8-bridge/
 * `src/`：Bridge REST 服务骨架。
 * `src/Xinchuan.U8Bridge.Manager/`：Windows 图形化配置、启动、测试和日志查看工具。
 * `deploy/windows/`：Windows 构建脚本和生产配置模板。
+* 统一 Bridge API 契约，覆盖清单中的读写接口；缺 U8 官方示例的接口有稳定占位返回。
 * `tests/`：`login-test`、销售订单新增/审核、出库新增/审核等接口测试。
 
 ## 本地/Windows 构建
@@ -216,7 +217,14 @@ logs\u8-bridge-yyyyMMdd.log
 
 * `GET /health`
 * `GET /openapi.yaml`
+* `GET /swagger`
 * `POST /api/u8/login-test`
+* `POST /api/u8/customers/query`
+* `POST /api/u8/materials/query`
+* `POST /api/u8/suppliers/query`
+* `POST /api/u8/inventory/query`
+* `POST /api/u8/in-transit/query`
+* `POST /api/u8/material-price/query`
 * `POST /api/u8/sales-order/save`
 * `POST /api/u8/sales-order/audit`
 * `POST /api/u8/consignment/save`
@@ -225,5 +233,13 @@ logs\u8-bridge-yyyyMMdd.log
 * `POST /api/u8/saleout/audit`
 * `POST /api/u8/material-out/add`
 * `POST /api/u8/material-out/audit`
+* `POST /api/u8/material-app/add`
+* `POST /api/u8/material-app/audit`
+* `POST /api/u8/morder/add`
+* `POST /api/u8/morder/audit`
+* `POST /api/u8/inbound/add`
+* `POST /api/u8/production-plan/publish`
+* `POST /api/u8/work-report/save`
+* `POST /api/u8/material-return/add`
 
-当前 U8 官方适配层已实现 `login-test` 的 `U8Login.clsLogin` COM 调用，并已接入 `U8ApiBroker` 写单据/审核调用。首轮字段映射按当前 REST 模型和官方示例的最小字段集实现，真实账套如返回字段必填、档案不存在、单据类型不匹配等错误，需要根据 U8 `rawMessage` 与客户单据模板继续补字段。
+当前 U8 官方适配层已实现 `login-test` 的 `U8Login.clsLogin` COM 调用，并已接入部分 `U8ApiBroker` 写单据/审核调用。缺少官方 U8API 示例的接口会返回 `U8_API_NOT_SUPPORTED`，待拿到示例后按同一 REST 契约补真实实现。

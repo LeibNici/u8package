@@ -142,6 +142,85 @@ namespace Xinchuan.U8Bridge.Models
         public IList<MaterialOutItem> Items { get; set; }
     }
 
+    public sealed class MaterialAppAddRequest : BaseBusinessRequest
+    {
+        [Required]
+        public string ApplicationNo { get; set; }
+        [Required]
+        public string ApplicationDate { get; set; }
+        public string RdCode { get; set; }
+        public string DepartmentCode { get; set; }
+        [Required]
+        public string Maker { get; set; }
+        public string Memo { get; set; }
+        [Required]
+        public IList<MaterialAppItem> Items { get; set; }
+    }
+
+    public sealed class ManufactureOrderAddRequest : BaseBusinessRequest
+    {
+        [Required]
+        public string OrderNo { get; set; }
+        public string Maker { get; set; }
+        public string CreateDate { get; set; }
+        [Required]
+        public IList<ManufactureOrderItem> Items { get; set; }
+    }
+
+    public sealed class ManufactureOrderAuditRequest : BaseBusinessRequest
+    {
+        [Required]
+        public string OrderNo { get; set; }
+        public string Verifier { get; set; }
+    }
+
+    public sealed class InboundAddRequest : BaseBusinessRequest
+    {
+        [Required]
+        public string InboundNo { get; set; }
+        public string InboundDate { get; set; }
+        public string WarehouseCode { get; set; }
+        public string SourceNo { get; set; }
+        public string Maker { get; set; }
+        public IList<MaterialOutItem> Items { get; set; }
+    }
+
+    public sealed class ProductionPlanPublishRequest : BaseBusinessRequest
+    {
+        [Required]
+        public string PlanNo { get; set; }
+        public string BusinessUnit { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+        public string Status { get; set; }
+        public string Remark { get; set; }
+    }
+
+    public sealed class WorkReportSaveRequest : BaseBusinessRequest
+    {
+        [Required]
+        public string ReportNo { get; set; }
+        public string WorkOrderNo { get; set; }
+        public string ReportType { get; set; }
+        public string Operator { get; set; }
+        public decimal ReportQuantity { get; set; }
+        public decimal QualifiedQuantity { get; set; }
+        public decimal ScrapQuantity { get; set; }
+        public string ReportTime { get; set; }
+    }
+
+    public sealed class MaterialReturnAddRequest : BaseBusinessRequest
+    {
+        [Required]
+        public string ReturnNo { get; set; }
+        public string WorkOrderNo { get; set; }
+        public string WarehouseCode { get; set; }
+        public string Reason { get; set; }
+        public string Operator { get; set; }
+        public string ReturnTime { get; set; }
+        public IList<MaterialOutItem> Items { get; set; }
+    }
+
     public sealed class OutboundItem
     {
         public int LineNo { get; set; }
@@ -166,5 +245,31 @@ namespace Xinchuan.U8Bridge.Models
         public string BatchNo { get; set; }
         public string WorkOrderNo { get; set; }
         public string SourceDetailId { get; set; }
+    }
+
+    public sealed class MaterialAppItem
+    {
+        public int LineNo { get; set; }
+        [Required]
+        public string MaterialCode { get; set; }
+        public string MaterialName { get; set; }
+        public string Unit { get; set; }
+        public string BatchNo { get; set; }
+        public decimal Quantity { get; set; }
+        public string DueDate { get; set; }
+    }
+
+    public sealed class ManufactureOrderItem
+    {
+        public int LineNo { get; set; }
+        [Required]
+        public string MaterialCode { get; set; }
+        public string MaterialName { get; set; }
+        [Required]
+        public string StartDate { get; set; }
+        [Required]
+        public string DueDate { get; set; }
+        public decimal Quantity { get; set; }
+        public int OrderClass { get; set; } = 1;
     }
 }
