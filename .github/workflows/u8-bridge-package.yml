@@ -23,6 +23,9 @@ on:
       - vendor/**
       - .github/workflows/u8-bridge-package.yml
 
+permissions:
+  contents: write
+
 jobs:
   package:
     name: Build and package on Windows
@@ -178,6 +181,14 @@ jobs:
             Copy-Item $u8ApiFramework (Join-Path $packageDir "U8APIFramework") -Recurse -Force
           }
 
+          $version = @{
+            version = "${{ github.run_number }}"
+            name = "Xinchuan.U8Bridge-Release-${{ github.run_number }}"
+            commit = "${{ github.sha }}"
+            builtAt = (Get-Date).ToUniversalTime().ToString("o")
+          } | ConvertTo-Json
+          Set-Content -Path (Join-Path $packageDir "package-version.json") -Value $version -Encoding UTF8
+
           Compress-Archive -Path (Join-Path $packageDir "*") -DestinationPath $zipPath -Force
           "zipPath=$zipPath" >> $env:GITHUB_ENV
 
@@ -187,6 +198,21 @@ jobs:
           name: Xinchuan.U8Bridge-${{ env.BUILD_CONFIGURATION }}-${{ github.run_number }}
           path: ${{ env.zipPath }}
           if-no-files-found: error
+
+      - name: Publish GitHub release
+        if: env.BUILD_CONFIGURATION == 'Release'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = "u8-bridge-${{ github.run_number }}"
+          $title = "Xinchuan.U8Bridge-Release-${{ github.run_number }}"
+          $notes = @(
+            "U8 Bridge Release ${{ github.run_number }}",
+            "",
+            "Commit: ${{ github.sha }}",
+            "Artifact: Xinchuan.U8Bridge-${{ env.BUILD_CONFIGURATION }}-${{ github.run_number }}"
+          ) -join "`n"
+          gh release create $tag "${{ env.zipPath }}" --title $title --notes $notes --latest
 
       - name: Write summary
         run: |

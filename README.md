@@ -123,6 +123,7 @@ Xinchuan.U8Bridge-Release-<run_number>.zip
 ```
 
 这个 zip 才是交给客户 U8 机器解压运行的包；客户机器不需要 NuGet、MSBuild 或 Visual Studio Build Tools。
+Release 构建会同时发布 GitHub Release，管理器默认通过 GitHub Release latest API 检测更新。
 
 当前 Actions 固定使用 `windows-2022`，避免 `windows-latest` 迁移期间影响 .NET Framework 4.8 打包稳定性。
 如果仓库存在 `vendor/U8APIFramework/`，Actions 会把完整官方 U8API Framework 目录复制到 release 包根目录，Bridge 会优先从 `程序目录\U8APIFramework` 加载 `UFIDA.U8.U8APIFramework.dll` 等依赖。
@@ -141,6 +142,7 @@ Xinchuan.U8Bridge-Release-<run_number>.zip
 * 一键配置 Windows `HttpListener` 监听权限。
 * 启动/停止 `Xinchuan.U8Bridge.exe`；停止时会清理已有 Bridge 进程，避免 8081 端口残留。
 * 测试 `/health` 和 `/api/u8/login-test`。
+* 检查新版本；默认支持 GitHub Release，也可改成自定义 JSON manifest 地址。
 * 查看并打开 `logs` 日志目录。
 * 关闭窗口时驻留到任务栏通知区域，右键托盘图标可打开、停止服务或退出。
 
@@ -180,6 +182,8 @@ copy .\appsettings.sample.json .\appsettings.json
 * `database.server`、`database.database`、`database.user`、`database.password`：U8 只读 SQL Server 连接信息，统一由 Bridge 持有，Java 后端不直接连库。
 * `server`：U8 登录界面服务器/数据源下拉框中选中的值。
 * `userId`、`password`、`loginDate`：按客户 U8 登录信息填写。
+* `update.sourceType`：更新检测来源，`githubRelease` 或 `manifest`。
+* `update.checkUrl`：更新检测地址。GitHub Release 可填 `https://api.github.com/repos/<owner>/<repo>/releases/latest`；自定义地址返回 JSON manifest。
 
 `subId`、`accountId`、`year`、`serial` 不需要现场用户配置。Bridge 内部默认 `subId=AS`、`serial` 为空，并会从库名
 `ufdata_100_2018` 推导账套 `100` 与年度 `2018`；如果客户库名不符合该格式，再按现场 U8 登录失败日志补充兼容逻辑。
@@ -216,6 +220,40 @@ logs\u8-bridge-yyyyMMdd.log
 ```
 
 如果需要改日志目录，可设置环境变量 `U8_BRIDGE_LOG_DIR`。启动失败、配置缺失、JSON 格式错误、U8 API 调用异常都会写入日志。
+
+## 更新检测
+
+管理器“检查更新”只做检测和提示，不会静默替换正在运行的程序。
+
+推荐把正式交付包发布成 GitHub Release，或由内网文件服务提供 manifest。GitHub Actions artifact
+更适合临时下载和联调，通常有过期时间，不建议作为现场长期自动更新源。
+
+默认 GitHub Release 配置：
+
+```json
+{
+  "update": {
+    "enabled": true,
+    "sourceType": "githubRelease",
+    "checkUrl": "https://api.github.com/repos/LeibNici/u8package/releases/latest",
+    "currentVersion": "",
+    "includePrerelease": false
+  }
+}
+```
+
+如果不用 GitHub Release，可以把 `sourceType` 改成 `manifest`，`checkUrl` 指向自定义 JSON：
+
+```json
+{
+  "version": "22",
+  "releaseUrl": "https://example.com/u8-bridge/releases/22",
+  "downloadUrl": "https://example.com/u8-bridge/Xinchuan.U8Bridge-Release-22.zip",
+  "notes": "更新说明"
+}
+```
+
+Release 包会随带 `package-version.json`；若 `update.currentVersion` 留空，管理器会读取该文件作为当前版本。
 
 ## 当前实现状态
 

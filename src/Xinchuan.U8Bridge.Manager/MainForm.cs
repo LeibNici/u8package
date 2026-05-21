@@ -14,6 +14,7 @@ namespace Xinchuan.U8Bridge.Manager
         private readonly BridgeProcessService processService = new BridgeProcessService();
         private readonly BridgeHttpClient httpClient = new BridgeHttpClient();
         private readonly UrlAclService urlAclService = new UrlAclService();
+        private readonly UpdateCheckService updateCheckService = new UpdateCheckService();
         private bool allowExit;
 
         public MainForm()
@@ -190,6 +191,7 @@ namespace Xinchuan.U8Bridge.Manager
                 DefaultProfileName = profileNameTextBox.Text.Trim(),
                 U8Mode = Convert.ToString(modeComboBox.SelectedItem),
                 Database = BuildDatabase(),
+                Update = BuildUpdate(),
                 Profiles = new Dictionary<string, U8ProfileConfig>()
             };
             config.Profiles[config.DefaultProfileName] = BuildProfile();
@@ -223,6 +225,7 @@ namespace Xinchuan.U8Bridge.Manager
         {
             U8ProfileConfig profile = config.Profiles.Values.FirstOrDefault() ?? new U8ProfileConfig();
             U8DatabaseConfig database = config.Database ?? new U8DatabaseConfig();
+            UpdateCheckConfig update = config.Update ?? new UpdateCheckConfig();
             baseUrlTextBox.Text = config.BaseUrl;
             apiKeyTextBox.Text = config.ApiKey;
             profileNameTextBox.Text = config.DefaultProfileName;
@@ -236,6 +239,13 @@ namespace Xinchuan.U8Bridge.Manager
             dbNameTextBox.Text = database.Database;
             dbUserTextBox.Text = database.User;
             dbPasswordTextBox.Text = database.Password;
+            updateEnabledCheckBox.Checked = update.Enabled;
+            updateSourceTypeComboBox.SelectedItem = string.IsNullOrWhiteSpace(update.SourceType)
+                ? "githubRelease"
+                : update.SourceType;
+            updateUrlTextBox.Text = update.CheckUrl;
+            updateCurrentVersionTextBox.Text = update.CurrentVersion;
+            updatePrereleaseCheckBox.Checked = update.IncludePrerelease;
         }
 
         private void AppendLogSafe(string message)

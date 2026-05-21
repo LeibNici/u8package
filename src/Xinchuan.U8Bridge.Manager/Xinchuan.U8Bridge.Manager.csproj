@@ -38,10 +38,13 @@
     <Compile Include="BridgeConfig.cs" />
     <Compile Include="MainForm.cs" />
     <Compile Include="MainForm.Layout.cs" />
+    <Compile Include="MainForm.Update.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Services\BridgeHttpClient.cs" />
     <Compile Include="Services\BridgeProcessService.cs" />
     <Compile Include="Services\ConfigService.cs" />
+    <Compile Include="Services\UpdateCheckResult.cs" />
+    <Compile Include="Services\UpdateCheckService.cs" />
     <Compile Include="Services\UrlAclService.cs" />
   </ItemGroup>
   <ItemGroup>

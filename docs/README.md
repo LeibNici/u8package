@@ -10,6 +10,7 @@
 | [u8-bridge-openapi.yaml](./u8-bridge-openapi.yaml) | OpenAPI 3.0 合同，可通过 `/openapi.yaml` 或 `/swagger` 使用 |
 | [u8-bridge-field-mapping.md](./u8-bridge-field-mapping.md) | 业务 JSON 字段到 U8 `domHead` / `domBody` 字段映射 |
 | [u8-bridge-error-codes.md](./u8-bridge-error-codes.md) | 标准错误码、HTTP 状态、重试和日志约定 |
+| [u8-bridge-confirmation-gaps.md](./u8-bridge-confirmation-gaps.md) | 基于联调清单整理的未实现与待业务确认项 |
 
 ## 维护原则
 

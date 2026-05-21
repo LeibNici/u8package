@@ -18,6 +18,11 @@ namespace Xinchuan.U8Bridge.Manager
         private TextBox dbNameTextBox;
         private TextBox dbUserTextBox;
         private TextBox dbPasswordTextBox;
+        private CheckBox updateEnabledCheckBox;
+        private ComboBox updateSourceTypeComboBox;
+        private TextBox updateUrlTextBox;
+        private TextBox updateCurrentVersionTextBox;
+        private CheckBox updatePrereleaseCheckBox;
         private TextBox logTextBox;
         private Label statusLabel;
         private NotifyIcon trayIcon;
@@ -52,7 +57,7 @@ namespace Xinchuan.U8Bridge.Manager
             root.Padding = new Padding(12);
             root.RowCount = 3;
             root.ColumnCount = 1;
-            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 335));
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 450));
             root.RowStyles.Add(new RowStyle(SizeType.Absolute, 54));
             root.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             return root;
@@ -65,12 +70,12 @@ namespace Xinchuan.U8Bridge.Manager
             grid.Dock = DockStyle.Fill;
             grid.Padding = new Padding(10);
             grid.ColumnCount = 4;
-            grid.RowCount = 7;
+            grid.RowCount = 10;
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 115));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 115));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 10; i++)
             {
                 grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 38));
             }
@@ -90,6 +95,11 @@ namespace Xinchuan.U8Bridge.Manager
             dbUserTextBox = AddTextRow(grid, "DB用户", 5, 2);
             dbPasswordTextBox = AddTextRow(grid, "DB密码", 6, 0);
             dbPasswordTextBox.UseSystemPasswordChar = true;
+            updateEnabledCheckBox = AddCheckRow(grid, "检测更新", 7, 0);
+            updateSourceTypeComboBox = AddComboRow(grid, "更新来源", 7, 2, "githubRelease", "manifest");
+            updateUrlTextBox = AddWideTextRow(grid, "检测地址", 8, 0);
+            updateCurrentVersionTextBox = AddTextRow(grid, "当前版本", 9, 0);
+            updatePrereleaseCheckBox = AddCheckRow(grid, "预发布", 9, 2);
             group.Controls.Add(grid);
             return group;
         }
@@ -108,6 +118,7 @@ namespace Xinchuan.U8Bridge.Manager
             panel.Controls.Add(CreateButton("停止服务", (s, e) => StopBridge()));
             panel.Controls.Add(CreateButton("测试 Health", (s, e) => TestHealth()));
             panel.Controls.Add(CreateButton("测试 U8 登录", (s, e) => TestLogin()));
+            panel.Controls.Add(CreateButton("检查更新", (s, e) => CheckUpdate()));
             panel.Controls.Add(CreateButton("刷新日志", (s, e) => RefreshLog()));
             panel.Controls.Add(CreateButton("打开日志目录", (s, e) => OpenLogDirectory()));
             statusLabel = new Label { AutoSize = true, Padding = new Padding(18, 8, 0, 0) };
@@ -143,11 +154,20 @@ namespace Xinchuan.U8Bridge.Manager
             return checkBox;
         }
 
-        private ComboBox AddComboRow(TableLayoutPanel grid, string label, int row, int col)
+        private TextBox AddWideTextRow(TableLayoutPanel grid, string label, int row, int col)
+        {
+            grid.Controls.Add(CreateLabel(label), col, row);
+            var textBox = new TextBox { Dock = DockStyle.Fill };
+            grid.Controls.Add(textBox, col + 1, row);
+            grid.SetColumnSpan(textBox, 3);
+            return textBox;
+        }
+
+        private ComboBox AddComboRow(TableLayoutPanel grid, string label, int row, int col, params string[] items)
         {
             grid.Controls.Add(CreateLabel(label), col, row);
             var comboBox = new ComboBox { Dock = DockStyle.Fill, DropDownStyle = ComboBoxStyle.DropDownList };
-            comboBox.Items.AddRange(new object[] { "dryRun", "official" });
+            comboBox.Items.AddRange(items.Length == 0 ? new object[] { "dryRun", "official" } : items);
             grid.Controls.Add(comboBox, col + 1, row);
             return comboBox;
         }

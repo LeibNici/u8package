@@ -60,6 +60,7 @@ namespace Xinchuan.U8Bridge.Manager.Services
             }
 
             config.Database = config.Database ?? new U8DatabaseConfig();
+            config.Update = config.Update ?? new UpdateCheckConfig();
             config.Profiles = config.Profiles ?? new Dictionary<string, U8ProfileConfig>();
             if (!config.Profiles.Any())
             {

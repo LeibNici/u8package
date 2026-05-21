@@ -15,6 +15,8 @@ namespace Xinchuan.U8Bridge.Manager
 
         public U8DatabaseConfig Database { get; set; } = new U8DatabaseConfig();
 
+        public UpdateCheckConfig Update { get; set; } = new UpdateCheckConfig();
+
         public IDictionary<string, U8ProfileConfig> Profiles { get; set; } =
             new Dictionary<string, U8ProfileConfig>();
     }
@@ -53,5 +55,19 @@ namespace Xinchuan.U8Bridge.Manager
         public string User { get; set; } = "link100";
 
         public string Password { get; set; }
+    }
+
+    public sealed class UpdateCheckConfig
+    {
+        public bool Enabled { get; set; } = true;
+
+        public string SourceType { get; set; } = "githubRelease";
+
+        public string CheckUrl { get; set; } =
+            "https://api.github.com/repos/LeibNici/u8package/releases/latest";
+
+        public string CurrentVersion { get; set; }
+
+        public bool IncludePrerelease { get; set; }
     }
 }
