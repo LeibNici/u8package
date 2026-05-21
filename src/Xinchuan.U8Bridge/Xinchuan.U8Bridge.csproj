@@ -74,6 +74,11 @@
     <Compile Include="U8\DryRunU8ApiClient.cs" />
     <Compile Include="U8\IU8ApiClient.cs" />
     <Compile Include="U8\OfficialU8ApiClient.cs" />
+    <Compile Include="U8\U8BrokerCall.cs" />
+    <Compile Include="U8\U8BrokerDocumentMapper.cs" />
+    <Compile Include="U8\U8BrokerResultReader.cs" />
+    <Compile Include="U8\U8BrokerRuntime.cs" />
+    <Compile Include="U8\U8Reflection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -2,11 +2,19 @@ using System;
 using System.Runtime.InteropServices;
 using Xinchuan.U8Bridge.Configuration;
 using Xinchuan.U8Bridge.Models;
+using Xinchuan.U8Bridge.Services;
 
 namespace Xinchuan.U8Bridge.U8
 {
     public sealed class OfficialU8ApiClient : IU8ApiClient
     {
+        private readonly BridgeOptions options;
+
+        public OfficialU8ApiClient(BridgeOptions options)
+        {
+            this.options = options;
+        }
+
         public BridgeResponse LoginTest(string requestId, U8ProfileOptions profile)
         {
             if (HasMissingLoginField(profile))
@@ -22,16 +30,54 @@ namespace Xinchuan.U8Bridge.U8
 
         public BridgeResponse Invoke(string requestId, U8ProfileOptions profile, U8ApiCall call)
         {
-            if (string.IsNullOrWhiteSpace(call.ApiAddress))
+            BridgeResponse invalid = ValidateInvoke(requestId, profile, call);
+            if (invalid != null)
             {
-                return BridgeResponse.Fail(requestId, BridgeErrorCodes.U8ApiNotSupported, "U8 API 地址未配置");
+                return invalid;
             }
 
-            return BridgeResponse.Fail(
-                requestId,
-                BridgeErrorCodes.U8ApiNotSupported,
-                "U8 API Broker 写单据调用层尚未完成字段映射绑定",
-                call.ApiAddress);
+            object login = null;
+            try
+            {
+                string shareString;
+                login = CreateLogin(profile, out shareString);
+                if (login == null)
+                {
+                    return BridgeResponse.Fail(
+                        requestId,
+                        BridgeErrorCodes.U8LoginFailed,
+                        "U8 登录失败",
+                        shareString);
+                }
+
+                BridgeLogger.Info("Invoking U8 API. RequestId=" + requestId + ", ApiAddress=" + call.ApiAddress);
+                var runtime = new U8BrokerRuntime(options, login);
+                return runtime.Invoke(requestId, call);
+            }
+            catch (COMException ex)
+            {
+                return BridgeResponse.Fail(
+                    requestId,
+                    BridgeErrorCodes.U8ComponentUnavailable,
+                    "U8 COM 组件不可用",
+                    ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BridgeResponse.Fail(
+                    requestId,
+                    BridgeErrorCodes.U8ComponentUnavailable,
+                    "U8 API Framework 组件不可用",
+                    ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BridgeResponse.Fail(requestId, BridgeErrorCodes.U8SysError, "U8 API 调用异常", ex.Message);
+            }
+            finally
+            {
+                ReleaseCom(login);
+            }
         }
 
         private static BridgeResponse TryLogin(string requestId, U8ProfileOptions profile)
@@ -39,24 +85,9 @@ namespace Xinchuan.U8Bridge.U8
             object login = null;
             try
             {
-                Type loginType = Type.GetTypeFromProgID("U8Login.clsLogin");
-                if (loginType == null)
-                {
-                    return BridgeResponse.Fail(
-                        requestId,
-                        BridgeErrorCodes.U8ComponentUnavailable,
-                        "当前 Windows 环境未注册 U8Login.clsLogin");
-                }
-
-                login = Activator.CreateInstance(loginType);
-                bool ok = InvokeLogin(login, profile);
-                string shareString = Convert.ToString(loginType.InvokeMember(
-                    "ShareString",
-                    System.Reflection.BindingFlags.GetProperty,
-                    null,
-                    login,
-                    null));
-                return ok
+                string shareString;
+                login = CreateLogin(profile, out shareString);
+                return login != null
                     ? BridgeResponse.Ok(requestId, "U8 登录成功")
                     : BridgeResponse.Fail(requestId, BridgeErrorCodes.U8LoginFailed, "U8 登录失败", shareString);
             }
@@ -74,10 +105,56 @@ namespace Xinchuan.U8Bridge.U8
             }
             finally
             {
-                if (login != null && Marshal.IsComObject(login))
-                {
-                    Marshal.FinalReleaseComObject(login);
-                }
+                ReleaseCom(login);
+            }
+        }
+
+        private static object CreateLogin(U8ProfileOptions profile, out string shareString)
+        {
+            shareString = null;
+            Type loginType = Type.GetTypeFromProgID("U8Login.clsLogin");
+            if (loginType == null)
+            {
+                throw new COMException("当前 Windows 环境未注册 U8Login.clsLogin");
+            }
+
+            object login = Activator.CreateInstance(loginType);
+            bool ok = InvokeLogin(login, profile);
+            shareString = Convert.ToString(loginType.InvokeMember(
+                "ShareString",
+                System.Reflection.BindingFlags.GetProperty,
+                null,
+                login,
+                null));
+            if (ok)
+            {
+                return login;
+            }
+
+            ReleaseCom(login);
+            return null;
+        }
+
+        private static BridgeResponse ValidateInvoke(string requestId, U8ProfileOptions profile, U8ApiCall call)
+        {
+            if (HasMissingLoginField(profile))
+            {
+                return BridgeResponse.Fail(requestId, BridgeErrorCodes.RequestInvalid, "U8 登录 Profile 缺少必要字段");
+            }
+
+            if (call == null || string.IsNullOrWhiteSpace(call.ApiAddress))
+            {
+                return BridgeResponse.Fail(requestId, BridgeErrorCodes.U8ApiNotSupported, "U8 API 地址未配置");
+            }
+
+            return null;
+        }
+
+        private static void ReleaseCom(object value)
+        {
+            if (value != null && Marshal.IsComObject(value))
+            {
+                Marshal.FinalReleaseComObject(value);
             }
         }
 

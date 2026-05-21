@@ -14,6 +14,8 @@ namespace Xinchuan.U8Bridge.Manager
 
         public string U8Mode { get; set; } = "dryRun";
 
+        public string U8ApiDllDirectory { get; set; }
+
         public IDictionary<string, U8ProfileConfig> Profiles { get; set; } =
             new Dictionary<string, U8ProfileConfig>();
     }

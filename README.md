@@ -172,6 +172,7 @@ copy .\appsettings.sample.json .\appsettings.json
 * `apiKey`：信川后端调用 Bridge 时传入的 `X-API-KEY`。
 * `server`：U8 登录界面服务器/数据源下拉框中选中的值。
 * `accountId`、`year`、`userId`、`password`、`loginDate`：按客户 U8 登录信息填写。
+* `u8ApiDllDirectory`：U8 API Framework DLL 目录，默认可填 `C:\U8SOFT\UFMOM\U8APIFramework`，若 DLL 已注册或已在程序目录可留空。
 * `u8Mode`：正式联调用 `official`，只验证 REST 服务启动可用时用 `dryRun`。
 
 `official` 模式需要满足：
@@ -182,6 +183,7 @@ copy .\appsettings.sample.json .\appsettings.json
 * `server` 必须填写 U8 登录界面服务器/数据源下拉框的原始值，不能只凭数据库名猜。
 * `accountId`、`year`、`userId`、`password`、`loginDate` 与 U8 客户端可登录信息一致。
 * 先用管理器“测试 U8 登录”，返回 `U8 登录成功` 后再做写单据联调。
+* 写单据会通过 `U8ApiBroker` 调用 `SaleOrder/Save`、`Consignment/Save`、`saleout/Add`、`MaterialOut/Add` 以及对应审核 API；若 U8 返回字段/档案错误，按 `rawMessage` 补齐字段或基础档案。
 
 正式启动：
 
@@ -220,4 +222,4 @@ logs\u8-bridge-yyyyMMdd.log
 * `POST /api/u8/material-out/add`
 * `POST /api/u8/material-out/audit`
 
-当前 U8 官方适配层已先实现 `login-test` 的 `U8Login.clsLogin` COM 调用；写单据的 `U8ApiBroker` 字段映射绑定仍会返回 `U8_API_NOT_SUPPORTED`，防止误以为已经写入 U8。联调 REST 层可临时设置 `u8Mode` 为 `dryRun`，但生产必须使用 `official`。
+当前 U8 官方适配层已实现 `login-test` 的 `U8Login.clsLogin` COM 调用，并已接入 `U8ApiBroker` 写单据/审核调用。首轮字段映射按当前 REST 模型和官方示例的最小字段集实现，真实账套如返回字段必填、档案不存在、单据类型不匹配等错误，需要根据 U8 `rawMessage` 与客户单据模板继续补字段。

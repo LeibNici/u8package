@@ -12,6 +12,8 @@ namespace Xinchuan.U8Bridge.Configuration
 
         public string U8Mode { get; set; } = "official";
 
+        public string U8ApiDllDirectory { get; set; }
+
         public IList<string> AllowedSourceIps { get; set; } = new List<string>();
 
         public IDictionary<string, U8ProfileOptions> Profiles { get; set; } =

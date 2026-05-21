@@ -189,6 +189,7 @@ namespace Xinchuan.U8Bridge.Manager
                 ApiKey = apiKeyTextBox.Text.Trim(),
                 DefaultProfileName = profileNameTextBox.Text.Trim(),
                 U8Mode = Convert.ToString(modeComboBox.SelectedItem),
+                U8ApiDllDirectory = u8ApiDllDirectoryTextBox.Text.Trim(),
                 AllowedSourceIps = SplitLines(allowedIpsTextBox.Text),
                 Profiles = new Dictionary<string, U8ProfileConfig>()
             };
@@ -218,6 +219,7 @@ namespace Xinchuan.U8Bridge.Manager
             apiKeyTextBox.Text = config.ApiKey;
             profileNameTextBox.Text = config.DefaultProfileName;
             modeComboBox.SelectedItem = config.U8Mode == "official" ? "official" : "dryRun";
+            u8ApiDllDirectoryTextBox.Text = config.U8ApiDllDirectory;
             allowedIpsTextBox.Text = string.Join(Environment.NewLine, config.AllowedSourceIps);
             subIdTextBox.Text = profile.SubId;
             accountIdTextBox.Text = profile.AccountId;

@@ -14,7 +14,7 @@ namespace Xinchuan.U8Bridge.Services
             Options = options;
             IU8ApiClient apiClient = options.IsDryRun
                 ? (IU8ApiClient)new DryRunU8ApiClient()
-                : new OfficialU8ApiClient();
+                : new OfficialU8ApiClient(options);
             BridgeLogger.Info(
                 "Service registry initialized. U8Mode="
                 + options.U8Mode

@@ -9,6 +9,7 @@ namespace Xinchuan.U8Bridge.Manager
         private TextBox apiKeyTextBox;
         private TextBox profileNameTextBox;
         private ComboBox modeComboBox;
+        private TextBox u8ApiDllDirectoryTextBox;
         private TextBox allowedIpsTextBox;
         private TextBox subIdTextBox;
         private TextBox accountIdTextBox;
@@ -65,30 +66,31 @@ namespace Xinchuan.U8Bridge.Manager
             grid.Dock = DockStyle.Fill;
             grid.Padding = new Padding(10);
             grid.ColumnCount = 4;
-            grid.RowCount = 7;
+            grid.RowCount = 8;
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 115));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 115));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 8; i++)
             {
-                grid.RowStyles.Add(new RowStyle(SizeType.Absolute, i == 2 ? 72 : 38));
+                grid.RowStyles.Add(new RowStyle(SizeType.Absolute, i == 3 ? 72 : 38));
             }
 
             baseUrlTextBox = AddTextRow(grid, "监听地址", 0, 0);
             modeComboBox = AddComboRow(grid, "模式", 0, 2);
             apiKeyTextBox = AddTextRow(grid, "API Key", 1, 0);
             profileNameTextBox = AddTextRow(grid, "Profile", 1, 2);
-            allowedIpsTextBox = AddMultiTextRow(grid, "允许IP", 2, 0);
-            subIdTextBox = AddTextRow(grid, "SubId", 3, 0);
-            accountIdTextBox = AddTextRow(grid, "账套", 3, 2);
-            yearTextBox = AddTextRow(grid, "年度", 4, 0);
-            userIdTextBox = AddTextRow(grid, "U8账号", 4, 2);
-            passwordTextBox = AddTextRow(grid, "U8密码", 5, 0);
+            u8ApiDllDirectoryTextBox = AddWideTextRow(grid, "U8 DLL目录", 2, 0);
+            allowedIpsTextBox = AddMultiTextRow(grid, "允许IP", 3, 0);
+            subIdTextBox = AddTextRow(grid, "SubId", 4, 0);
+            accountIdTextBox = AddTextRow(grid, "账套", 4, 2);
+            yearTextBox = AddTextRow(grid, "年度", 5, 0);
+            userIdTextBox = AddTextRow(grid, "U8账号", 5, 2);
+            passwordTextBox = AddTextRow(grid, "U8密码", 6, 0);
             passwordTextBox.UseSystemPasswordChar = true;
-            loginDateTextBox = AddTextRow(grid, "登录日期", 5, 2);
-            serverTextBox = AddTextRow(grid, "服务器", 6, 0);
-            serialTextBox = AddTextRow(grid, "Serial", 6, 2);
+            loginDateTextBox = AddTextRow(grid, "登录日期", 6, 2);
+            serverTextBox = AddTextRow(grid, "服务器", 7, 0);
+            serialTextBox = AddTextRow(grid, "Serial", 7, 2);
             group.Controls.Add(grid);
             return group;
         }
@@ -138,6 +140,15 @@ namespace Xinchuan.U8Bridge.Manager
         {
             grid.Controls.Add(CreateLabel(label), col, row);
             var textBox = new TextBox { Dock = DockStyle.Fill, Multiline = true, ScrollBars = ScrollBars.Vertical };
+            grid.Controls.Add(textBox, col + 1, row);
+            grid.SetColumnSpan(textBox, 3);
+            return textBox;
+        }
+
+        private TextBox AddWideTextRow(TableLayoutPanel grid, string label, int row, int col)
+        {
+            grid.Controls.Add(CreateLabel(label), col, row);
+            var textBox = new TextBox { Dock = DockStyle.Fill };
             grid.Controls.Add(textBox, col + 1, row);
             grid.SetColumnSpan(textBox, 3);
             return textBox;
