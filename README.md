@@ -33,6 +33,9 @@ xinchuan-u8-bridge/
     u8-bridge-openapi.yaml
     u8-bridge-field-mapping.md
     u8-bridge-error-codes.md
+  vendor/
+    u8api-dll/
+      # 官方 U8API 示例 DLL，打包时复制到 release 根目录
   src/
     Xinchuan.U8Bridge.sln
     Xinchuan.U8Bridge/
@@ -120,6 +123,7 @@ Xinchuan.U8Bridge-Release-<run_number>.zip
 这个 zip 才是交给客户 U8 机器解压运行的包；客户机器不需要 NuGet、MSBuild 或 Visual Studio Build Tools。
 
 当前 Actions 固定使用 `windows-2022`，避免 `windows-latest` 迁移期间影响 .NET Framework 4.8 打包稳定性。
+如果仓库存在 `vendor/u8api-dll/*.dll`，Actions 会把这些官方 U8API DLL 复制到 release 包根目录，Bridge 会优先从程序目录加载 `UFIDA.U8.U8APIFramework.dll` 等依赖。
 
 ## Windows 运行与日志
 
@@ -172,7 +176,7 @@ copy .\appsettings.sample.json .\appsettings.json
 * `apiKey`：信川后端调用 Bridge 时传入的 `X-API-KEY`。
 * `server`：U8 登录界面服务器/数据源下拉框中选中的值。
 * `accountId`、`year`、`userId`、`password`、`loginDate`：按客户 U8 登录信息填写。
-* `u8ApiDllDirectory`：U8 API Framework DLL 目录，默认可填 `C:\U8SOFT\UFMOM\U8APIFramework`，若 DLL 已注册或已在程序目录可留空。
+* `u8ApiDllDirectory`：U8 API Framework DLL 目录，默认可填 `C:\U8SOFT\UFMOM\U8APIFramework`。当前 release 包已随带官方示例 DLL 到程序目录，正常可留空；若现场有客户版本专用 DLL，再填实际目录覆盖。
 * `u8Mode`：正式联调用 `official`，只验证 REST 服务启动可用时用 `dryRun`。
 
 `official` 模式需要满足：

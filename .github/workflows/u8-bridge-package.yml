@@ -20,6 +20,7 @@ on:
       - src/**
       - deploy/**
       - docs/**
+      - vendor/**
       - .github/workflows/u8-bridge-package.yml
 
 jobs:
@@ -172,6 +173,11 @@ jobs:
             Copy-Item $docs (Join-Path $packageDir "docs") -Recurse
           }
 
+          $u8Dlls = Join-Path $root "vendor\u8api-dll"
+          if (Test-Path $u8Dlls) {
+            Copy-Item -Path (Join-Path $u8Dlls "*.dll") -Destination $packageDir -Force
+          }
+
           Compress-Archive -Path (Join-Path $packageDir "*") -DestinationPath $zipPath -Force
           "zipPath=$zipPath" >> $env:GITHUB_ENV
 
@@ -188,3 +194,4 @@ jobs:
           Add-Content $env:GITHUB_STEP_SUMMARY ""
           Add-Content $env:GITHUB_STEP_SUMMARY "- Configuration: ${{ env.BUILD_CONFIGURATION }}"
           Add-Content $env:GITHUB_STEP_SUMMARY "- Artifact: Xinchuan.U8Bridge-${{ env.BUILD_CONFIGURATION }}-${{ github.run_number }}"
+          Add-Content $env:GITHUB_STEP_SUMMARY "- U8 API DLLs: packaged from vendor/u8api-dll when present"
