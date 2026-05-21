@@ -45,7 +45,7 @@ xinchuan-u8-bridge/
       appsettings.prod.example.json
 ```
 
-当前已经开始首版开发。第一版代码目标是先固定 REST 服务边界、配置、安全、标准响应和 U8 API 防腐层；真实 U8 DLL 绑定需要在 Windows/U8 环境继续完成。
+当前首版已补齐 REST 服务边界、配置、安全、标准响应、U8 登录和 U8ApiBroker 写单据/审核调用。真实账套联调时，若 U8 返回字段必填、档案不存在或单据类型不匹配，需要按 `rawMessage` 与客户 U8 单据模板继续补字段。
 
 ## 对接边界
 
