@@ -135,6 +135,14 @@ Xinchuan.U8Bridge-Release-<run_number>.zip
 * 启动/停止 `Xinchuan.U8Bridge.exe`。
 * 测试 `/health` 和 `/api/u8/login-test`。
 * 查看并打开 `logs` 日志目录。
+* 关闭窗口时驻留到任务栏通知区域，右键托盘图标可打开、停止服务或退出。
+
+管理器行为：
+
+* 最小化：保持普通最小化。
+* 点击窗口关闭：隐藏到任务栏通知区域，不停止 Bridge。
+* 托盘图标双击：恢复管理器窗口。
+* 托盘右键退出：停止 Bridge 并退出管理器。
 
 解压 artifact 后，先复制一份配置：
 
