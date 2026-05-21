@@ -65,7 +65,10 @@ namespace Xinchuan.U8Bridge.U8
 
         public static U8BrokerCall MapPurchaseOrderConfirm(PurchaseOrderConfirmRequest request)
         {
-            var call = new U8BrokerCall { BooleanReturn = true };
+            var call = new U8BrokerCall { BooleanReturn = true, VoucherType = 1 };
+            call.ContextValues["bPositive"] = true;
+            call.ContextValues["sBillType"] = string.Empty;
+            call.ContextValues["sBusType"] = Any(request.BusinessType, "普通采购");
             var head = OneRow("DomHead");
             Put(head, "poid", request.U8Id, "cpoid", request.PurchaseOrderNo);
             Put(head, "ufts", request.TimeStamp, "cverifier", request.Verifier);

@@ -26,7 +26,7 @@ namespace Xinchuan.U8Bridge.U8
             try
             {
                 U8BrokerCall brokerCall = U8BrokerDocumentMapper.Map(call);
-                broker = CreateBroker(call.ApiAddress, brokerCall.VoucherType);
+                broker = CreateBroker(call.ApiAddress, brokerCall);
                 brokerCall.ApplyTo(broker, reflection);
                 return InvokeBroker(requestId, call, broker, brokerCall);
             }
@@ -36,21 +36,26 @@ namespace Xinchuan.U8Bridge.U8
             }
         }
 
-        private object CreateBroker(string apiAddress, int? voucherType)
+        private object CreateBroker(string apiAddress, U8BrokerCall brokerCall)
         {
             Type envType = reflection.ResolveType("UFIDA.U8.U8APIFramework.U8EnvContext");
             Type addressType = reflection.ResolveType("UFIDA.U8.U8APIFramework.U8ApiAddress");
             Type brokerType = reflection.ResolveType("UFIDA.U8.U8APIFramework.U8ApiBroker");
             object env = Activator.CreateInstance(envType);
             envType.InvokeMember("U8Login", BindingFlags.SetProperty, null, env, new[] { login });
-            if (voucherType.HasValue)
+            if (brokerCall.VoucherType.HasValue)
+            {
+                brokerCall.ContextValues["VoucherType"] = brokerCall.VoucherType.Value;
+            }
+
+            foreach (var item in brokerCall.ContextValues)
             {
                 envType.InvokeMember(
-                    "SetApiContext",
-                    BindingFlags.InvokeMethod,
-                    null,
-                    env,
-                    new object[] { "VoucherType", voucherType.Value });
+                   "SetApiContext",
+                   BindingFlags.InvokeMethod,
+                   null,
+                   env,
+                   new[] { item.Key, item.Value });
             }
 
             object address = Activator.CreateInstance(addressType, apiAddress);

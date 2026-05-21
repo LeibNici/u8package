@@ -333,6 +333,9 @@
 | `u8Id` | `DomHead[0]["poid"]` | 建议 | U8 主键 |
 | `timeStamp` | `DomHead[0]["ufts"]` | 待确认 | 时间戳 |
 | `verifier` | `DomHead[0]["cverifier"]` | 否 | 审核人 |
+| `businessType` | API Context `sBusType` | 建议 | 默认普通采购 |
+
+固定上下文：`VoucherType=1`、`bPositive=true`、`sBillType=""`。
 
 ## 13. 待确认基础档案
 

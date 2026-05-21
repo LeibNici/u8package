@@ -808,6 +808,9 @@ components:
               type: boolean
             verifier:
               type: string
+            businessType:
+              type: string
+              default: 普通采购
     ConsignmentSaveRequest:
       allOf:
         - $ref: "#/components/schemas/BaseBusinessRequest"

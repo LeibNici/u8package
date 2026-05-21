@@ -13,6 +13,8 @@ namespace Xinchuan.U8Bridge.U8
 
         public IDictionary<string, object> NormalValues { get; } = new Dictionary<string, object>();
 
+        public IDictionary<string, object> ContextValues { get; } = new Dictionary<string, object>();
+
         public IList<U8BoObject> BusinessObjects { get; } = new List<U8BoObject>();
 
         public IList<U8ExtBoObject> ExtensionObjects { get; } = new List<U8ExtBoObject>();
