@@ -120,6 +120,42 @@ Xinchuan.U8Bridge-Release-<run_number>.zip
 
 当前 Actions 固定使用 `windows-2022`，避免 `windows-latest` 迁移期间影响 .NET Framework 4.8 打包稳定性。
 
+## Windows 运行与日志
+
+解压 artifact 后，先复制一份配置：
+
+```powershell
+copy .\appsettings.sample.json .\appsettings.json
+```
+
+然后修改 `appsettings.json`：
+
+* `apiKey`：信川后端调用 Bridge 时传入的 `X-API-KEY`。
+* `server`：U8 登录界面服务器/数据源下拉框中选中的值。
+* `accountId`、`year`、`userId`、`password`、`loginDate`：按客户 U8 登录信息填写。
+* `u8Mode`：正式联调用 `official`，只验证 REST 服务启动可用时用 `dryRun`。
+
+正式启动：
+
+```powershell
+.\Xinchuan.U8Bridge.exe .\appsettings.json
+```
+
+只验证服务能启动时，可以先执行：
+
+```powershell
+copy .\appsettings.dryrun.example.json .\appsettings.dryrun.json
+.\Xinchuan.U8Bridge.exe .\appsettings.dryrun.json
+```
+
+运行日志默认写入：
+
+```text
+logs\u8-bridge-yyyyMMdd.log
+```
+
+如果需要改日志目录，可设置环境变量 `U8_BRIDGE_LOG_DIR`。启动失败、配置缺失、JSON 格式错误、U8 API 调用异常都会写入日志。
+
 ## 当前实现状态
 
 已实现：

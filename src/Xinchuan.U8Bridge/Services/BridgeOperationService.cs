@@ -78,6 +78,14 @@ namespace Xinchuan.U8Bridge.Services
             }
             catch (Exception ex)
             {
+                BridgeLogger.Error(
+                    "U8 API call failed. RequestId="
+                    + request.RequestId
+                    + ", ApiAddress="
+                    + call.ApiAddress
+                    + ", BusinessNo="
+                    + call.BusinessNo,
+                    ex);
                 return BridgeResponse.Fail(
                     request.RequestId,
                     BridgeErrorCodes.BridgeInternalError,

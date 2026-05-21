@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using Xinchuan.U8Bridge.Services;
 
 namespace Xinchuan.U8Bridge.Configuration
 {
@@ -8,19 +10,55 @@ namespace Xinchuan.U8Bridge.Configuration
     {
         public static BridgeOptions Load(string path)
         {
-            if (!File.Exists(path))
+            string resolvedPath = ResolvePath(path);
+            BridgeLogger.Info("Loading bridge config: " + resolvedPath);
+
+            if (!File.Exists(resolvedPath))
             {
-                throw new FileNotFoundException("Bridge config file was not found.", path);
+                throw new FileNotFoundException(
+                    "Bridge config file was not found. Copy appsettings.sample.json to appsettings.json and update apiKey and U8 profile.",
+                    resolvedPath);
             }
 
-            var json = File.ReadAllText(path);
-            var options = JsonConvert.DeserializeObject<BridgeOptions>(json) ?? new BridgeOptions();
-            Normalize(options);
-            return options;
+            try
+            {
+                var json = File.ReadAllText(resolvedPath);
+                var options = JsonConvert.DeserializeObject<BridgeOptions>(json) ?? new BridgeOptions();
+                Normalize(options);
+                BridgeLogger.Info(
+                    "Bridge config loaded. Mode="
+                    + options.U8Mode
+                    + ", BaseUrl="
+                    + options.BaseUrl
+                    + ", DefaultProfile="
+                    + options.DefaultProfileName
+                    + ", Profiles="
+                    + options.Profiles.Count);
+                return options;
+            }
+            catch (JsonException ex)
+            {
+                throw new InvalidOperationException("Bridge config JSON is invalid: " + resolvedPath, ex);
+            }
         }
 
         private static void Normalize(BridgeOptions options)
         {
+            if (string.IsNullOrWhiteSpace(options.BaseUrl))
+            {
+                options.BaseUrl = "http://+:8081/";
+            }
+
+            if (options.AllowedSourceIps == null)
+            {
+                options.AllowedSourceIps = new List<string>();
+            }
+
+            if (options.Profiles == null)
+            {
+                options.Profiles = new Dictionary<string, U8ProfileOptions>();
+            }
+
             options.ApiKey = ResolveEnv(options.ApiKey);
             foreach (var profile in options.Profiles.Values)
             {
@@ -36,6 +74,23 @@ namespace Xinchuan.U8Bridge.Configuration
             {
                 throw new InvalidOperationException("At least one U8 login profile is required.");
             }
+        }
+
+        private static string ResolvePath(string path)
+        {
+            string candidate = string.IsNullOrWhiteSpace(path) ? "appsettings.json" : path;
+            if (Path.IsPathRooted(candidate))
+            {
+                return candidate;
+            }
+
+            string currentDirectoryPath = Path.GetFullPath(candidate);
+            if (File.Exists(currentDirectoryPath))
+            {
+                return currentDirectoryPath;
+            }
+
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, candidate);
         }
 
         private static string ResolveEnv(string value)

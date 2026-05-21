@@ -125,6 +125,11 @@ jobs:
             Copy-Item $prodConfig (Join-Path $packageDir "appsettings.prod.example.json")
           }
 
+          $dryRunConfig = Join-Path $root "deploy\windows\appsettings.dryrun.example.json"
+          if (Test-Path $dryRunConfig) {
+            Copy-Item $dryRunConfig (Join-Path $packageDir "appsettings.dryrun.example.json")
+          }
+
           $docs = Join-Path $root "docs"
           if (Test-Path $docs) {
             Copy-Item $docs (Join-Path $packageDir "docs") -Recurse
