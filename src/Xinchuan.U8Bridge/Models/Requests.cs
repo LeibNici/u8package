@@ -157,23 +157,6 @@ namespace Xinchuan.U8Bridge.Models
         public IList<MaterialAppItem> Items { get; set; }
     }
 
-    public sealed class ManufactureOrderAddRequest : BaseBusinessRequest
-    {
-        [Required]
-        public string OrderNo { get; set; }
-        public string Maker { get; set; }
-        public string CreateDate { get; set; }
-        [Required]
-        public IList<ManufactureOrderItem> Items { get; set; }
-    }
-
-    public sealed class ManufactureOrderAuditRequest : BaseBusinessRequest
-    {
-        [Required]
-        public string OrderNo { get; set; }
-        public string Verifier { get; set; }
-    }
-
     public sealed class InboundAddRequest : BaseBusinessRequest
     {
         [Required]
@@ -259,17 +242,4 @@ namespace Xinchuan.U8Bridge.Models
         public string DueDate { get; set; }
     }
 
-    public sealed class ManufactureOrderItem
-    {
-        public int LineNo { get; set; }
-        [Required]
-        public string MaterialCode { get; set; }
-        public string MaterialName { get; set; }
-        [Required]
-        public string StartDate { get; set; }
-        [Required]
-        public string DueDate { get; set; }
-        public decimal Quantity { get; set; }
-        public int OrderClass { get; set; } = 1;
-    }
 }

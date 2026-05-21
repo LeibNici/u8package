@@ -15,6 +15,8 @@ namespace Xinchuan.U8Bridge.U8
 
         public IList<U8BoObject> BusinessObjects { get; } = new List<U8BoObject>();
 
+        public IList<U8ExtBoObject> ExtensionObjects { get; } = new List<U8ExtBoObject>();
+
         public void ApplyTo(object broker, U8Reflection reflection)
         {
             foreach (KeyValuePair<string, object> item in NormalValues)
@@ -25,6 +27,12 @@ namespace Xinchuan.U8Bridge.U8
             foreach (U8BoObject item in BusinessObjects)
             {
                 ApplyBusinessObject(broker, reflection, item);
+            }
+
+            foreach (U8ExtBoObject item in ExtensionObjects)
+            {
+                object entity = reflection.GetExtBoEntity(broker, item.Name);
+                ApplyExtensionObject(entity, reflection, item);
             }
         }
 
@@ -56,6 +64,25 @@ namespace Xinchuan.U8Bridge.U8
                 }
             }
         }
+
+        private static void ApplyExtensionObject(object entity, U8Reflection reflection, U8ExtBoObject item)
+        {
+            reflection.SetExtItemCount(entity, item.Rows.Count);
+            for (int row = 0; row < item.Rows.Count; row++)
+            {
+                object extItem = reflection.GetExtItem(entity, row);
+                foreach (KeyValuePair<string, object> field in item.Rows[row].Fields)
+                {
+                    reflection.SetExtValue(extItem, field.Key, field.Value);
+                }
+
+                foreach (KeyValuePair<string, U8ExtBoObject> child in item.Rows[row].Children)
+                {
+                    object subEntity = reflection.GetSubEntity(extItem, child.Key);
+                    ApplyExtensionObject(subEntity, reflection, child.Value);
+                }
+            }
+        }
     }
 
     public sealed class U8BoObject
@@ -68,6 +95,25 @@ namespace Xinchuan.U8Bridge.U8
         public string Name { get; }
 
         public IList<IDictionary<string, object>> Rows { get; } = new List<IDictionary<string, object>>();
+    }
+
+    public sealed class U8ExtBoObject
+    {
+        public U8ExtBoObject(string name)
+        {
+            Name = name;
+        }
+
+        public string Name { get; }
+
+        public IList<U8ExtBoRow> Rows { get; } = new List<U8ExtBoRow>();
+    }
+
+    public sealed class U8ExtBoRow
+    {
+        public IDictionary<string, object> Fields { get; } = new Dictionary<string, object>();
+
+        public IDictionary<string, U8ExtBoObject> Children { get; } = new Dictionary<string, U8ExtBoObject>();
     }
 
     public sealed class U8BrokerSpecialValue

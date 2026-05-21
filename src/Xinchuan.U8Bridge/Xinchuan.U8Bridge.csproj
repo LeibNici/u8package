@@ -62,6 +62,7 @@
     <Compile Include="Controllers\U8Controller.cs" />
     <Compile Include="Models\BridgeErrorCodes.cs" />
     <Compile Include="Models\BridgeResponse.cs" />
+    <Compile Include="Models\ProductionRequests.cs" />
     <Compile Include="Models\QueryRequests.cs" />
     <Compile Include="Models\Requests.cs" />
     <Compile Include="Models\U8ApiCall.cs" />

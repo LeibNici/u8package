@@ -261,15 +261,80 @@
 | `items[].quantity` | `domBody[i]["iquantity"]` | 是 | 申请数量 |
 | `items[].dueDate` | `domBody[i]["dduedate"]` | 否 | 需求日期 |
 
-## 11. 生产订单新增
+## 11. 生产订单接口
 
 内部 U8 API：`U8API/MOrder/MOrderAdd`
 
-生产订单示例使用扩展业务对象 `extbo`，包含 `Mom_Order`、`Mom_OrderDetail`、`Mom_MoAllocate` 等节点。
+同类接口：
 
-首期不建议直接纳入，除非客户明确要求 APS/MES 发布生产订单到 U8。
+| Bridge API | U8 API |
+| --- | --- |
+| `/api/u8/morder/add` | `U8API/MOrder/MOrderAdd` |
+| `/api/u8/morder/update` | `U8API/MOrder/MOrderUpdate` |
+| `/api/u8/morder/audit` | `U8API/MOrder/MOrderAuditing` |
+| `/api/u8/morder/unaudit` | `U8API/MOrder/MOrderUnauditing` |
+| `/api/u8/morder/delete` | `U8API/MOrder/MOrderDelete` |
+| `/api/u8/morder/load` | `U8API/MOrder/MOrderLoad` |
 
-## 12. 待确认基础档案
+生产订单新增/更新使用扩展业务对象 `extbo`，包含表头、`Mom_OrderDetail`、`Mom_MoAllocate` 子件结构。
+
+### 11.1 表头 extbo 映射
+
+| 信川字段 | U8 字段 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `orderNo` | `extbo[0]["MoCode"]` | 是 | 生产订单号 |
+| `maker` | `extbo[0]["CreateUser"]` | 建议 | 制单人 |
+| `createDate` | `extbo[0]["CreateDate"]` | 建议 | 制单日期 |
+| `createTime` | `extbo[0]["CreateTime"]` | 否 | 制单时间 |
+
+### 11.2 生产订单明细 `Mom_OrderDetail`
+
+| 信川字段 | U8 字段 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `items[].lineNo` | `DSortSeq` | 是 | 行号 |
+| `items[].orderClass` | `DMoClass` | 是 | 1 标准 / 2 非标准 / 3 重复计划 |
+| `items[].materialCode` | `DInvCode` | 是 | 母件物料编码 |
+| `items[].materialName` | `DInvName` | 建议 | 母件物料名称 |
+| `items[].startDate` | `DStartDate` | 是 | 开工日期 |
+| `items[].dueDate` | `DDueDate` | 是 | 完工日期 |
+| `items[].quantity` | `DQty` | 是 | 生产数量 |
+| `items[].warehouseCode` | `DWhCode` | 建议 | 预入仓库 |
+| `items[].departmentCode` | `DMDeptCode` | 建议 | 生产部门 |
+| `items[].orderTypeCode` | `DMoTypeCode` | 待确认 | 生产订单类别 |
+| `items[].lotNo` | `DMoLotCode` | 否 | 生产批号 |
+| `items[].remark` | `DRemark` | 否 | 备注 |
+
+### 11.3 子件 `Mom_MoAllocate`
+
+| 信川字段 | U8 字段 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `components[].lineNo` | `DSortSeq` | 是 | 子件行号 |
+| `components[].operationSeq` | `DOpSeq` | 否 | 工序行号 |
+| `components[].materialCode` | `DInvCode` | 是 | 子件编码 |
+| `components[].materialName` | `DInvName` | 建议 | 子件名称 |
+| `components[].baseQtyNumerator` | `DBaseQtyN` | 建议 | 基本用量 |
+| `components[].baseQtyDenominator` | `DBaseQtyD` | 建议 | 基础数量，默认 1 |
+| `components[].requiredDate` | `DStartDemDate` | 建议 | 需求日期 |
+| `components[].quantity` | `DQty` | 建议 | 应领数量 |
+| `components[].warehouseCode` | `DWhCode` | 建议 | 供应仓库 |
+| `components[].batchNo` | `DLotNo` | 否 | 批号 |
+| `components[].remark` | `DRemark` | 否 | 备注 |
+
+## 12. 采购订单确认/弃审
+
+| Bridge API | U8 API |
+| --- | --- |
+| `/api/u8/purchase-order/confirm` | `U8API/PurchaseOrder/ConfirmPO` |
+| `/api/u8/purchase-order/cancel-confirm` | `U8API/PurchaseOrder/CancelconfirmPo` |
+
+| 信川字段 | U8 字段 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `purchaseOrderNo` | `DomHead[0]["cpoid"]` | 是 | 采购订单号 |
+| `u8Id` | `DomHead[0]["poid"]` | 建议 | U8 主键 |
+| `timeStamp` | `DomHead[0]["ufts"]` | 待确认 | 时间戳 |
+| `verifier` | `DomHead[0]["cverifier"]` | 否 | 审核人 |
+
+## 13. 待确认基础档案
 
 Bridge 实施前必须由客户/U8 顾问提供下列编码：
 
@@ -286,7 +351,7 @@ Bridge 实施前必须由客户/U8 顾问提供下列编码：
 | 税率 | `taxRate` | 销售订单必填 |
 | 单位编码 | `unitCode` | 如果 U8 要求单位编码，不能只传名称 |
 
-## 13. 不允许的映射方式
+## 14. 不允许的映射方式
 
 * 不允许直接写 U8 业务表生成单据。
 * 不允许用客户名称代替客户编码。

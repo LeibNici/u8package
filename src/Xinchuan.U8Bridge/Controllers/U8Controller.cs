@@ -113,7 +113,21 @@ namespace Xinchuan.U8Bridge.Controllers
         [Route("material-out/audit")]
         public IHttpActionResult AuditMaterialOut(StockAuditRequest request)
         {
-            return Invoke(request, "U8API/saleout/Audit", "material-out-audit", request?.U8Id, false);
+            return Invoke(request, "U8API/MaterialOut/Audit", "material-out-audit", request?.U8Id, false);
+        }
+
+        [HttpPost]
+        [Route("material-out/cancel-audit")]
+        public IHttpActionResult CancelAuditMaterialOut(StockAuditRequest request)
+        {
+            return Invoke(request, "U8API/MaterialOut/CancelAudit", "material-out-cancel-audit", request?.U8Id, false);
+        }
+
+        [HttpPost]
+        [Route("material-out/delete")]
+        public IHttpActionResult DeleteMaterialOut(StockAuditRequest request)
+        {
+            return Invoke(request, "U8API/MaterialOut/Delete", "material-out-delete", request?.U8Id, false);
         }
 
         [HttpPost]
@@ -134,7 +148,14 @@ namespace Xinchuan.U8Bridge.Controllers
         [Route("morder/add")]
         public IHttpActionResult AddManufactureOrder(ManufactureOrderAddRequest request)
         {
-            return Unsupported(request, request?.OrderNo, "U8 生产订单新增需要 extbo 映射，待按现场模板补齐");
+            return Invoke(request, "U8API/MOrder/MOrderAdd", "morder", request?.OrderNo, true);
+        }
+
+        [HttpPost]
+        [Route("morder/update")]
+        public IHttpActionResult UpdateManufactureOrder(ManufactureOrderAddRequest request)
+        {
+            return Invoke(request, "U8API/MOrder/MOrderUpdate", "morder-update", request?.OrderNo, true);
         }
 
         [HttpPost]
@@ -142,6 +163,41 @@ namespace Xinchuan.U8Bridge.Controllers
         public IHttpActionResult AuditManufactureOrder(ManufactureOrderAuditRequest request)
         {
             return Invoke(request, "U8API/MOrder/MOrderAuditing", "morder-audit", request?.OrderNo, false);
+        }
+
+        [HttpPost]
+        [Route("morder/unaudit")]
+        public IHttpActionResult UnauditManufactureOrder(ManufactureOrderSimpleRequest request)
+        {
+            return Invoke(request, "U8API/MOrder/MOrderUnauditing", "morder-unaudit", request?.OrderNo, false);
+        }
+
+        [HttpPost]
+        [Route("morder/delete")]
+        public IHttpActionResult DeleteManufactureOrder(ManufactureOrderSimpleRequest request)
+        {
+            return Invoke(request, "U8API/MOrder/MOrderDelete", "morder-delete", request?.OrderNo, false);
+        }
+
+        [HttpPost]
+        [Route("morder/load")]
+        public IHttpActionResult LoadManufactureOrder(ManufactureOrderSimpleRequest request)
+        {
+            return Invoke(request, "U8API/MOrder/MOrderLoad", "morder-load", request?.OrderNo, false);
+        }
+
+        [HttpPost]
+        [Route("purchase-order/confirm")]
+        public IHttpActionResult ConfirmPurchaseOrder(PurchaseOrderConfirmRequest request)
+        {
+            return Invoke(request, "U8API/PurchaseOrder/ConfirmPO", "purchase-order-confirm", request?.PurchaseOrderNo, false);
+        }
+
+        [HttpPost]
+        [Route("purchase-order/cancel-confirm")]
+        public IHttpActionResult CancelConfirmPurchaseOrder(PurchaseOrderConfirmRequest request)
+        {
+            return Invoke(request, "U8API/PurchaseOrder/CancelconfirmPo", "purchase-order-cancel-confirm", request?.PurchaseOrderNo, false);
         }
 
         [HttpPost]

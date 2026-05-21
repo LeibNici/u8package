@@ -56,6 +56,11 @@ namespace Xinchuan.U8Bridge.U8
             return Call(broker, "GetBoParam", name);
         }
 
+        public object GetExtBoEntity(object broker, string name)
+        {
+            return Call(broker, "GetExtBoEntity", name);
+        }
+
         public void AssignNormalValue(object broker, string name, object value)
         {
             Call(broker, "AssignNormalValue", name, value);
@@ -74,6 +79,52 @@ namespace Xinchuan.U8Bridge.U8
                 BindingFlags.SetProperty,
                 null,
                 row,
+                new[] { field, value ?? string.Empty });
+        }
+
+        public void SetExtItemCount(object entity, int count)
+        {
+            entity.GetType().InvokeMember(
+                "ItemCount",
+                BindingFlags.SetProperty,
+                null,
+                entity,
+                new object[] { count });
+        }
+
+        public object GetExtItem(object entity, int rowIndex)
+        {
+            return entity.GetType().InvokeMember(
+                "Item",
+                BindingFlags.GetProperty,
+                null,
+                entity,
+                new object[] { rowIndex });
+        }
+
+        public object GetSubEntity(object item, string name)
+        {
+            object subEntities = item.GetType().InvokeMember(
+                "SubEntity",
+                BindingFlags.GetProperty,
+                null,
+                item,
+                null);
+            return subEntities.GetType().InvokeMember(
+                "Item",
+                BindingFlags.GetProperty,
+                null,
+                subEntities,
+                new object[] { name });
+        }
+
+        public void SetExtValue(object item, string field, object value)
+        {
+            item.GetType().InvokeMember(
+                "Item",
+                BindingFlags.SetProperty,
+                null,
+                item,
                 new[] { field, value ?? string.Empty });
         }
 

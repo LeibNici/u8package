@@ -451,9 +451,19 @@ POST /api/u8/material-out/add
 POST /api/u8/material-out/audit
 ```
 
-内部 U8 API：待 U8 顾问确认。
+内部 U8 API：`U8API/MaterialOut/Audit`
 
-备注：当前提供的“材料出库单审核”示例文件中 API 地址疑似为 `U8API/saleout/Audit`，这可能是示例复制问题，不能直接按该地址实施。
+同类接口：
+
+```http
+POST /api/u8/material-out/cancel-audit
+POST /api/u8/material-out/delete
+```
+
+内部 U8 API：
+
+* `U8API/MaterialOut/CancelAudit`
+* `U8API/MaterialOut/Delete`
 
 ### 8.12 领料申请单新增
 
@@ -481,7 +491,56 @@ POST /api/u8/morder/add
 
 内部 U8 API：`U8API/MOrder/MOrderAdd`
 
-是否首期实施取决于 APS/MES 是否要求将生产订单回写 U8。
+生产订单接口来自 `生产订单.txt` 这一类官方示例，新增/更新使用 `extbo`，包含表头、`Mom_OrderDetail`、`Mom_MoAllocate` 子件结构。
+
+最小请求：
+
+```json
+{
+  "requestId": "MO-ADD-202605210001",
+  "orderNo": "MO202605210001",
+  "maker": "168",
+  "createDate": "2026-05-21",
+  "items": [
+    {
+      "lineNo": 1,
+      "materialCode": "FG001",
+      "materialName": "成品A",
+      "startDate": "2026-05-22",
+      "dueDate": "2026-05-30",
+      "quantity": 10,
+      "orderClass": 1,
+      "warehouseCode": "01",
+      "departmentCode": "02",
+      "components": [
+        {
+          "lineNo": 1,
+          "materialCode": "RM001",
+          "materialName": "原材料A",
+          "baseQtyNumerator": 1,
+          "baseQtyDenominator": 1,
+          "quantity": 10,
+          "requiredDate": "2026-05-22"
+        }
+      ]
+    }
+  ]
+}
+```
+
+同类接口：
+
+```http
+POST /api/u8/morder/update
+POST /api/u8/morder/load
+POST /api/u8/morder/delete
+```
+
+内部 U8 API：
+
+* `U8API/MOrder/MOrderUpdate`
+* `U8API/MOrder/MOrderLoad`
+* `U8API/MOrder/MOrderDelete`
 
 ### 8.15 生产订单审核
 
@@ -491,7 +550,29 @@ POST /api/u8/morder/audit
 
 内部 U8 API：`U8API/MOrder/MOrderAuditing`
 
-### 8.16 入库单新增
+弃审接口：
+
+```http
+POST /api/u8/morder/unaudit
+```
+
+内部 U8 API：`U8API/MOrder/MOrderUnauditing`
+
+### 8.16 采购订单确认/弃审
+
+```http
+POST /api/u8/purchase-order/confirm
+POST /api/u8/purchase-order/cancel-confirm
+```
+
+内部 U8 API：
+
+* `U8API/PurchaseOrder/ConfirmPO`
+* `U8API/PurchaseOrder/CancelconfirmPo`
+
+说明：该接口来自 `采购订单.txt` 示例，文件名虽然是采购订单，但示例内容是采购订单确认/弃审。
+
+### 8.17 入库单新增
 
 ```http
 POST /api/u8/inbound/add
@@ -501,7 +582,7 @@ POST /api/u8/inbound/add
 
 缺少资料：采购入库、产成品入库、其他入库分别对应的官方 U8API 示例，以及业务应使用哪一种入库类型。
 
-### 8.17 生产计划发布
+### 8.18 生产计划发布
 
 ```http
 POST /api/u8/production-plan/publish
@@ -511,7 +592,7 @@ POST /api/u8/production-plan/publish
 
 缺少资料：生产计划发布到 U8 的官方接口路径、字段模板和业务触发时点。
 
-### 8.18 生产报工回写
+### 8.19 生产报工回写
 
 ```http
 POST /api/u8/work-report/save
@@ -521,7 +602,7 @@ POST /api/u8/work-report/save
 
 缺少资料：报工/完工汇报/工序汇报在客户 U8 中使用的官方 API 示例。
 
-### 8.19 生产退料回写
+### 8.20 生产退料回写
 
 ```http
 POST /api/u8/material-return/add
@@ -539,7 +620,8 @@ POST /api/u8/material-return/add
 2. 主数据查询接口：客户、物料、供应商
 3. 销售链路：`sales-order/save`、`sales-order/audit`、`saleout/add` 或 `consignment/save`
 4. 生产领料链路：`material-app/add`、`material-app/audit`、`material-out/add`
-5. 生产、入库、报工、退料等需等官方示例补齐后再联调
+5. 生产订单新增/审核/弃审/更新/删除
+6. 入库、报工、退料等需等官方示例补齐后再联调
 
 ## 10. Java 后端调用建议
 
@@ -577,4 +659,4 @@ xinchuan:
 * 客户、物料、供应商、库存、采购在途、价格查询的官方 U8API 示例。
 * 入库类单据对应的官方 U8API 示例。
 * 生产计划、生产报工、生产退料对应的官方 U8API 示例。
-* 生产订单新增示例中的 `extbo` 结构是否固定，以及是否允许 Bridge 按当前模板实现。
+* 生产订单 `extbo` 中哪些字段为客户现场必填，尤其是生产部门、预入仓库、生产订单类别、子件用量。

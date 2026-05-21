@@ -267,8 +267,42 @@ paths:
   /api/u8/material-out/audit:
     post:
       summary: Audit U8 material outbound document
-      description: Internal U8 API address must be confirmed by U8 consultant.
+      description: Calls U8API/MaterialOut/Audit from the official material outbound sample.
       operationId: auditMaterialOut
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StockAuditRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "422":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/material-out/cancel-audit:
+    post:
+      summary: Cancel audit for U8 material outbound document
+      operationId: cancelAuditMaterialOut
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StockAuditRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "422":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/material-out/delete:
+    post:
+      summary: Delete U8 material outbound document
+      operationId: deleteMaterialOut
       parameters:
         - $ref: "#/components/parameters/RequestIdHeader"
       requestBody:
@@ -319,7 +353,7 @@ paths:
   /api/u8/morder/add:
     post:
       summary: Create U8 manufacture order
-      description: Unified Bridge API shell. Returns U8_API_NOT_SUPPORTED until extbo mapping is completed from the official sample.
+      description: Calls U8API/MOrder/MOrderAdd with the official extbo structure.
       operationId: addManufactureOrder
       parameters:
         - $ref: "#/components/parameters/RequestIdHeader"
@@ -330,7 +364,26 @@ paths:
             schema:
               $ref: "#/components/schemas/ManufactureOrderAddRequest"
       responses:
-        "400":
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "422":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/morder/update:
+    post:
+      summary: Update U8 manufacture order
+      operationId: updateManufactureOrder
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ManufactureOrderAddRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "422":
           $ref: "#/components/responses/BridgeResponse"
   /api/u8/morder/audit:
     post:
@@ -344,6 +397,91 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ManufactureOrderAuditRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "422":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/morder/unaudit:
+    post:
+      summary: Cancel audit for U8 manufacture order
+      operationId: unauditManufactureOrder
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ManufactureOrderSimpleRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "422":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/morder/delete:
+    post:
+      summary: Delete U8 manufacture order
+      operationId: deleteManufactureOrder
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ManufactureOrderSimpleRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "422":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/morder/load:
+    post:
+      summary: Load U8 manufacture order
+      operationId: loadManufactureOrder
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ManufactureOrderSimpleRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "422":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/purchase-order/confirm:
+    post:
+      summary: Confirm U8 purchase order
+      operationId: confirmPurchaseOrder
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PurchaseOrderConfirmRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "422":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/purchase-order/cancel-confirm:
+    post:
+      summary: Cancel confirmation for U8 purchase order
+      operationId: cancelConfirmPurchaseOrder
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PurchaseOrderConfirmRequest"
       responses:
         "200":
           $ref: "#/components/responses/BridgeResponse"
@@ -814,11 +952,21 @@ components:
             createDate:
               type: string
               format: date
+            createTime:
+              type: string
             items:
               type: array
               minItems: 1
               items:
                 $ref: "#/components/schemas/ManufactureOrderItem"
+    ManufactureOrderSimpleRequest:
+      allOf:
+        - $ref: "#/components/schemas/BaseBusinessRequest"
+        - type: object
+          required: [orderNo]
+          properties:
+            orderNo:
+              type: string
     ManufactureOrderAuditRequest:
       allOf:
         - $ref: "#/components/schemas/BaseBusinessRequest"
@@ -826,6 +974,20 @@ components:
           required: [orderNo]
           properties:
             orderNo:
+              type: string
+            verifier:
+              type: string
+    PurchaseOrderConfirmRequest:
+      allOf:
+        - $ref: "#/components/schemas/BaseBusinessRequest"
+        - type: object
+          required: [purchaseOrderNo]
+          properties:
+            purchaseOrderNo:
+              type: string
+            u8Id:
+              type: string
+            timeStamp:
               type: string
             verifier:
               type: string
@@ -1007,6 +1169,52 @@ components:
         orderClass:
           type: integer
           default: 1
+        warehouseCode:
+          type: string
+        departmentCode:
+          type: string
+        orderTypeCode:
+          type: string
+        lotNo:
+          type: string
+        remark:
+          type: string
+        components:
+          type: array
+          items:
+            $ref: "#/components/schemas/ManufactureOrderComponentItem"
+    ManufactureOrderComponentItem:
+      type: object
+      required: [lineNo, materialCode]
+      properties:
+        lineNo:
+          type: integer
+          minimum: 1
+        operationSeq:
+          type: string
+        materialCode:
+          type: string
+        materialName:
+          type: string
+        baseQtyNumerator:
+          type: number
+          format: decimal
+        baseQtyDenominator:
+          type: number
+          format: decimal
+          default: 1
+        quantity:
+          type: number
+          format: decimal
+        requiredDate:
+          type: string
+          format: date
+        warehouseCode:
+          type: string
+        batchNo:
+          type: string
+        remark:
+          type: string
     StockAuditRequest:
       allOf:
         - $ref: "#/components/schemas/BaseBusinessRequest"

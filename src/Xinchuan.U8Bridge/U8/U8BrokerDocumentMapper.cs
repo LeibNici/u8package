@@ -30,8 +30,23 @@ namespace Xinchuan.U8Bridge.U8
                     return U8AdvancedDocumentMapper.MapMaterialApp((MaterialAppAddRequest)call.Payload);
                 case "U8API/materialapp/Audit":
                     return U8AdvancedDocumentMapper.MapMaterialAppAudit((StockAuditRequest)call.Payload);
+                case "U8API/MOrder/MOrderAdd":
+                case "U8API/MOrder/MOrderUpdate":
+                    return U8AdvancedDocumentMapper.MapManufactureOrderAdd((ManufactureOrderAddRequest)call.Payload);
                 case "U8API/MOrder/MOrderAuditing":
                     return U8AdvancedDocumentMapper.MapManufactureOrderAudit((ManufactureOrderAuditRequest)call.Payload);
+                case "U8API/MOrder/MOrderUnauditing":
+                case "U8API/MOrder/MOrderDelete":
+                case "U8API/MOrder/MOrderLoad":
+                    return U8AdvancedDocumentMapper.MapManufactureOrderSimple((ManufactureOrderSimpleRequest)call.Payload);
+                case "U8API/PurchaseOrder/ConfirmPO":
+                case "U8API/PurchaseOrder/CancelconfirmPo":
+                    return U8AdvancedDocumentMapper.MapPurchaseOrderConfirm((PurchaseOrderConfirmRequest)call.Payload);
+                case "U8API/MaterialOut/Audit":
+                    return U8AdvancedDocumentMapper.MapMaterialOutAction((StockAuditRequest)call.Payload, true);
+                case "U8API/MaterialOut/CancelAudit":
+                case "U8API/MaterialOut/Delete":
+                    return U8AdvancedDocumentMapper.MapMaterialOutAction((StockAuditRequest)call.Payload, false);
                 default:
                     throw new InvalidOperationException("Unsupported U8 API address: " + call.ApiAddress);
             }
