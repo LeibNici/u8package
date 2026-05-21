@@ -1,0 +1,127 @@
+name: Package U8 Bridge
+
+on:
+  workflow_dispatch:
+    inputs:
+      configuration:
+        description: Build configuration
+        required: true
+        default: Release
+        type: choice
+        options:
+          - Release
+          - Debug
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - xinchuan-u8-bridge/**
+      - src/**
+      - deploy/**
+      - docs/**
+      - .github/workflows/u8-bridge-package.yml
+
+jobs:
+  package:
+    name: Build and package on Windows
+    runs-on: windows-latest
+    env:
+      BUILD_CONFIGURATION: ${{ github.event.inputs.configuration || 'Release' }}
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Resolve bridge paths
+        id: bridge
+        run: |
+          $candidates = @(
+            "${{ github.workspace }}\xinchuan-u8-bridge",
+            "${{ github.workspace }}"
+          )
+
+          foreach ($candidate in $candidates) {
+            $solution = Join-Path $candidate "src\Xinchuan.U8Bridge.sln"
+            if (Test-Path $solution) {
+              "root=$candidate" >> $env:GITHUB_OUTPUT
+              "solution=$solution" >> $env:GITHUB_OUTPUT
+              "projectDir=$(Join-Path $candidate 'src\Xinchuan.U8Bridge')" >> $env:GITHUB_OUTPUT
+              "outDir=$(Join-Path $candidate 'src\Xinchuan.U8Bridge\bin\${{ env.BUILD_CONFIGURATION }}')" >> $env:GITHUB_OUTPUT
+              "packageDir=$(Join-Path $candidate 'artifacts\package')" >> $env:GITHUB_OUTPUT
+              "zipPath=$(Join-Path $candidate 'artifacts\Xinchuan.U8Bridge-${{ env.BUILD_CONFIGURATION }}-${{ github.run_number }}.zip')" >> $env:GITHUB_OUTPUT
+              exit 0
+            }
+          }
+
+          throw "Cannot find src\Xinchuan.U8Bridge.sln in repository root or xinchuan-u8-bridge subdirectory."
+
+      - name: Restore NuGet packages
+        run: |
+          $root = "${{ steps.bridge.outputs.root }}"
+          $solution = "${{ steps.bridge.outputs.solution }}"
+          $packages = Join-Path $root "src\packages"
+          nuget restore $solution -PackagesDirectory $packages
+
+      - name: Build
+        run: |
+          msbuild "${{ steps.bridge.outputs.solution }}" `
+            /p:Configuration="${{ env.BUILD_CONFIGURATION }}" `
+            /p:Platform="Any CPU" `
+            /m
+
+      - name: Assemble package
+        run: |
+          $root = "${{ steps.bridge.outputs.root }}"
+          $outDir = "${{ steps.bridge.outputs.outDir }}"
+          $packageDir = "${{ steps.bridge.outputs.packageDir }}"
+          $zipPath = "${{ steps.bridge.outputs.zipPath }}"
+
+          if (!(Test-Path $outDir)) {
+            throw "Build output was not found: $outDir"
+          }
+
+          Remove-Item -Recurse -Force $packageDir -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force -Path $packageDir | Out-Null
+          Copy-Item -Path (Join-Path $outDir "*") -Destination $packageDir -Recurse
+
+          $sampleConfig = Join-Path $root "src\Xinchuan.U8Bridge\appsettings.sample.json"
+          if (Test-Path $sampleConfig) {
+            Copy-Item $sampleConfig (Join-Path $packageDir "appsettings.sample.json")
+          }
+
+          $prodConfig = Join-Path $root "deploy\windows\appsettings.prod.example.json"
+          if (Test-Path $prodConfig) {
+            Copy-Item $prodConfig (Join-Path $packageDir "appsettings.prod.example.json")
+          }
+
+          $docs = Join-Path $root "docs"
+          if (Test-Path $docs) {
+            Copy-Item $docs (Join-Path $packageDir "docs") -Recurse
+          }
+
+          Compress-Archive -Path (Join-Path $packageDir "*") -DestinationPath $zipPath -Force
+          "zipPath=$zipPath" >> $env:GITHUB_ENV
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Xinchuan.U8Bridge-${{ env.BUILD_CONFIGURATION }}-${{ github.run_number }}
+          path: ${{ env.zipPath }}
+          if-no-files-found: error
+
+      - name: Write summary
+        run: |
+          Add-Content $env:GITHUB_STEP_SUMMARY "## U8 Bridge package"
+          Add-Content $env:GITHUB_STEP_SUMMARY ""
+          Add-Content $env:GITHUB_STEP_SUMMARY "- Configuration: ${{ env.BUILD_CONFIGURATION }}"
+          Add-Content $env:GITHUB_STEP_SUMMARY "- Artifact: Xinchuan.U8Bridge-${{ env.BUILD_CONFIGURATION }}-${{ github.run_number }}"

@@ -1,0 +1,487 @@
+# U8 Bridge REST API 对接文档
+
+## 1. 目标
+
+U8 Bridge 是部署在客户 U8 Windows 环境上的转接服务。信川 Java 后端通过 RESTful HTTP JSON 调用 Bridge，Bridge 内部调用 U8 官方 `U8Login` / `U8ApiBroker` / U8API DLL 完成 U8 单据新增、审核等操作。
+
+本文定义 Bridge 对外 REST API 契约。Bridge 内部实现语言建议为 C# / .NET Framework 4.8，但对信川系统只暴露 HTTP JSON。
+
+## 2. 总体架构
+
+```text
+信川 Java 后端
+  -> HTTP JSON
+      -> U8 Bridge REST 服务
+          -> U8Login 登录账套
+          -> U8ApiBroker 调官方 U8API
+              -> U8 账套
+```
+
+## 3. 环境与部署约束
+
+Bridge 必须部署在能正常运行 U8 官方 API 的 Windows 环境中。
+
+最低要求：
+
+* Windows Server 正式环境。
+* 已安装 U8 客户端或 U8 服务端组件。
+* 当前机器可通过 U8 客户端登录目标账套。
+* U8 API 相关 DLL 可引用或已注册。
+* 如 U8 组件为 32 位，Bridge 进程或 IIS 应用池必须启用 32 位。
+* Bridge 运行账号具备访问 U8 组件、U8 安装目录、账套服务的权限。
+
+## 4. 登录参数设计
+
+Bridge 不应把 U8 登录参数写死在代码里，应通过配置文件或管理界面维护登录 Profile。
+
+建议配置项：
+
+| 字段 | U8Login 参数 | 说明 |
+| --- | --- | --- |
+| `profileName` | - | 环境名称，例如 `prod-100` |
+| `subId` | `sSubId` | 子系统，销售类示例为 `AS` |
+| `server` | `sServer` | U8 登录界面“服务器/数据源”下拉框选中值，必须原样配置 |
+| `accountId` | `sAccID` | 账套参数，常见格式如 `(default)@100` |
+| `accountSet` | - | 账套号，例如 `100`，便于展示和校验 |
+| `year` | `sYear` | 会计年度，例如 `2018` |
+| `loginDateMode` | `sDate` | `TODAY` / `BUSINESS_DATE` / `FIXED` |
+| `fixedLoginDate` | `sDate` | 当 `loginDateMode=FIXED` 时使用 |
+| `userId` | `sUserID` | U8 操作员 |
+| `password` | `sPassword` | U8 密码，必须加密或由密钥服务注入 |
+| `serial` | `sSerial` | 通常为空，按 U8 环境要求配置 |
+
+重要规则：
+
+* `server` 必须来自 U8 客户端登录界面下拉框，不从 SQL Server JDBC URL 推导。
+* `accountId`、`year` 可以从库名 `ufdata_100_2018` 推断为 `100` / `2018`，但最终必须以 `login-test` 成功为准。
+* 不允许在源码、文档、日志中输出明文密码。
+
+## 5. 通用请求头
+
+所有业务写接口必须携带：
+
+```http
+Content-Type: application/json
+X-API-KEY: <bridge-api-key>
+X-Request-ID: <global-request-id>
+```
+
+说明：
+
+* `X-API-KEY` 用于 Bridge 入站鉴权。
+* `X-Request-ID` 用于链路追踪。若请求体内也包含 `requestId`，两者必须一致或 Bridge 记录不一致告警。
+
+## 6. 通用响应格式
+
+成功：
+
+```json
+{
+  "success": true,
+  "requestId": "OMS-ORDER-202605210001",
+  "u8Code": "SO202605210001",
+  "u8Id": "123456",
+  "message": "销售订单新增成功",
+  "errorCode": null,
+  "rawMessage": null
+}
+```
+
+失败：
+
+```json
+{
+  "success": false,
+  "requestId": "OMS-ORDER-202605210001",
+  "u8Code": null,
+  "u8Id": null,
+  "message": "U8销售订单新增失败",
+  "errorCode": "U8_BIZ_ERROR",
+  "rawMessage": "客户编码不存在"
+}
+```
+
+字段说明：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `success` | boolean | 是否成功 |
+| `requestId` | string | 请求追踪 ID |
+| `u8Code` | string | U8 单据号，若 U8 返回或可确定则填充 |
+| `u8Id` | string | U8 单据主键 ID，例如 `vNewID` 或 `VouchId` |
+| `message` | string | 面向调用方的摘要消息 |
+| `errorCode` | string | 标准错误码，见 `u8-bridge-error-codes.md` |
+| `rawMessage` | string | U8 原始错误或 `broker.GetExceptionString()`，需脱敏 |
+
+## 7. 幂等规则
+
+Bridge 必须按业务单号做幂等，避免重复生成 U8 单据。
+
+建议幂等键：
+
+| 接口 | 幂等键 |
+| --- | --- |
+| 销售订单新增 | `orderNo` |
+| 销售订单审核 | `orderNo` 或 `u8Id` |
+| 销售发货单新增 | `deliveryNo` |
+| 销售出库单新增 | `outboundNo` |
+| 材料出库单新增 | `materialOutNo` |
+| 生产订单新增 | `moCode` |
+
+重复请求处理：
+
+* 若之前成功，直接返回原 `u8Code` / `u8Id`。
+* 若之前失败，允许重试，但必须记录 retry 次数。
+* 若同一幂等键请求内容发生变化，返回 `IDEMPOTENCY_CONFLICT`。
+
+## 8. API 清单
+
+### 8.1 健康检查
+
+```http
+GET /health
+```
+
+用途：检查 Bridge 进程是否存活，不调用 U8。
+
+成功响应：
+
+```json
+{
+  "success": true,
+  "message": "OK"
+}
+```
+
+### 8.2 U8 登录测试
+
+```http
+POST /api/u8/login-test
+```
+
+用途：验证当前 Bridge Profile 是否可以通过 `U8Login.Login` 登录 U8。
+
+请求：
+
+```json
+{
+  "requestId": "LOGIN-TEST-001",
+  "profileName": "prod-100"
+}
+```
+
+成功响应：
+
+```json
+{
+  "success": true,
+  "requestId": "LOGIN-TEST-001",
+  "u8Code": null,
+  "u8Id": null,
+  "message": "U8登录成功",
+  "errorCode": null,
+  "rawMessage": null
+}
+```
+
+失败响应中 `rawMessage` 应包含 `u8Login.ShareString` 或等效错误信息。
+
+### 8.3 销售订单新增
+
+```http
+POST /api/u8/sales-order/save
+```
+
+内部 U8 API：`U8API/SaleOrder/Save`
+
+用途：OMS 订单确认后，在 U8 创建或更新销售订单。
+
+请求：
+
+```json
+{
+  "requestId": "OMS-ORDER-202605210001",
+  "orderNo": "SO202605210001",
+  "orderDate": "2026-05-21",
+  "customerCode": "C001",
+  "customerName": "某客户",
+  "departmentCode": "01",
+  "departmentName": "销售部",
+  "salesTypeCode": "01",
+  "salesTypeName": "普通销售",
+  "maker": "168",
+  "currency": "人民币",
+  "taxRate": 13,
+  "autoAudit": false,
+  "memo": "OMS订单确认同步",
+  "items": [
+    {
+      "lineNo": 1,
+      "materialCode": "M001",
+      "materialName": "设备A",
+      "specification": "XC-001",
+      "quantity": 2,
+      "unit": "台",
+      "deliveryDate": "2026-06-01",
+      "taxUnitPrice": 10000,
+      "taxAmount": 20000
+    }
+  ]
+}
+```
+
+成功响应：
+
+```json
+{
+  "success": true,
+  "requestId": "OMS-ORDER-202605210001",
+  "u8Code": "SO202605210001",
+  "u8Id": "1000123",
+  "message": "销售订单新增成功",
+  "errorCode": null,
+  "rawMessage": null
+}
+```
+
+### 8.4 销售订单审核
+
+```http
+POST /api/u8/sales-order/audit
+```
+
+内部 U8 API：`U8API/SaleOrder/Audit`
+
+请求：
+
+```json
+{
+  "requestId": "OMS-ORDER-AUDIT-202605210001",
+  "orderNo": "SO202605210001",
+  "u8Id": "1000123",
+  "verify": true,
+  "verifier": "168"
+}
+```
+
+说明：
+
+* `verify=true` 表示审核。
+* `verify=false` 表示弃审，是否允许由业务和 U8 权限决定。
+
+### 8.5 销售发货单新增
+
+```http
+POST /api/u8/consignment/save
+```
+
+内部 U8 API：`U8API/Consignment/Save`
+
+用途：如果客户 U8 流程要求先生成销售发货单，则 WMS 发货前或发货时调用此接口。
+
+请求字段与销售出库相近，但 U8 字段映射不同，详见 `u8-bridge-field-mapping.md`。是否首期启用需业务确认。
+
+### 8.6 销售发货单审核
+
+```http
+POST /api/u8/consignment/audit
+```
+
+内部 U8 API：`U8API/Consignment/Audit`
+
+### 8.7 销售出库单新增
+
+```http
+POST /api/u8/saleout/add
+```
+
+内部 U8 API：`U8API/saleout/Add`
+
+用途：WMS 发货完成后，在 U8 创建销售出库单。
+
+请求：
+
+```json
+{
+  "requestId": "OMS-DELIVERY-202605210001",
+  "outboundNo": "DO202605210001",
+  "orderNo": "SO202605210001",
+  "outboundDate": "2026-05-21",
+  "customerCode": "C001",
+  "customerName": "某客户",
+  "warehouseCode": "01",
+  "warehouseName": "成品库",
+  "departmentCode": "01",
+  "departmentName": "销售部",
+  "maker": "168",
+  "autoAudit": false,
+  "memo": "WMS发货完成同步",
+  "items": [
+    {
+      "lineNo": 1,
+      "materialCode": "M001",
+      "materialName": "设备A",
+      "quantity": 2,
+      "unit": "台",
+      "batchNo": "",
+      "sourceOrderNo": "SO202605210001",
+      "sourceLineNo": 1
+    }
+  ]
+}
+```
+
+### 8.8 销售出库单审核
+
+```http
+POST /api/u8/saleout/audit
+```
+
+内部 U8 API：`U8API/saleout/Audit`
+
+请求：
+
+```json
+{
+  "requestId": "OMS-SALEOUT-AUDIT-202605210001",
+  "outboundNo": "DO202605210001",
+  "u8Id": "2000123",
+  "verify": true,
+  "verifier": "168",
+  "checkStock": true
+}
+```
+
+### 8.9 材料出库单新增
+
+```http
+POST /api/u8/material-out/add
+```
+
+内部 U8 API：`U8API/MaterialOut/Add`
+
+用途：生产领料实际出库后，在 U8 创建材料出库单。
+
+请求：
+
+```json
+{
+  "requestId": "WMS-MATERIAL-OUT-202605210001",
+  "materialOutNo": "MO202605210001",
+  "sourceNo": "WO202605210001",
+  "outDate": "2026-05-21",
+  "warehouseCode": "07",
+  "warehouseName": "原材料库",
+  "rdCode": "201",
+  "rdName": "生产领料",
+  "departmentCode": "02",
+  "departmentName": "生产部",
+  "maker": "168",
+  "autoAudit": false,
+  "memo": "生产领料同步",
+  "items": [
+    {
+      "lineNo": 1,
+      "materialCode": "RM001",
+      "materialName": "原材料A",
+      "quantity": 10,
+      "unit": "件",
+      "batchNo": "",
+      "workOrderNo": "WO202605210001"
+    }
+  ]
+}
+```
+
+### 8.10 材料出库单审核
+
+```http
+POST /api/u8/material-out/audit
+```
+
+内部 U8 API：待 U8 顾问确认。
+
+备注：当前提供的“材料出库单审核”示例文件中 API 地址疑似为 `U8API/saleout/Audit`，这可能是示例复制问题，不能直接按该地址实施。
+
+### 8.11 领料申请单新增
+
+```http
+POST /api/u8/material-app/add
+```
+
+内部 U8 API：`U8API/materialapp/Add`
+
+是否需要取决于客户 U8 流程。若 U8 要求“先申请、再材料出库”，此接口应在材料出库前调用。
+
+### 8.12 领料申请单审核
+
+```http
+POST /api/u8/material-app/audit
+```
+
+内部 U8 API：`U8API/materialapp/Audit`
+
+### 8.13 生产订单新增
+
+```http
+POST /api/u8/morder/add
+```
+
+内部 U8 API：`U8API/MOrder/MOrderAdd`
+
+是否首期实施取决于 APS/MES 是否要求将生产订单回写 U8。
+
+### 8.14 生产订单审核
+
+```http
+POST /api/u8/morder/audit
+```
+
+内部 U8 API：`U8API/MOrder/MOrderAuditing`
+
+## 9. 首期范围建议
+
+首期只建议纳入：
+
+1. `login-test`
+2. `sales-order/save`
+3. `sales-order/audit`
+4. `saleout/add` 或 `consignment/save` 二选一
+5. 与所选出库/发货路径对应的审核接口
+
+生产领料、生产订单、入库类接口放到第二阶段，避免首期范围过大。
+
+## 10. Java 后端调用建议
+
+Java 后端保留 `U8Adapter` 抽象，写类方法通过 Bridge HTTP API 实现。
+
+建议配置：
+
+```yaml
+xinchuan:
+  integration:
+    u8:
+      enabled: true
+      base-url: http://u8-bridge-host:8081
+      headers:
+        X-API-KEY: ${U8_BRIDGE_API_KEY}
+```
+
+当前 U8 数据库只读链路继续使用 `xinchuan.u8.datasource.*`。
+
+## 11. 安全要求
+
+* Bridge 不在日志中输出 U8 密码、API Key、数据库密码。
+* Bridge 不允许公网直接访问。
+* 推荐只允许信川后端服务器 IP 访问。
+* 所有失败日志保留 U8 原始错误，但必须脱敏。
+* Bridge 配置文件里的密码必须加密或由系统环境变量注入。
+
+## 12. 待确认事项
+
+* U8 登录界面“服务器/数据源”下拉框的实际可登录值。
+* 账套是否固定 `100`，年度是否固定 `2018`。
+* OMS 订单确认后是否自动审核 U8 销售订单。
+* WMS 发货后生成“销售发货单”“销售出库单”还是两者都生成。
+* U8 部门、仓库、销售类型、出库类别、制单人、币种、税率等基础档案编码。
+* 入库类单据对应的官方 U8API 示例。

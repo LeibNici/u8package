@@ -1,0 +1,535 @@
+openapi: 3.0.3
+info:
+  title: U8 Bridge REST API
+  version: 0.1.0
+  description: >
+    REST contract exposed by the Windows-hosted U8 Bridge service. The Bridge
+    calls official U8 APIs internally through U8Login and U8ApiBroker.
+servers:
+  - url: http://u8-bridge-host:8081
+    description: U8 Bridge server
+security:
+  - ApiKeyAuth: []
+paths:
+  /health:
+    get:
+      summary: Health check
+      security: []
+      responses:
+        "200":
+          description: Bridge process is alive.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleResponse"
+  /api/u8/login-test:
+    post:
+      summary: Test U8 login profile
+      operationId: loginTest
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginTestRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "503":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/sales-order/save:
+    post:
+      summary: Create or update U8 sales order
+      operationId: saveSalesOrder
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SalesOrderSaveRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "400":
+          $ref: "#/components/responses/BridgeResponse"
+        "409":
+          $ref: "#/components/responses/BridgeResponse"
+        "422":
+          $ref: "#/components/responses/BridgeResponse"
+        "503":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/sales-order/audit:
+    post:
+      summary: Audit or unaudit U8 sales order
+      operationId: auditSalesOrder
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuditRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "422":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/consignment/save:
+    post:
+      summary: Create or update U8 sales consignment document
+      operationId: saveConsignment
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConsignmentSaveRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "422":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/consignment/audit:
+    post:
+      summary: Audit or unaudit U8 sales consignment document
+      operationId: auditConsignment
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuditRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "422":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/saleout/add:
+    post:
+      summary: Create U8 sales outbound document
+      operationId: addSaleOut
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaleOutAddRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "409":
+          $ref: "#/components/responses/BridgeResponse"
+        "422":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/saleout/audit:
+    post:
+      summary: Audit U8 sales outbound document
+      operationId: auditSaleOut
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StockAuditRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "422":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/material-out/add:
+    post:
+      summary: Create U8 material outbound document
+      operationId: addMaterialOut
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MaterialOutAddRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "422":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/material-out/audit:
+    post:
+      summary: Audit U8 material outbound document
+      description: Internal U8 API address must be confirmed by U8 consultant.
+      operationId: auditMaterialOut
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StockAuditRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "422":
+          $ref: "#/components/responses/BridgeResponse"
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+  parameters:
+    RequestIdHeader:
+      name: X-Request-ID
+      in: header
+      required: true
+      schema:
+        type: string
+      description: Global request correlation id.
+  responses:
+    BridgeResponse:
+      description: Standard Bridge response.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/BridgeResponse"
+  schemas:
+    SimpleResponse:
+      type: object
+      required: [success, message]
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+    BridgeResponse:
+      type: object
+      required: [success, requestId]
+      properties:
+        success:
+          type: boolean
+        requestId:
+          type: string
+        u8Code:
+          type: string
+          nullable: true
+        u8Id:
+          type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+          enum:
+            - AUTH_MISSING
+            - AUTH_INVALID
+            - SOURCE_FORBIDDEN
+            - REQUEST_INVALID
+            - REQUEST_ID_MISMATCH
+            - LOGIN_PROFILE_NOT_FOUND
+            - U8_LOGIN_FAILED
+            - U8_COMPONENT_UNAVAILABLE
+            - U8_API_NOT_SUPPORTED
+            - U8_SYS_ERROR
+            - U8_BIZ_ERROR
+            - U8_RESULT_FAILED
+            - U8_RESPONSE_PARSE_ERROR
+            - IDEMPOTENCY_CONFLICT
+            - IDEMPOTENCY_RECORD_LOCKED
+            - BRIDGE_TIMEOUT
+            - BRIDGE_INTERNAL_ERROR
+        rawMessage:
+          type: string
+          nullable: true
+    LoginTestRequest:
+      type: object
+      required: [requestId, profileName]
+      properties:
+        requestId:
+          type: string
+        profileName:
+          type: string
+    BaseBusinessRequest:
+      type: object
+      required: [requestId]
+      properties:
+        requestId:
+          type: string
+        profileName:
+          type: string
+          default: prod-100
+    SalesOrderSaveRequest:
+      allOf:
+        - $ref: "#/components/schemas/BaseBusinessRequest"
+        - type: object
+          required: [orderNo, orderDate, customerCode, departmentCode, salesTypeCode, maker, items]
+          properties:
+            orderNo:
+              type: string
+            orderDate:
+              type: string
+              format: date
+            customerCode:
+              type: string
+            customerName:
+              type: string
+            departmentCode:
+              type: string
+            departmentName:
+              type: string
+            salesTypeCode:
+              type: string
+            salesTypeName:
+              type: string
+            maker:
+              type: string
+            currency:
+              type: string
+              default: 人民币
+            taxRate:
+              type: number
+              format: decimal
+            autoAudit:
+              type: boolean
+              default: false
+            memo:
+              type: string
+            items:
+              type: array
+              minItems: 1
+              items:
+                $ref: "#/components/schemas/SalesOrderItem"
+    SalesOrderItem:
+      type: object
+      required: [lineNo, materialCode, quantity, unit, deliveryDate]
+      properties:
+        lineNo:
+          type: integer
+          minimum: 1
+        materialCode:
+          type: string
+        materialName:
+          type: string
+        specification:
+          type: string
+        quantity:
+          type: number
+          format: decimal
+        unit:
+          type: string
+        unitCode:
+          type: string
+        deliveryDate:
+          type: string
+          format: date
+        taxUnitPrice:
+          type: number
+          format: decimal
+        taxAmount:
+          type: number
+          format: decimal
+    AuditRequest:
+      allOf:
+        - $ref: "#/components/schemas/BaseBusinessRequest"
+        - type: object
+          required: [verify]
+          properties:
+            orderNo:
+              type: string
+            deliveryNo:
+              type: string
+            outboundNo:
+              type: string
+            u8Id:
+              type: string
+            verify:
+              type: boolean
+            verifier:
+              type: string
+    ConsignmentSaveRequest:
+      allOf:
+        - $ref: "#/components/schemas/BaseBusinessRequest"
+        - type: object
+          required: [deliveryNo, deliveryDate, customerCode, maker, items]
+          properties:
+            deliveryNo:
+              type: string
+            orderNo:
+              type: string
+            deliveryDate:
+              type: string
+              format: date
+            customerCode:
+              type: string
+            customerName:
+              type: string
+            departmentCode:
+              type: string
+            salesTypeCode:
+              type: string
+            maker:
+              type: string
+            autoAudit:
+              type: boolean
+              default: false
+            memo:
+              type: string
+            items:
+              type: array
+              minItems: 1
+              items:
+                $ref: "#/components/schemas/OutboundItem"
+    SaleOutAddRequest:
+      allOf:
+        - $ref: "#/components/schemas/BaseBusinessRequest"
+        - type: object
+          required: [outboundNo, outboundDate, customerCode, warehouseCode, maker, items]
+          properties:
+            outboundNo:
+              type: string
+            orderNo:
+              type: string
+            outboundDate:
+              type: string
+              format: date
+            customerCode:
+              type: string
+            customerName:
+              type: string
+            warehouseCode:
+              type: string
+            warehouseName:
+              type: string
+            departmentCode:
+              type: string
+            rdCode:
+              type: string
+            maker:
+              type: string
+            autoAudit:
+              type: boolean
+              default: false
+            memo:
+              type: string
+            items:
+              type: array
+              minItems: 1
+              items:
+                $ref: "#/components/schemas/OutboundItem"
+    MaterialOutAddRequest:
+      allOf:
+        - $ref: "#/components/schemas/BaseBusinessRequest"
+        - type: object
+          required: [materialOutNo, outDate, warehouseCode, maker, items]
+          properties:
+            materialOutNo:
+              type: string
+            sourceNo:
+              type: string
+            outDate:
+              type: string
+              format: date
+            warehouseCode:
+              type: string
+            warehouseName:
+              type: string
+            rdCode:
+              type: string
+            rdName:
+              type: string
+            departmentCode:
+              type: string
+            departmentName:
+              type: string
+            maker:
+              type: string
+            autoAudit:
+              type: boolean
+              default: false
+            memo:
+              type: string
+            items:
+              type: array
+              minItems: 1
+              items:
+                $ref: "#/components/schemas/MaterialOutItem"
+    OutboundItem:
+      type: object
+      required: [lineNo, materialCode, quantity, unit]
+      properties:
+        lineNo:
+          type: integer
+          minimum: 1
+        materialCode:
+          type: string
+        materialName:
+          type: string
+        quantity:
+          type: number
+          format: decimal
+        unit:
+          type: string
+        batchNo:
+          type: string
+        sourceOrderNo:
+          type: string
+        sourceLineNo:
+          type: integer
+    MaterialOutItem:
+      type: object
+      required: [lineNo, materialCode, quantity, unit]
+      properties:
+        lineNo:
+          type: integer
+          minimum: 1
+        materialCode:
+          type: string
+        materialName:
+          type: string
+        quantity:
+          type: number
+          format: decimal
+        unit:
+          type: string
+        batchNo:
+          type: string
+        workOrderNo:
+          type: string
+        sourceDetailId:
+          type: string
+    StockAuditRequest:
+      allOf:
+        - $ref: "#/components/schemas/BaseBusinessRequest"
+        - type: object
+          required: [u8Id]
+          properties:
+            outboundNo:
+              type: string
+            materialOutNo:
+              type: string
+            u8Id:
+              type: string
+            vouchType:
+              type: string
+            verifier:
+              type: string
+            checkStock:
+              type: boolean
+              default: true
+            beforeCheckStock:
+              type: boolean
+              default: true

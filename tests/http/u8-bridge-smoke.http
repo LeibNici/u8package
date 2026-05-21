@@ -1,0 +1,45 @@
+@baseUrl = http://localhost:8081
+@apiKey = replace-with-local-api-key
+@requestId = U8-BRIDGE-SMOKE-001
+
+### health
+GET {{baseUrl}}/health
+
+### login-test
+POST {{baseUrl}}/api/u8/login-test
+Content-Type: application/json
+X-API-KEY: {{apiKey}}
+X-Request-ID: {{requestId}}
+
+{
+  "requestId": "{{requestId}}",
+  "profileName": "prod-100"
+}
+
+### sales-order/save
+POST {{baseUrl}}/api/u8/sales-order/save
+Content-Type: application/json
+X-API-KEY: {{apiKey}}
+X-Request-ID: U8-BRIDGE-SMOKE-ORDER-001
+
+{
+  "requestId": "U8-BRIDGE-SMOKE-ORDER-001",
+  "profileName": "prod-100",
+  "orderNo": "SO-SMOKE-001",
+  "orderDate": "2026-05-21",
+  "customerCode": "CUST001",
+  "departmentCode": "D001",
+  "salesTypeCode": "01",
+  "maker": "bridge",
+  "currency": "人民币",
+  "taxRate": 13,
+  "items": [
+    {
+      "lineNo": 1,
+      "materialCode": "MAT001",
+      "quantity": 1,
+      "unit": "件",
+      "deliveryDate": "2026-05-21"
+    }
+  ]
+}
