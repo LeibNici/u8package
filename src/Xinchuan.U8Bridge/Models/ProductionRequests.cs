@@ -30,8 +30,6 @@ namespace Xinchuan.U8Bridge.Models
         public string OrderNo { get; set; }
 
         public string Verifier { get; set; }
-
-        public string BusinessType { get; set; } = "普通采购";
     }
 
     public sealed class PurchaseOrderConfirmRequest : BaseBusinessRequest
@@ -44,6 +42,8 @@ namespace Xinchuan.U8Bridge.Models
         public string TimeStamp { get; set; }
 
         public string Verifier { get; set; }
+
+        public string BusinessType { get; set; } = "普通采购";
     }
 
     public sealed class ManufactureOrderItem
