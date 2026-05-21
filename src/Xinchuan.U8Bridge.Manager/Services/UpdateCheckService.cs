@@ -12,7 +12,10 @@ namespace Xinchuan.U8Bridge.Manager.Services
 {
     public sealed class UpdateCheckService
     {
-        public async Task<UpdateCheckResult> CheckAsync(UpdateCheckConfig config, string baseDirectory)
+        public async Task<UpdateCheckResult> CheckAsync(
+            UpdateCheckConfig config,
+            string baseDirectory,
+            int currentConfigSchemaVersion)
         {
             if (config == null || !config.Enabled)
             {
@@ -24,6 +27,7 @@ namespace Xinchuan.U8Bridge.Manager.Services
             UpdateCheckResult result = ParseResult(config, token);
             result.CurrentVersion = ResolveCurrentVersion(config, baseDirectory);
             result.HasUpdate = CompareVersion(result.LatestVersion, result.CurrentVersion) > 0;
+            EvaluateConfigCompatibility(result, currentConfigSchemaVersion);
             return result;
         }
 
@@ -76,7 +80,9 @@ namespace Xinchuan.U8Bridge.Manager.Services
                 LatestVersion = Value(release, "tag_name"),
                 ReleaseUrl = Value(release, "html_url"),
                 DownloadUrl = Value(asset as JObject, "browser_download_url"),
-                Notes = Value(release, "body")
+                Notes = Value(release, "body"),
+                LatestConfigSchemaVersion = BodyInt(release, "ConfigSchemaVersion", BridgeConfig.CurrentConfigSchemaVersion),
+                MinConfigSchemaVersion = BodyInt(release, "MinConfigSchemaVersion", BridgeConfig.CurrentConfigSchemaVersion)
             };
         }
 
@@ -88,8 +94,45 @@ namespace Xinchuan.U8Bridge.Manager.Services
                 LatestVersion = Value(manifest, "version"),
                 ReleaseUrl = Value(manifest, "releaseUrl"),
                 DownloadUrl = Value(manifest, "downloadUrl"),
-                Notes = Value(manifest, "notes")
+                Notes = Value(manifest, "notes"),
+                LatestConfigSchemaVersion = IntValue(manifest, "configSchemaVersion", BridgeConfig.CurrentConfigSchemaVersion),
+                MinConfigSchemaVersion = IntValue(manifest, "minConfigSchemaVersion", BridgeConfig.CurrentConfigSchemaVersion)
             };
+        }
+
+        private static void EvaluateConfigCompatibility(UpdateCheckResult result, int currentConfigSchemaVersion)
+        {
+            result.CurrentConfigSchemaVersion = currentConfigSchemaVersion <= 0
+                ? BridgeConfig.CurrentConfigSchemaVersion
+                : currentConfigSchemaVersion;
+            if (result.MinConfigSchemaVersion <= 0)
+            {
+                result.MinConfigSchemaVersion = BridgeConfig.CurrentConfigSchemaVersion;
+            }
+
+            if (result.LatestConfigSchemaVersion <= 0)
+            {
+                result.LatestConfigSchemaVersion = result.MinConfigSchemaVersion;
+            }
+
+            result.ConfigCompatible = result.MinConfigSchemaVersion <= result.CurrentConfigSchemaVersion;
+            result.RequiresConfigMigration = result.LatestConfigSchemaVersion > result.CurrentConfigSchemaVersion;
+            result.ConfigMessage = BuildConfigMessage(result);
+        }
+
+        private static string BuildConfigMessage(UpdateCheckResult result)
+        {
+            if (!result.ConfigCompatible)
+            {
+                return "新版本要求配置 schema >= " + result.MinConfigSchemaVersion + "，当前配置不能直接升级";
+            }
+
+            if (result.RequiresConfigMigration)
+            {
+                return "新版本会迁移配置到 schema " + result.LatestConfigSchemaVersion + "，升级前请备份 appsettings.json";
+            }
+
+            return "配置兼容，可直接升级";
         }
 
         private static string ResolveCurrentVersion(UpdateCheckConfig config, string baseDirectory)
@@ -102,7 +145,11 @@ namespace Xinchuan.U8Bridge.Manager.Services
             string manifest = Path.Combine(baseDirectory, "package-version.json");
             if (File.Exists(manifest))
             {
-                return Value(JObject.Parse(File.ReadAllText(manifest)), "version");
+                string version = Value(JObject.Parse(File.ReadAllText(manifest)), "version");
+                if (!string.IsNullOrWhiteSpace(version))
+                {
+                    return version.Trim();
+                }
             }
 
             return Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -127,6 +174,24 @@ namespace Xinchuan.U8Bridge.Manager.Services
         private static string Value(JObject obj, string property)
         {
             return obj == null ? null : obj.Value<string>(property);
+        }
+
+        private static int IntValue(JObject obj, string property, int defaultValue)
+        {
+            int? value = obj == null ? null : obj.Value<int?>(property);
+            return value ?? defaultValue;
+        }
+
+        private static int BodyInt(JObject release, string name, int defaultValue)
+        {
+            string body = Value(release, "body");
+            if (string.IsNullOrWhiteSpace(body))
+            {
+                return defaultValue;
+            }
+
+            Match match = Regex.Match(body, @"(?im)^" + Regex.Escape(name) + @":\s*(\d+)\s*$");
+            return match.Success ? int.Parse(match.Groups[1].Value) : defaultValue;
         }
     }
 }

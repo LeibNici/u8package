@@ -49,6 +49,16 @@ namespace Xinchuan.U8Bridge.Manager.Services
 
         private static void Normalize(BridgeConfig config)
         {
+            if (config.ConfigSchemaVersion <= 0)
+            {
+                config.ConfigSchemaVersion = BridgeConfig.CurrentConfigSchemaVersion;
+            }
+
+            if (config.ConfigSchemaVersion > BridgeConfig.CurrentConfigSchemaVersion)
+            {
+                throw new InvalidOperationException("配置版本高于当前管理器支持版本，请使用匹配的新版本管理器。");
+            }
+
             if (string.IsNullOrWhiteSpace(config.BaseUrl))
             {
                 config.BaseUrl = "http://+:8081/";

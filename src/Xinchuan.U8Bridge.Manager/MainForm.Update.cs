@@ -10,11 +10,13 @@ namespace Xinchuan.U8Bridge.Manager
             try
             {
                 SaveConfigFromForm();
+                BridgeConfig config = BuildConfig();
                 UpdateCheckResult result = await updateCheckService
-                    .CheckAsync(BuildConfig().Update, configService.BaseDirectory)
+                    .CheckAsync(config.Update, configService.BaseDirectory, config.ConfigSchemaVersion)
                     .ConfigureAwait(true);
+                updateCurrentVersionTextBox.Text = result.CurrentVersion;
                 AppendLog("UPDATE:" + Environment.NewLine + FormatUpdateResult(result));
-                SetStatus(result.HasUpdate ? "发现新版本: " + result.LatestVersion : "当前已是最新版本");
+                SetStatus(result.HasUpdate ? "发现新版本: " + result.LatestVersion : result.ConfigMessage);
             }
             catch (Exception ex)
             {
@@ -39,6 +41,11 @@ namespace Xinchuan.U8Bridge.Manager
             return "当前版本: " + result.CurrentVersion + Environment.NewLine
                 + "最新版本: " + result.LatestVersion + Environment.NewLine
                 + "是否需要更新: " + (result.HasUpdate ? "是" : "否") + Environment.NewLine
+                + "当前配置Schema: " + result.CurrentConfigSchemaVersion + Environment.NewLine
+                + "最新配置Schema: " + result.LatestConfigSchemaVersion + Environment.NewLine
+                + "最低配置Schema: " + result.MinConfigSchemaVersion + Environment.NewLine
+                + "配置兼容: " + (result.ConfigCompatible ? "是" : "否") + Environment.NewLine
+                + "配置提示: " + result.ConfigMessage + Environment.NewLine
                 + "Release: " + result.ReleaseUrl + Environment.NewLine
                 + "Download: " + result.DownloadUrl + Environment.NewLine
                 + "Notes: " + Truncate(result.Notes, 500);

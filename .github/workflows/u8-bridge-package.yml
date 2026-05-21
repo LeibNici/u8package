@@ -184,6 +184,8 @@ jobs:
           $version = @{
             version = "${{ github.run_number }}"
             name = "Xinchuan.U8Bridge-Release-${{ github.run_number }}"
+            configSchemaVersion = 1
+            minConfigSchemaVersion = 1
             commit = "${{ github.sha }}"
             builtAt = (Get-Date).ToUniversalTime().ToString("o")
           } | ConvertTo-Json
@@ -210,6 +212,8 @@ jobs:
             "U8 Bridge Release ${{ github.run_number }}",
             "",
             "Commit: ${{ github.sha }}",
+            "ConfigSchemaVersion: 1",
+            "MinConfigSchemaVersion: 1",
             "Artifact: Xinchuan.U8Bridge-${{ env.BUILD_CONFIGURATION }}-${{ github.run_number }}"
           ) -join "`n"
           gh release create $tag "${{ env.zipPath }}" --title $title --notes $notes --latest

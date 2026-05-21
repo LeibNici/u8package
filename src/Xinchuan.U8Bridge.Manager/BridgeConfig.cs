@@ -5,6 +5,10 @@ namespace Xinchuan.U8Bridge.Manager
 {
     public sealed class BridgeConfig
     {
+        public const int CurrentConfigSchemaVersion = 1;
+
+        public int ConfigSchemaVersion { get; set; } = CurrentConfigSchemaVersion;
+
         public string BaseUrl { get; set; } = "http://+:8081/";
 
         public string ApiKey { get; set; } = "local-dev-u8-bridge-key";
