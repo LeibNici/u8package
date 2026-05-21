@@ -57,6 +57,7 @@ jobs:
               "solution=$solution" >> $env:GITHUB_OUTPUT
               "projectDir=$(Join-Path $candidate 'src\Xinchuan.U8Bridge')" >> $env:GITHUB_OUTPUT
               "outDir=$(Join-Path $candidate 'src\Xinchuan.U8Bridge\bin\${{ env.BUILD_CONFIGURATION }}')" >> $env:GITHUB_OUTPUT
+              "managerOutDir=$(Join-Path $candidate 'src\Xinchuan.U8Bridge.Manager\bin\${{ env.BUILD_CONFIGURATION }}')" >> $env:GITHUB_OUTPUT
               "packageDir=$(Join-Path $candidate 'artifacts\package')" >> $env:GITHUB_OUTPUT
               "zipPath=$(Join-Path $candidate 'artifacts\Xinchuan.U8Bridge-${{ env.BUILD_CONFIGURATION }}-${{ github.run_number }}.zip')" >> $env:GITHUB_OUTPUT
               exit 0
@@ -104,6 +105,7 @@ jobs:
         run: |
           $root = "${{ steps.bridge.outputs.root }}"
           $outDir = "${{ steps.bridge.outputs.outDir }}"
+          $managerOutDir = "${{ steps.bridge.outputs.managerOutDir }}"
           $packageDir = "${{ steps.bridge.outputs.packageDir }}"
           $zipPath = "${{ steps.bridge.outputs.zipPath }}"
 
@@ -114,6 +116,10 @@ jobs:
           Remove-Item -Recurse -Force $packageDir -ErrorAction SilentlyContinue
           New-Item -ItemType Directory -Force -Path $packageDir | Out-Null
           Copy-Item -Path (Join-Path $outDir "*") -Destination $packageDir -Recurse
+
+          if (Test-Path $managerOutDir) {
+            Copy-Item -Path (Join-Path $managerOutDir "*") -Destination $packageDir -Recurse -Force
+          }
 
           $sampleConfig = Join-Path $root "src\Xinchuan.U8Bridge\appsettings.sample.json"
           if (Test-Path $sampleConfig) {

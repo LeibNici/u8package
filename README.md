@@ -66,6 +66,7 @@ xinchuan-u8-bridge/
 首版开发已补齐：
 
 * `src/`：Bridge REST 服务骨架。
+* `src/Xinchuan.U8Bridge.Manager/`：Windows 图形化配置、启动、测试和日志查看工具。
 * `deploy/windows/`：Windows 构建脚本和生产配置模板。
 * `tests/`：`login-test`、销售订单新增/审核、出库新增/审核等接口测试。
 
@@ -121,6 +122,19 @@ Xinchuan.U8Bridge-Release-<run_number>.zip
 当前 Actions 固定使用 `windows-2022`，避免 `windows-latest` 迁移期间影响 .NET Framework 4.8 打包稳定性。
 
 ## Windows 运行与日志
+
+推荐现场先打开图形界面：
+
+```powershell
+.\Xinchuan.U8Bridge.Manager.exe
+```
+
+管理器可完成：
+
+* 填写并保存 `appsettings.json`。
+* 启动/停止 `Xinchuan.U8Bridge.exe`。
+* 测试 `/health` 和 `/api/u8/login-test`。
+* 查看并打开 `logs` 日志目录。
 
 解压 artifact 后，先复制一份配置：
 

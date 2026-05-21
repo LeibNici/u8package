@@ -3,5 +3,7 @@ src/packages/
 deploy/windows/.tools/
 src/Xinchuan.U8Bridge/bin/
 src/Xinchuan.U8Bridge/obj/
+src/Xinchuan.U8Bridge.Manager/bin/
+src/Xinchuan.U8Bridge.Manager/obj/
 src/Xinchuan.U8Bridge/appsettings.json
 **/logs/

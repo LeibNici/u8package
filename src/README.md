@@ -13,5 +13,7 @@ U8 Bridge 源码放在本目录。
 
 * [Xinchuan.U8Bridge.sln](./Xinchuan.U8Bridge.sln)
 * [Xinchuan.U8Bridge/](./Xinchuan.U8Bridge/)
+* [Xinchuan.U8Bridge.Manager/](./Xinchuan.U8Bridge.Manager/)
 
 真实 U8 DLL 绑定集中在 `Xinchuan.U8Bridge/U8/OfficialU8ApiClient.cs`，REST 层不直接依赖 U8 DLL。
+图形化管理器只负责生成配置、启动/停止进程、接口测试和查看日志，不直接调用 U8 DLL。

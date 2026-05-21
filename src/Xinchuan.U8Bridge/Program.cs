@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Threading;
 using Microsoft.Owin.Hosting;
 using Xinchuan.U8Bridge.Configuration;
 using Xinchuan.U8Bridge.Services;
@@ -23,7 +25,8 @@ namespace Xinchuan.U8Bridge
 
         private static void Run(string[] args)
         {
-            string configPath = args.Length > 0 ? args[0] : "appsettings.json";
+            bool serviceMode = args.Any(IsServiceArgument);
+            string configPath = args.FirstOrDefault(arg => !IsServiceArgument(arg)) ?? "appsettings.json";
             BridgeLogger.Info("Bridge starting. Config argument: " + configPath);
 
             BridgeOptions options = BridgeOptionsLoader.Load(configPath);
@@ -31,11 +34,28 @@ namespace Xinchuan.U8Bridge
             using (WebApp.Start<Startup>(options.BaseUrl))
             {
                 BridgeLogger.Info("Bridge started at " + options.BaseUrl);
-                Console.WriteLine("Press ENTER to stop.");
-                Console.ReadLine();
+                WaitForStop(serviceMode);
             }
 
             BridgeLogger.Info("Bridge stopped.");
+        }
+
+        private static bool IsServiceArgument(string arg)
+        {
+            return string.Equals(arg, "--service", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static void WaitForStop(bool serviceMode)
+        {
+            if (serviceMode)
+            {
+                BridgeLogger.Info("Bridge is running in service mode.");
+                new ManualResetEvent(false).WaitOne();
+                return;
+            }
+
+            Console.WriteLine("Press ENTER to stop.");
+            Console.ReadLine();
         }
     }
 }
