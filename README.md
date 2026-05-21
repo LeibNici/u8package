@@ -54,7 +54,7 @@ xinchuan-u8-bridge/
 
 * 读写数据：统一由 Java 后端调用本 Bridge REST API，不再让业务系统直连 U8 SQL Server。
 * Bridge 写入/审核底层接 U8 官方 API / U8 客户端组件；读类接口可由 Bridge 持有只读数据库配置统一封装，业务系统不感知表结构。
-* 缺官方示例或读库字段口径未确认的接口先返回 `U8_API_NOT_SUPPORTED`，不在业务系统侧猜 U8 表结构。
+* 缺官方示例的剩余写入接口先返回 `U8_API_NOT_SUPPORTED`，不在业务系统侧猜 U8 表结构。
 * 登录参数：Bridge 使用配置化 U8 Profile，`server` 值应来自 U8 客户端登录界面的服务器/数据源下拉框，并通过 `login-test` 接口验证。
 * 对外接口：Bridge 提供 `GET /openapi.yaml` 与 `GET /swagger`，后端按文档调用。
 
@@ -72,7 +72,7 @@ xinchuan-u8-bridge/
 * `src/`：Bridge REST 服务骨架。
 * `src/Xinchuan.U8Bridge.Manager/`：Windows 图形化配置、启动、测试和日志查看工具。
 * `deploy/windows/`：Windows 构建脚本和生产配置模板。
-* 统一 Bridge API 契约，覆盖清单中的读写接口；缺 U8 官方示例的接口有稳定占位返回。
+* 统一 Bridge API 契约，覆盖清单中的读写接口；读类接口已封装只读数据库查询，缺 U8 官方示例的剩余写入接口有稳定占位返回。
 * `tests/`：`login-test`、销售订单新增/审核、出库新增/审核等接口测试。
 
 ## 本地/Windows 构建
@@ -256,4 +256,4 @@ logs\u8-bridge-yyyyMMdd.log
 * `POST /api/u8/work-report/save`
 * `POST /api/u8/material-return/add`
 
-当前 U8 官方适配层已实现 `login-test` 的 `U8Login.clsLogin` COM 调用，并已接入部分 `U8ApiBroker` 写单据/审核调用。缺少官方 U8API 示例的接口会返回 `U8_API_NOT_SUPPORTED`，待拿到示例后按同一 REST 契约补真实实现。
+当前 U8 官方适配层已实现 `login-test` 的 `U8Login.clsLogin` COM 调用，并已接入部分 `U8ApiBroker` 写单据/审核调用。客户、物料、供应商、库存、采购在途和物料价格查询已通过 Bridge 持有的只读数据库配置封装为统一 REST API；缺少官方示例的剩余写入接口会返回 `U8_API_NOT_SUPPORTED`，待拿到示例后按同一 REST 契约补真实实现。

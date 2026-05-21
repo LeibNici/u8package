@@ -6,8 +6,8 @@ info:
     REST contract exposed by the Windows-hosted U8 Bridge service. The Bridge
     is the only integration boundary for U8; business systems must not connect
     to the U8 database directly. Implemented endpoints call official U8 APIs
-    through U8Login and U8ApiBroker, while endpoints without official samples
-    return U8_API_NOT_SUPPORTED.
+    through U8Login and U8ApiBroker. Read endpoints are exposed through the
+    same Bridge boundary and use the Bridge-owned read-only U8 database config.
 servers:
   - url: http://u8-bridge-host:8081
     description: U8 Bridge server
@@ -56,43 +56,55 @@ paths:
   /api/u8/customers/query:
     post:
       summary: Query U8 customer master data
-      description: Unified Bridge API shell. Returns U8_API_NOT_SUPPORTED until official U8 customer query sample is provided.
+      description: Reads U8 customer master data from the Bridge-owned read-only U8 database config.
       operationId: queryCustomers
       parameters:
         - $ref: "#/components/parameters/RequestIdHeader"
       requestBody:
         $ref: "#/components/requestBodies/MasterQueryRequest"
       responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
         "400":
+          $ref: "#/components/responses/BridgeResponse"
+        "503":
           $ref: "#/components/responses/BridgeResponse"
   /api/u8/materials/query:
     post:
       summary: Query U8 material master data
-      description: Unified Bridge API shell. Returns U8_API_NOT_SUPPORTED until official U8 material query sample is provided.
+      description: Reads U8 material master data from the Bridge-owned read-only U8 database config.
       operationId: queryMaterials
       parameters:
         - $ref: "#/components/parameters/RequestIdHeader"
       requestBody:
         $ref: "#/components/requestBodies/MasterQueryRequest"
       responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
         "400":
+          $ref: "#/components/responses/BridgeResponse"
+        "503":
           $ref: "#/components/responses/BridgeResponse"
   /api/u8/suppliers/query:
     post:
       summary: Query U8 supplier master data
-      description: Unified Bridge API shell. Returns U8_API_NOT_SUPPORTED until official U8 supplier query sample is provided.
+      description: Reads U8 supplier master data from the Bridge-owned read-only U8 database config.
       operationId: querySuppliers
       parameters:
         - $ref: "#/components/parameters/RequestIdHeader"
       requestBody:
         $ref: "#/components/requestBodies/MasterQueryRequest"
       responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
         "400":
+          $ref: "#/components/responses/BridgeResponse"
+        "503":
           $ref: "#/components/responses/BridgeResponse"
   /api/u8/inventory/query:
     post:
       summary: Query U8 inventory balance
-      description: Unified Bridge API shell. Returns U8_API_NOT_SUPPORTED until official U8 inventory query sample is provided.
+      description: Reads U8 current stock data from the Bridge-owned read-only U8 database config.
       operationId: queryInventory
       parameters:
         - $ref: "#/components/parameters/RequestIdHeader"
@@ -103,12 +115,16 @@ paths:
             schema:
               $ref: "#/components/schemas/InventoryQueryRequest"
       responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
         "400":
+          $ref: "#/components/responses/BridgeResponse"
+        "503":
           $ref: "#/components/responses/BridgeResponse"
   /api/u8/in-transit/query:
     post:
       summary: Query U8 purchase in-transit data
-      description: Unified Bridge API shell. Returns U8_API_NOT_SUPPORTED until official U8 in-transit query sample is provided.
+      description: Reads U8 purchase in-transit data from the Bridge-owned read-only U8 database config.
       operationId: queryInTransit
       parameters:
         - $ref: "#/components/parameters/RequestIdHeader"
@@ -119,12 +135,16 @@ paths:
             schema:
               $ref: "#/components/schemas/InTransitQueryRequest"
       responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
         "400":
+          $ref: "#/components/responses/BridgeResponse"
+        "503":
           $ref: "#/components/responses/BridgeResponse"
   /api/u8/material-price/query:
     post:
       summary: Query U8 material price
-      description: Unified Bridge API shell. Returns U8_API_NOT_SUPPORTED until official U8 price query sample is provided.
+      description: Reads U8 material reference price fields from the Bridge-owned read-only U8 database config.
       operationId: queryMaterialPrice
       parameters:
         - $ref: "#/components/parameters/RequestIdHeader"
@@ -135,7 +155,11 @@ paths:
             schema:
               $ref: "#/components/schemas/MaterialPriceQueryRequest"
       responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
         "400":
+          $ref: "#/components/responses/BridgeResponse"
+        "503":
           $ref: "#/components/responses/BridgeResponse"
   /api/u8/sales-order/save:
     post:
@@ -617,6 +641,7 @@ components:
             - LOGIN_PROFILE_NOT_FOUND
             - U8_LOGIN_FAILED
             - U8_COMPONENT_UNAVAILABLE
+            - U8_DATABASE_ERROR
             - U8_API_NOT_SUPPORTED
             - U8_SYS_ERROR
             - U8_BIZ_ERROR
@@ -629,6 +654,25 @@ components:
         rawMessage:
           type: string
           nullable: true
+        data:
+          nullable: true
+          oneOf:
+            - $ref: "#/components/schemas/QueryResult"
+            - type: object
+    QueryResult:
+      type: object
+      properties:
+        pageNo:
+          type: integer
+        pageSize:
+          type: integer
+        hasMore:
+          type: boolean
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
     LoginTestRequest:
       type: object
       required: [requestId, profileName]

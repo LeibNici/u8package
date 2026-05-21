@@ -44,6 +44,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.9\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -63,6 +64,7 @@
     <Compile Include="Models\BridgeErrorCodes.cs" />
     <Compile Include="Models\BridgeResponse.cs" />
     <Compile Include="Models\ProductionRequests.cs" />
+    <Compile Include="Models\QueryResponses.cs" />
     <Compile Include="Models\QueryRequests.cs" />
     <Compile Include="Models\Requests.cs" />
     <Compile Include="Models\U8ApiCall.cs" />
@@ -72,6 +74,10 @@
     <Compile Include="Services\BridgeLogger.cs" />
     <Compile Include="Services\IdempotencyStore.cs" />
     <Compile Include="Services\ServiceRegistry.cs" />
+    <Compile Include="Services\U8DatabaseQueryService.Filters.cs" />
+    <Compile Include="Services\U8DatabaseQueryService.Helpers.cs" />
+    <Compile Include="Services\U8DatabaseQueryService.cs" />
+    <Compile Include="Services\U8SqlParts.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="U8\DryRunU8ApiClient.cs" />
     <Compile Include="U8\IU8ApiClient.cs" />

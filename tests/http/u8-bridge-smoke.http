@@ -16,6 +16,35 @@ X-Request-ID: {{requestId}}
   "profileName": "prod-100"
 }
 
+### customers/query
+POST {{baseUrl}}/api/u8/customers/query
+Content-Type: application/json
+X-API-KEY: {{apiKey}}
+X-Request-ID: U8-BRIDGE-SMOKE-CUSTOMERS-001
+
+{
+  "requestId": "U8-BRIDGE-SMOKE-CUSTOMERS-001",
+  "profileName": "prod-100",
+  "keyword": "",
+  "pageNo": 1,
+  "pageSize": 20
+}
+
+### inventory/query
+POST {{baseUrl}}/api/u8/inventory/query
+Content-Type: application/json
+X-API-KEY: {{apiKey}}
+X-Request-ID: U8-BRIDGE-SMOKE-INVENTORY-001
+
+{
+  "requestId": "U8-BRIDGE-SMOKE-INVENTORY-001",
+  "profileName": "prod-100",
+  "warehouseCode": "",
+  "materialCode": "",
+  "pageNo": 1,
+  "pageSize": 20
+}
+
 ### sales-order/save
 POST {{baseUrl}}/api/u8/sales-order/save
 Content-Type: application/json

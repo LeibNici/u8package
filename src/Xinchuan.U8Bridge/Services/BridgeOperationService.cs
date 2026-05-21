@@ -10,15 +10,18 @@ namespace Xinchuan.U8Bridge.Services
         private readonly BridgeOptions options;
         private readonly IU8ApiClient apiClient;
         private readonly IdempotencyStore idempotencyStore;
+        private readonly U8DatabaseQueryService databaseQueryService;
 
         public BridgeOperationService(
             BridgeOptions options,
             IU8ApiClient apiClient,
-            IdempotencyStore idempotencyStore)
+            IdempotencyStore idempotencyStore,
+            U8DatabaseQueryService databaseQueryService)
         {
             this.options = options;
             this.apiClient = apiClient;
             this.idempotencyStore = idempotencyStore;
+            this.databaseQueryService = databaseQueryService;
         }
 
         public BridgeResponse LoginTest(string headerRequestId, LoginTestRequest request)
@@ -68,6 +71,59 @@ namespace Xinchuan.U8Bridge.Services
             }
 
             return response;
+        }
+
+        public BridgeResponse QueryCustomers(string headerRequestId, MasterQueryRequest request)
+        {
+            return Query(headerRequestId, request, () => databaseQueryService.QueryCustomers(request), "U8 客户主数据查询成功");
+        }
+
+        public BridgeResponse QueryMaterials(string headerRequestId, MasterQueryRequest request)
+        {
+            return Query(headerRequestId, request, () => databaseQueryService.QueryMaterials(request), "U8 物料主数据查询成功");
+        }
+
+        public BridgeResponse QuerySuppliers(string headerRequestId, MasterQueryRequest request)
+        {
+            return Query(headerRequestId, request, () => databaseQueryService.QuerySuppliers(request), "U8 供应商主数据查询成功");
+        }
+
+        public BridgeResponse QueryInventory(string headerRequestId, InventoryQueryRequest request)
+        {
+            return Query(headerRequestId, request, () => databaseQueryService.QueryInventory(request), "U8 现存量查询成功");
+        }
+
+        public BridgeResponse QueryInTransit(string headerRequestId, InTransitQueryRequest request)
+        {
+            return Query(headerRequestId, request, () => databaseQueryService.QueryInTransit(request), "U8 采购在途查询成功");
+        }
+
+        public BridgeResponse QueryMaterialPrice(string headerRequestId, MaterialPriceQueryRequest request)
+        {
+            return Query(headerRequestId, request, () => databaseQueryService.QueryMaterialPrice(request), "U8 物料价格查询成功");
+        }
+
+        private BridgeResponse Query(
+            string headerRequestId,
+            BaseBusinessRequest request,
+            Func<QueryResult> query,
+            string message)
+        {
+            BridgeResponse invalid = ValidateRequestId(headerRequestId, request);
+            if (invalid != null)
+            {
+                return invalid;
+            }
+
+            try
+            {
+                return BridgeResponse.OkData(request.RequestId, message, query());
+            }
+            catch (Exception ex)
+            {
+                BridgeLogger.Error("U8 database query failed. RequestId=" + request.RequestId, ex);
+                return BridgeResponse.Fail(request.RequestId, BridgeErrorCodes.U8DatabaseError, "U8 只读数据库查询失败", ex.Message);
+            }
         }
 
         private BridgeResponse SafeInvoke(BaseBusinessRequest request, U8ProfileOptions profile, U8ApiCall call)

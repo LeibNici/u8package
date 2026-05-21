@@ -1,4 +1,5 @@
 using System.Net;
+using Newtonsoft.Json;
 
 namespace Xinchuan.U8Bridge.Models
 {
@@ -17,6 +18,9 @@ namespace Xinchuan.U8Bridge.Models
         public string ErrorCode { get; set; }
 
         public string RawMessage { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public object Data { get; set; }
 
         public static BridgeResponse Ok(string requestId, string message, string u8Id = null)
         {
@@ -38,6 +42,17 @@ namespace Xinchuan.U8Bridge.Models
                 ErrorCode = errorCode,
                 Message = message,
                 RawMessage = rawMessage
+            };
+        }
+
+        public static BridgeResponse OkData(string requestId, string message, object data)
+        {
+            return new BridgeResponse
+            {
+                Success = true,
+                RequestId = requestId,
+                Message = message,
+                Data = data
             };
         }
 
@@ -65,6 +80,7 @@ namespace Xinchuan.U8Bridge.Models
                     return (HttpStatusCode)422;
                 case BridgeErrorCodes.U8LoginFailed:
                 case BridgeErrorCodes.U8ComponentUnavailable:
+                case BridgeErrorCodes.U8DatabaseError:
                     return HttpStatusCode.ServiceUnavailable;
                 default:
                     return HttpStatusCode.InternalServerError;

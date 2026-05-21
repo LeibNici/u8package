@@ -111,6 +111,7 @@ X-Request-ID: <global-request-id>
 | `message` | string | 面向调用方的摘要消息 |
 | `errorCode` | string | 标准错误码，见 `u8-bridge-error-codes.md` |
 | `rawMessage` | string | U8 原始错误或 `broker.GetExceptionString()`，需脱敏 |
+| `data` | object | 查询类接口返回分页数据；写入/审核类接口通常为空 |
 
 ## 7. 幂等规则
 
@@ -198,16 +199,16 @@ POST /api/u8/login-test
 
 ### 8.3 主数据、库存、价格查询
 
-统一原则：业务系统只调用 Bridge，不再直接连接 U8 SQL Server。Bridge 可以持有 U8 只读数据库配置，用于后续把读类接口统一封装成 REST；写入和审核仍通过 U8 官方 API。以下接口当前已作为稳定 REST 契约暴露；在拿到官方 U8API 示例或确认读库字段口径前，会返回 `U8_API_NOT_SUPPORTED`，不会在业务系统侧猜测 U8 表结构。
+统一原则：业务系统只调用 Bridge，不再直接连接 U8 SQL Server。Bridge 持有 U8 只读数据库配置，把读类接口统一封装成 REST；写入和审核仍通过 U8 官方 API。
 
-| 接口 | 用途 | 当前状态 | 缺少资料 |
-| --- | --- | --- | --- |
-| `POST /api/u8/customers/query` | 客户主数据同步 | 占位 | 客户档案查询官方 U8API 示例 |
-| `POST /api/u8/materials/query` | 物料主数据同步 | 占位 | 存货档案查询官方 U8API 示例 |
-| `POST /api/u8/suppliers/query` | 供应商主数据同步 | 占位 | 供应商档案查询官方 U8API 示例 |
-| `POST /api/u8/inventory/query` | 库存现存量查询 | 占位 | 现存量/可用量查询官方 U8API 示例 |
-| `POST /api/u8/in-transit/query` | 采购在途查询 | 占位 | 采购在途查询官方 U8API 示例 |
-| `POST /api/u8/material-price/query` | 物料价格查询 | 占位 | 价格表/客户价/供应商价查询官方 U8API 示例 |
+| 接口 | 用途 | 当前实现 |
+| --- | --- | --- |
+| `POST /api/u8/customers/query` | 客户主数据同步 | 读 `Customer` |
+| `POST /api/u8/materials/query` | 物料主数据同步 | 读 `Inventory` |
+| `POST /api/u8/suppliers/query` | 供应商主数据同步 | 读 `Vendor` |
+| `POST /api/u8/inventory/query` | 库存现存量查询 | 读 `CurrentStock` |
+| `POST /api/u8/in-transit/query` | 采购在途查询 | 读 `PO_Podetails` + `PO_Pomain` |
+| `POST /api/u8/material-price/query` | 物料价格查询 | 读 `Inventory` 价格字段 |
 
 通用主数据查询请求：
 
@@ -223,19 +224,32 @@ POST /api/u8/login-test
 }
 ```
 
-未补官方示例前的稳定响应：
+成功响应：
 
 ```json
 {
-  "success": false,
+  "success": true,
   "requestId": "U8-MASTER-QUERY-001",
   "u8Code": null,
   "u8Id": null,
-  "message": "U8 客户主数据查询实现未接入",
-  "errorCode": "U8_API_NOT_SUPPORTED",
-  "rawMessage": null
+  "message": "U8 客户主数据查询成功",
+  "errorCode": null,
+  "rawMessage": null,
+  "data": {
+    "pageNo": 1,
+    "pageSize": 200,
+    "hasMore": false,
+    "items": [
+      {
+        "customerCode": "C001",
+        "customerName": "示例客户"
+      }
+    ]
+  }
 }
 ```
+
+如果数据库未启用、连接失败、现场表字段与当前适配口径不一致，返回 `U8_DATABASE_ERROR`，`rawMessage` 中记录实际原因供联调定位。
 
 ### 8.4 销售订单新增
 

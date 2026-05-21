@@ -10,6 +10,7 @@ namespace Xinchuan.U8Bridge.Models
         public const string LoginProfileNotFound = "LOGIN_PROFILE_NOT_FOUND";
         public const string U8LoginFailed = "U8_LOGIN_FAILED";
         public const string U8ComponentUnavailable = "U8_COMPONENT_UNAVAILABLE";
+        public const string U8DatabaseError = "U8_DATABASE_ERROR";
         public const string U8ApiNotSupported = "U8_API_NOT_SUPPORTED";
         public const string U8SysError = "U8_SYS_ERROR";
         public const string U8BizError = "U8_BIZ_ERROR";

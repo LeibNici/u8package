@@ -20,7 +20,11 @@ namespace Xinchuan.U8Bridge.Services
                 + options.U8Mode
                 + ", Profiles="
                 + options.Profiles.Count);
-            OperationService = new BridgeOperationService(options, apiClient, new IdempotencyStore());
+            OperationService = new BridgeOperationService(
+                options,
+                apiClient,
+                new IdempotencyStore(),
+                new U8DatabaseQueryService(options.Database));
         }
     }
 }

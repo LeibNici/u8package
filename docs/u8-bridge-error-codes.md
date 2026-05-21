@@ -47,6 +47,7 @@ Bridge 必须把 U8 官方 API 的系统异常、业务异常、登录错误、�
 | `LOGIN_PROFILE_NOT_FOUND` | 400 | 否 | 指定 U8 登录 Profile 不存在 |
 | `U8_LOGIN_FAILED` | 503 | 可人工重试 | `U8Login.Login` 返回失败 |
 | `U8_COMPONENT_UNAVAILABLE` | 503 | 可重试 | U8 DLL、COM、MSXML、注册组件不可用 |
+| `U8_DATABASE_ERROR` | 503 | 视情况 | U8 只读数据库未启用、连接失败或表字段不匹配 |
 | `U8_API_NOT_SUPPORTED` | 400 | 否 | Bridge 未启用该 U8 API |
 | `U8_SYS_ERROR` | 500 | 视情况 | U8 `MomSysException` 或系统级异常 |
 | `U8_BIZ_ERROR` | 422 | 否 | U8 `MomBizException` 或业务校验失败 |
