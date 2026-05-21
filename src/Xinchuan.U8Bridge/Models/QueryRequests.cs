@@ -52,5 +52,9 @@ namespace Xinchuan.U8Bridge.Models
         public string SupplierCode { get; set; }
 
         public string PriceDate { get; set; }
+
+        public int PageNo { get; set; } = 1;
+
+        public int PageSize { get; set; } = 200;
     }
 }

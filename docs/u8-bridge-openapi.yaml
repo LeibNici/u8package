@@ -764,6 +764,12 @@ components:
             priceDate:
               type: string
               format: date
+            pageNo:
+              type: integer
+              default: 1
+            pageSize:
+              type: integer
+              default: 200
     SalesOrderSaveRequest:
       allOf:
         - $ref: "#/components/schemas/BaseBusinessRequest"
