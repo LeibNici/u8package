@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Net;
+using System.Reflection;
 using System.Threading;
 using Microsoft.Owin.Hosting;
 using Xinchuan.U8Bridge.Configuration;
@@ -31,10 +33,17 @@ namespace Xinchuan.U8Bridge
 
             BridgeOptions options = BridgeOptionsLoader.Load(configPath);
             ServiceRegistry.Initialize(options);
-            using (WebApp.Start<Startup>(options.BaseUrl))
+            try
             {
-                BridgeLogger.Info("Bridge started at " + options.BaseUrl);
-                WaitForStop(serviceMode);
+                using (WebApp.Start<Startup>(options.BaseUrl))
+                {
+                    BridgeLogger.Info("Bridge started at " + options.BaseUrl);
+                    WaitForStop(serviceMode);
+                }
+            }
+            catch (TargetInvocationException ex) when (ex.InnerException is HttpListenerException)
+            {
+                throw CreateListenException(options.BaseUrl, (HttpListenerException)ex.InnerException, ex);
             }
 
             BridgeLogger.Info("Bridge stopped.");
@@ -56,6 +65,18 @@ namespace Xinchuan.U8Bridge
 
             Console.WriteLine("Press ENTER to stop.");
             Console.ReadLine();
+        }
+
+        private static InvalidOperationException CreateListenException(
+            string baseUrl,
+            HttpListenerException listenerException,
+            Exception original)
+        {
+            string message = "Bridge listen failed at "
+                + baseUrl
+                + ". If the error is access denied, run URL ACL setup. "
+                + "If the error is address already in use, stop the existing Xinchuan.U8Bridge.exe process.";
+            return new InvalidOperationException(message, original);
         }
     }
 }

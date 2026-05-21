@@ -133,7 +133,7 @@ Xinchuan.U8Bridge-Release-<run_number>.zip
 
 * 填写并保存 `appsettings.json`。
 * 一键配置 Windows `HttpListener` 监听权限。
-* 启动/停止 `Xinchuan.U8Bridge.exe`。
+* 启动/停止 `Xinchuan.U8Bridge.exe`；停止时会清理已有 Bridge 进程，避免 8081 端口残留。
 * 测试 `/health` 和 `/api/u8/login-test`。
 * 查看并打开 `logs` 日志目录。
 * 关闭窗口时驻留到任务栏通知区域，右键托盘图标可打开、停止服务或退出。
@@ -153,6 +153,14 @@ Xinchuan.U8Bridge-Release-<run_number>.zip
 netsh http add urlacl url="http://+:8081/" sddl="D:(A;;GX;;;WD)"
 ```
 
+如果启动日志出现 `OwinServerFactory.cs:100`、`侦听失败` 或 8081 未释放，通常是旧的
+`Xinchuan.U8Bridge.exe` 还在运行。先在管理器里点击“停止服务”，再启动；手工兜底命令：
+
+```powershell
+taskkill /F /IM Xinchuan.U8Bridge.exe
+netstat -ano | findstr :8081
+```
+
 解压 artifact 后，先复制一份配置：
 
 ```powershell
@@ -165,6 +173,15 @@ copy .\appsettings.sample.json .\appsettings.json
 * `server`：U8 登录界面服务器/数据源下拉框中选中的值。
 * `accountId`、`year`、`userId`、`password`、`loginDate`：按客户 U8 登录信息填写。
 * `u8Mode`：正式联调用 `official`，只验证 REST 服务启动可用时用 `dryRun`。
+
+`official` 模式需要满足：
+
+* 在安装了 U8 客户端或 U8 API 组件的 Windows 机器运行。
+* `U8Login.clsLogin` 已注册。
+* Bridge 以 x86 进程运行，以兼容常见 32 位 U8 COM 组件。
+* `server` 必须填写 U8 登录界面服务器/数据源下拉框的原始值，不能只凭数据库名猜。
+* `accountId`、`year`、`userId`、`password`、`loginDate` 与 U8 客户端可登录信息一致。
+* 先用管理器“测试 U8 登录”，返回 `U8 登录成功` 后再做写单据联调。
 
 正式启动：
 
