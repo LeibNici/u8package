@@ -118,6 +118,8 @@ Xinchuan.U8Bridge-Release-<run_number>.zip
 
 这个 zip 才是交给客户 U8 机器解压运行的包；客户机器不需要 NuGet、MSBuild 或 Visual Studio Build Tools。
 
+当前 Actions 固定使用 `windows-2022`，避免 `windows-latest` 迁移期间影响 .NET Framework 4.8 打包稳定性。
+
 ## 当前实现状态
 
 已实现：
