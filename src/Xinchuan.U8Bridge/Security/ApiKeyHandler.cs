@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,27 +27,10 @@ namespace Xinchuan.U8Bridge.Security
                 return base.SendAsync(request, cancellationToken);
             }
 
-            BridgeResponse rejection = CheckAccess(request);
+            BridgeResponse rejection = CheckApiKey(request);
             return rejection == null
                 ? base.SendAsync(request, cancellationToken)
                 : Task.FromResult(request.CreateResponse(rejection.ToHttpStatus(), rejection));
-        }
-
-        private BridgeResponse CheckAccess(HttpRequestMessage request)
-        {
-            if (options.AllowedSourceIps != null && options.AllowedSourceIps.Count > 0)
-            {
-                string remoteIp = GetRemoteIp(request);
-                if (!options.AllowedSourceIps.Contains(remoteIp))
-                {
-                    return BridgeResponse.Fail(
-                        GetRequestId(request),
-                        BridgeErrorCodes.SourceForbidden,
-                        "来源 IP 不允许访问 U8 Bridge");
-                }
-            }
-
-            return CheckApiKey(request);
         }
 
         private BridgeResponse CheckApiKey(HttpRequestMessage request)
@@ -77,16 +59,5 @@ namespace Xinchuan.U8Bridge.Security
             return request.Headers.TryGetValues("X-Request-ID", out var values) ? values.FirstOrDefault() : null;
         }
 
-        private static string GetRemoteIp(HttpRequestMessage request)
-        {
-            const string owinKey = "MS_OwinContext";
-            if (!request.Properties.ContainsKey(owinKey))
-            {
-                return null;
-            }
-
-            dynamic context = request.Properties[owinKey];
-            return context.Request.RemoteIpAddress;
-        }
     }
 }

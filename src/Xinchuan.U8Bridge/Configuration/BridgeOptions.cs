@@ -12,9 +12,7 @@ namespace Xinchuan.U8Bridge.Configuration
 
         public string U8Mode { get; set; } = "official";
 
-        public string U8ApiDllDirectory { get; set; }
-
-        public IList<string> AllowedSourceIps { get; set; } = new List<string>();
+        public U8DatabaseOptions Database { get; set; } = new U8DatabaseOptions();
 
         public IDictionary<string, U8ProfileOptions> Profiles { get; set; } =
             new Dictionary<string, U8ProfileOptions>();
@@ -39,5 +37,18 @@ namespace Xinchuan.U8Bridge.Configuration
         public string Server { get; set; }
 
         public string Serial { get; set; } = string.Empty;
+    }
+
+    public sealed class U8DatabaseOptions
+    {
+        public bool Enabled { get; set; }
+
+        public string Server { get; set; }
+
+        public string Database { get; set; }
+
+        public string User { get; set; }
+
+        public string Password { get; set; }
     }
 }

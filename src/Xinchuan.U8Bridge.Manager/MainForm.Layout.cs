@@ -9,16 +9,15 @@ namespace Xinchuan.U8Bridge.Manager
         private TextBox apiKeyTextBox;
         private TextBox profileNameTextBox;
         private ComboBox modeComboBox;
-        private TextBox u8ApiDllDirectoryTextBox;
-        private TextBox allowedIpsTextBox;
-        private TextBox subIdTextBox;
-        private TextBox accountIdTextBox;
-        private TextBox yearTextBox;
         private TextBox userIdTextBox;
         private TextBox passwordTextBox;
         private TextBox loginDateTextBox;
         private TextBox serverTextBox;
-        private TextBox serialTextBox;
+        private CheckBox dbEnabledCheckBox;
+        private TextBox dbServerTextBox;
+        private TextBox dbNameTextBox;
+        private TextBox dbUserTextBox;
+        private TextBox dbPasswordTextBox;
         private TextBox logTextBox;
         private Label statusLabel;
         private NotifyIcon trayIcon;
@@ -53,7 +52,7 @@ namespace Xinchuan.U8Bridge.Manager
             root.Padding = new Padding(12);
             root.RowCount = 3;
             root.ColumnCount = 1;
-            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 375));
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 335));
             root.RowStyles.Add(new RowStyle(SizeType.Absolute, 54));
             root.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             return root;
@@ -66,31 +65,31 @@ namespace Xinchuan.U8Bridge.Manager
             grid.Dock = DockStyle.Fill;
             grid.Padding = new Padding(10);
             grid.ColumnCount = 4;
-            grid.RowCount = 8;
+            grid.RowCount = 7;
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 115));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 115));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 7; i++)
             {
-                grid.RowStyles.Add(new RowStyle(SizeType.Absolute, i == 3 ? 72 : 38));
+                grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 38));
             }
 
             baseUrlTextBox = AddTextRow(grid, "监听地址", 0, 0);
             modeComboBox = AddComboRow(grid, "模式", 0, 2);
             apiKeyTextBox = AddTextRow(grid, "API Key", 1, 0);
             profileNameTextBox = AddTextRow(grid, "Profile", 1, 2);
-            u8ApiDllDirectoryTextBox = AddWideTextRow(grid, "U8 DLL目录", 2, 0);
-            allowedIpsTextBox = AddMultiTextRow(grid, "允许IP", 3, 0);
-            subIdTextBox = AddTextRow(grid, "SubId", 4, 0);
-            accountIdTextBox = AddTextRow(grid, "账套", 4, 2);
-            yearTextBox = AddTextRow(grid, "年度", 5, 0);
-            userIdTextBox = AddTextRow(grid, "U8账号", 5, 2);
-            passwordTextBox = AddTextRow(grid, "U8密码", 6, 0);
+            serverTextBox = AddTextRow(grid, "U8服务器", 2, 0);
+            loginDateTextBox = AddTextRow(grid, "登录日期", 2, 2);
+            userIdTextBox = AddTextRow(grid, "U8账号", 3, 0);
+            passwordTextBox = AddTextRow(grid, "U8密码", 3, 2);
             passwordTextBox.UseSystemPasswordChar = true;
-            loginDateTextBox = AddTextRow(grid, "登录日期", 6, 2);
-            serverTextBox = AddTextRow(grid, "服务器", 7, 0);
-            serialTextBox = AddTextRow(grid, "Serial", 7, 2);
+            dbEnabledCheckBox = AddCheckRow(grid, "启用读库", 4, 0);
+            dbServerTextBox = AddTextRow(grid, "DB服务器", 4, 2);
+            dbNameTextBox = AddTextRow(grid, "DB名称", 5, 0);
+            dbUserTextBox = AddTextRow(grid, "DB用户", 5, 2);
+            dbPasswordTextBox = AddTextRow(grid, "DB密码", 6, 0);
+            dbPasswordTextBox.UseSystemPasswordChar = true;
             group.Controls.Add(grid);
             return group;
         }
@@ -136,22 +135,12 @@ namespace Xinchuan.U8Bridge.Manager
             return textBox;
         }
 
-        private TextBox AddMultiTextRow(TableLayoutPanel grid, string label, int row, int col)
+        private CheckBox AddCheckRow(TableLayoutPanel grid, string label, int row, int col)
         {
             grid.Controls.Add(CreateLabel(label), col, row);
-            var textBox = new TextBox { Dock = DockStyle.Fill, Multiline = true, ScrollBars = ScrollBars.Vertical };
-            grid.Controls.Add(textBox, col + 1, row);
-            grid.SetColumnSpan(textBox, 3);
-            return textBox;
-        }
-
-        private TextBox AddWideTextRow(TableLayoutPanel grid, string label, int row, int col)
-        {
-            grid.Controls.Add(CreateLabel(label), col, row);
-            var textBox = new TextBox { Dock = DockStyle.Fill };
-            grid.Controls.Add(textBox, col + 1, row);
-            grid.SetColumnSpan(textBox, 3);
-            return textBox;
+            var checkBox = new CheckBox { Dock = DockStyle.Fill };
+            grid.Controls.Add(checkBox, col + 1, row);
+            return checkBox;
         }
 
         private ComboBox AddComboRow(TableLayoutPanel grid, string label, int row, int col)

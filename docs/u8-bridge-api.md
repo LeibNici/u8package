@@ -34,26 +34,25 @@ Bridge 必须部署在能正常运行 U8 官方 API 的 Windows 环境中。
 
 Bridge 不应把 U8 登录参数写死在代码里，应通过配置文件或管理界面维护登录 Profile。
 
-建议配置项：
+现场可见配置项：
 
 | 字段 | U8Login 参数 | 说明 |
 | --- | --- | --- |
 | `profileName` | - | 环境名称，例如 `prod-100` |
-| `subId` | `sSubId` | 子系统，销售类示例为 `AS` |
 | `server` | `sServer` | U8 登录界面“服务器/数据源”下拉框选中值，必须原样配置 |
-| `accountId` | `sAccID` | 账套参数，常见格式如 `(default)@100` |
-| `accountSet` | - | 账套号，例如 `100`，便于展示和校验 |
-| `year` | `sYear` | 会计年度，例如 `2018` |
-| `loginDateMode` | `sDate` | `TODAY` / `BUSINESS_DATE` / `FIXED` |
-| `fixedLoginDate` | `sDate` | 当 `loginDateMode=FIXED` 时使用 |
 | `userId` | `sUserID` | U8 操作员 |
 | `password` | `sPassword` | U8 密码，必须加密或由密钥服务注入 |
-| `serial` | `sSerial` | 通常为空，按 U8 环境要求配置 |
+| `loginDate` | `sDate` | U8 登录业务日期 |
+| `database.server` | - | U8 只读 SQL Server 地址 |
+| `database.database` | - | 账套库名，例如 `ufdata_100_2018` |
+| `database.user` | - | U8 只读 SQL Server 用户 |
+| `database.password` | - | U8 只读 SQL Server 密码 |
 
 重要规则：
 
 * `server` 必须来自 U8 客户端登录界面下拉框，不从 SQL Server JDBC URL 推导。
-* `accountId`、`year` 可以从库名 `ufdata_100_2018` 推断为 `100` / `2018`，但最终必须以 `login-test` 成功为准。
+* `subId`、`accountId`、`year`、`serial` 不作为现场可见配置；Bridge 内部默认 `subId=AS`、`serial` 为空，并从库名 `ufdata_100_2018` 推断账套 `100` / 年度 `2018`。
+* 如果客户库名不符合 `ufdata_<账套>_<年度>` 格式，最终以 `login-test` 的 U8 返回为准，再补兼容规则。
 * 不允许在源码、文档、日志中输出明文密码。
 
 ## 5. 通用请求头
@@ -199,7 +198,7 @@ POST /api/u8/login-test
 
 ### 8.3 主数据、库存、价格查询
 
-统一原则：业务系统只调用 Bridge，不再直接连接 U8 SQL Server。以下接口当前已作为稳定 REST 契约暴露；在拿到官方 U8API 示例前，会返回 `U8_API_NOT_SUPPORTED`，不会猜测 U8 表结构。
+统一原则：业务系统只调用 Bridge，不再直接连接 U8 SQL Server。Bridge 可以持有 U8 只读数据库配置，用于后续把读类接口统一封装成 REST；写入和审核仍通过 U8 官方 API。以下接口当前已作为稳定 REST 契约暴露；在拿到官方 U8API 示例或确认读库字段口径前，会返回 `U8_API_NOT_SUPPORTED`，不会在业务系统侧猜测 U8 表结构。
 
 | 接口 | 用途 | 当前状态 | 缺少资料 |
 | --- | --- | --- | --- |
@@ -232,7 +231,7 @@ POST /api/u8/login-test
   "requestId": "U8-MASTER-QUERY-001",
   "u8Code": null,
   "u8Id": null,
-  "message": "U8 客户主数据查询官方 API 示例未提供，系统不再直连 U8 数据库",
+  "message": "U8 客户主数据查询实现未接入",
   "errorCode": "U8_API_NOT_SUPPORTED",
   "rawMessage": null
 }

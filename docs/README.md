@@ -18,4 +18,4 @@
 * 不在文档中记录任何真实登录凭据、数据库凭据或 API Key。
 * 联调时的真实环境值放在部署配置或受控交接文档中，不提交到仓库。
 
-当前官方模式已接入 `U8Login.clsLogin` 与 `U8ApiBroker`，对外统一通过 Bridge REST API 对接。业务系统不再直连 U8 数据库；缺少官方 U8API 示例的接口先返回 `U8_API_NOT_SUPPORTED`，待实施补齐示例后再接真实 U8 调用。
+当前官方模式已接入 `U8Login.clsLogin` 与 `U8ApiBroker`，对外统一通过 Bridge REST API 对接。业务系统不再直连 U8 数据库；读类接口由 Bridge 持有只读库配置后统一封装。缺少官方 U8API 示例或读库字段口径未确认的接口先返回 `U8_API_NOT_SUPPORTED`，待实施补齐示例后再接真实 U8 调用。

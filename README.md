@@ -53,7 +53,8 @@ xinchuan-u8-bridge/
 ## 对接边界
 
 * 读写数据：统一由 Java 后端调用本 Bridge REST API，不再让业务系统直连 U8 SQL Server。
-* Bridge 底层只接 U8 官方 API / U8 客户端组件；缺官方示例的接口先返回 `U8_API_NOT_SUPPORTED`，不猜 U8 表结构。
+* Bridge 写入/审核底层接 U8 官方 API / U8 客户端组件；读类接口可由 Bridge 持有只读数据库配置统一封装，业务系统不感知表结构。
+* 缺官方示例或读库字段口径未确认的接口先返回 `U8_API_NOT_SUPPORTED`，不在业务系统侧猜 U8 表结构。
 * 登录参数：Bridge 使用配置化 U8 Profile，`server` 值应来自 U8 客户端登录界面的服务器/数据源下拉框，并通过 `login-test` 接口验证。
 * 对外接口：Bridge 提供 `GET /openapi.yaml` 与 `GET /swagger`，后端按文档调用。
 
@@ -175,10 +176,14 @@ copy .\appsettings.sample.json .\appsettings.json
 然后修改 `appsettings.json`：
 
 * `apiKey`：信川后端调用 Bridge 时传入的 `X-API-KEY`。
-* `server`：U8 登录界面服务器/数据源下拉框中选中的值。
-* `accountId`、`year`、`userId`、`password`、`loginDate`：按客户 U8 登录信息填写。
-* `u8ApiDllDirectory`：U8 API Framework DLL 目录，默认可填 `C:\U8SOFT\UFMOM\U8APIFramework`。当前 release 包已随带完整 `U8APIFramework` 目录，正常可留空；若现场有客户版本专用 DLL，再填实际目录覆盖。
 * `u8Mode`：正式联调用 `official`，只验证 REST 服务启动可用时用 `dryRun`。
+* `database.server`、`database.database`、`database.user`、`database.password`：U8 只读 SQL Server 连接信息，统一由 Bridge 持有，Java 后端不直接连库。
+* `server`：U8 登录界面服务器/数据源下拉框中选中的值。
+* `userId`、`password`、`loginDate`：按客户 U8 登录信息填写。
+
+`subId`、`accountId`、`year`、`serial` 不需要现场用户配置。Bridge 内部默认 `subId=AS`、`serial` 为空，并会从库名
+`ufdata_100_2018` 推导账套 `100` 与年度 `2018`；如果客户库名不符合该格式，再按现场 U8 登录失败日志补充兼容逻辑。
+DLL 目录也不需要配置，release 包已随带 `U8APIFramework`，运行时会优先从程序目录加载，再回退到 U8 标准安装目录。
 
 `official` 模式需要满足：
 
@@ -186,7 +191,8 @@ copy .\appsettings.sample.json .\appsettings.json
 * `U8Login.clsLogin` 已注册。
 * Bridge 以 x86 进程运行，以兼容常见 32 位 U8 COM 组件。
 * `server` 必须填写 U8 登录界面服务器/数据源下拉框的原始值，不能只凭数据库名猜。
-* `accountId`、`year`、`userId`、`password`、`loginDate` 与 U8 客户端可登录信息一致。
+* `database.database` 应填写目标账套库名，例如 `ufdata_100_2018`，用于推导 U8 登录账套与年度。
+* `userId`、`password`、`loginDate` 与 U8 客户端可登录信息一致。
 * 先用管理器“测试 U8 登录”，返回 `U8 登录成功` 后再做写单据联调。
 * 写单据会通过 `U8ApiBroker` 调用 `SaleOrder/Save`、`Consignment/Save`、`saleout/Add`、`MaterialOut/Add` 以及对应审核 API；若 U8 返回字段/档案错误，按 `rawMessage` 补齐字段或基础档案。
 

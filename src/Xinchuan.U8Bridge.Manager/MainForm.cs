@@ -189,8 +189,7 @@ namespace Xinchuan.U8Bridge.Manager
                 ApiKey = apiKeyTextBox.Text.Trim(),
                 DefaultProfileName = profileNameTextBox.Text.Trim(),
                 U8Mode = Convert.ToString(modeComboBox.SelectedItem),
-                U8ApiDllDirectory = u8ApiDllDirectoryTextBox.Text.Trim(),
-                AllowedSourceIps = SplitLines(allowedIpsTextBox.Text),
+                Database = BuildDatabase(),
                 Profiles = new Dictionary<string, U8ProfileConfig>()
             };
             config.Profiles[config.DefaultProfileName] = BuildProfile();
@@ -201,42 +200,42 @@ namespace Xinchuan.U8Bridge.Manager
         {
             return new U8ProfileConfig
             {
-                SubId = subIdTextBox.Text.Trim(),
-                AccountId = accountIdTextBox.Text.Trim(),
-                Year = yearTextBox.Text.Trim(),
                 UserId = userIdTextBox.Text.Trim(),
                 Password = passwordTextBox.Text,
                 LoginDate = loginDateTextBox.Text.Trim(),
-                Server = serverTextBox.Text.Trim(),
-                Serial = serialTextBox.Text.Trim()
+                Server = serverTextBox.Text.Trim()
+            };
+        }
+
+        private U8DatabaseConfig BuildDatabase()
+        {
+            return new U8DatabaseConfig
+            {
+                Enabled = dbEnabledCheckBox.Checked,
+                Server = dbServerTextBox.Text.Trim(),
+                Database = dbNameTextBox.Text.Trim(),
+                User = dbUserTextBox.Text.Trim(),
+                Password = dbPasswordTextBox.Text
             };
         }
 
         private void BindConfig(BridgeConfig config)
         {
             U8ProfileConfig profile = config.Profiles.Values.FirstOrDefault() ?? new U8ProfileConfig();
+            U8DatabaseConfig database = config.Database ?? new U8DatabaseConfig();
             baseUrlTextBox.Text = config.BaseUrl;
             apiKeyTextBox.Text = config.ApiKey;
             profileNameTextBox.Text = config.DefaultProfileName;
             modeComboBox.SelectedItem = config.U8Mode == "official" ? "official" : "dryRun";
-            u8ApiDllDirectoryTextBox.Text = config.U8ApiDllDirectory;
-            allowedIpsTextBox.Text = string.Join(Environment.NewLine, config.AllowedSourceIps);
-            subIdTextBox.Text = profile.SubId;
-            accountIdTextBox.Text = profile.AccountId;
-            yearTextBox.Text = profile.Year;
             userIdTextBox.Text = profile.UserId;
             passwordTextBox.Text = profile.Password;
             loginDateTextBox.Text = profile.LoginDate;
             serverTextBox.Text = profile.Server;
-            serialTextBox.Text = profile.Serial;
-        }
-
-        private static IList<string> SplitLines(string value)
-        {
-            return value.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(line => line.Trim())
-                .Where(line => line.Length > 0)
-                .ToList();
+            dbEnabledCheckBox.Checked = database.Enabled;
+            dbServerTextBox.Text = database.Server;
+            dbNameTextBox.Text = database.Database;
+            dbUserTextBox.Text = database.User;
+            dbPasswordTextBox.Text = database.Password;
         }
 
         private void AppendLogSafe(string message)

@@ -22,42 +22,42 @@ namespace Xinchuan.U8Bridge.Controllers
         [Route("customers/query")]
         public IHttpActionResult QueryCustomers(MasterQueryRequest request)
         {
-            return UnsupportedQuery(request, "U8 客户主数据查询官方 API 示例未提供，系统不再直连 U8 数据库");
+            return UnsupportedQuery(request, "U8 客户主数据查询实现未接入");
         }
 
         [HttpPost]
         [Route("materials/query")]
         public IHttpActionResult QueryMaterials(MasterQueryRequest request)
         {
-            return UnsupportedQuery(request, "U8 物料主数据查询官方 API 示例未提供，系统不再直连 U8 数据库");
+            return UnsupportedQuery(request, "U8 物料主数据查询实现未接入");
         }
 
         [HttpPost]
         [Route("suppliers/query")]
         public IHttpActionResult QuerySuppliers(MasterQueryRequest request)
         {
-            return UnsupportedQuery(request, "U8 供应商主数据查询官方 API 示例未提供，系统不再直连 U8 数据库");
+            return UnsupportedQuery(request, "U8 供应商主数据查询实现未接入");
         }
 
         [HttpPost]
         [Route("inventory/query")]
         public IHttpActionResult QueryInventory(InventoryQueryRequest request)
         {
-            return UnsupportedQuery(request, "U8 现存量查询官方 API 示例未提供，系统不再直连 U8 数据库");
+            return UnsupportedQuery(request, "U8 现存量查询实现未接入");
         }
 
         [HttpPost]
         [Route("in-transit/query")]
         public IHttpActionResult QueryInTransit(InTransitQueryRequest request)
         {
-            return UnsupportedQuery(request, "U8 采购在途查询官方 API 示例未提供，系统不再直连 U8 数据库");
+            return UnsupportedQuery(request, "U8 采购在途查询实现未接入");
         }
 
         [HttpPost]
         [Route("material-price/query")]
         public IHttpActionResult QueryMaterialPrice(MaterialPriceQueryRequest request)
         {
-            return UnsupportedQuery(request, "U8 物料价格查询官方 API 示例未提供，系统不再直连 U8 数据库");
+            return UnsupportedQuery(request, "U8 物料价格查询实现未接入");
         }
 
         [HttpPost]

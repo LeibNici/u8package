@@ -59,7 +59,7 @@ namespace Xinchuan.U8Bridge.Manager.Services
                 config.DefaultProfileName = "prod-100";
             }
 
-            config.AllowedSourceIps = config.AllowedSourceIps ?? new List<string>();
+            config.Database = config.Database ?? new U8DatabaseConfig();
             config.Profiles = config.Profiles ?? new Dictionary<string, U8ProfileConfig>();
             if (!config.Profiles.Any())
             {
