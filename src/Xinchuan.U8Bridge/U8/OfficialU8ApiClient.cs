@@ -68,11 +68,12 @@ namespace Xinchuan.U8Bridge.U8
                     requestId,
                     BridgeErrorCodes.U8ComponentUnavailable,
                     "U8 API Framework 组件不可用",
-                    ex.Message);
+                    DescribeException(ex));
             }
             catch (Exception ex)
             {
-                return BridgeResponse.Fail(requestId, BridgeErrorCodes.U8SysError, "U8 API 调用异常", ex.Message);
+                BridgeLogger.Error("U8 API invoke failed. RequestId=" + requestId, ex);
+                return BridgeResponse.Fail(requestId, BridgeErrorCodes.U8SysError, "U8 API 调用异常", DescribeException(ex));
             }
             finally
             {
@@ -148,6 +149,17 @@ namespace Xinchuan.U8Bridge.U8
             }
 
             return null;
+        }
+
+        private static string DescribeException(Exception ex)
+        {
+            Exception root = ex.GetBaseException();
+            if (root == null || root == ex)
+            {
+                return ex.Message;
+            }
+
+            return root.GetType().FullName + ": " + root.Message;
         }
 
         private static void ReleaseCom(object value)
