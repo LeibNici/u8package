@@ -20,6 +20,8 @@ namespace Xinchuan.U8Bridge.Manager
         private TextBox serialTextBox;
         private TextBox logTextBox;
         private Label statusLabel;
+        private NotifyIcon trayIcon;
+        private ContextMenuStrip trayMenu;
 
         private void InitializeComponent()
         {
@@ -28,6 +30,8 @@ namespace Xinchuan.U8Bridge.Manager
             MinimumSize = new Size(980, 680);
             Size = new Size(1100, 760);
             Font = new Font("Microsoft YaHei UI", 9F);
+            FormClosing += OnFormClosing;
+            Resize += OnFormResize;
 
             var root = CreateRootLayout();
             var configGroup = CreateConfigGroup();
@@ -38,6 +42,7 @@ namespace Xinchuan.U8Bridge.Manager
             root.Controls.Add(actionPanel, 0, 1);
             root.Controls.Add(logGroup, 0, 2);
             Controls.Add(root);
+            InitializeTrayIcon();
         }
 
         private TableLayoutPanel CreateRootLayout()
@@ -156,6 +161,22 @@ namespace Xinchuan.U8Bridge.Manager
             var button = new Button { Text = text, AutoSize = true, Height = 32, Margin = new Padding(4) };
             button.Click += handler;
             return button;
+        }
+
+        private void InitializeTrayIcon()
+        {
+            trayMenu = new ContextMenuStrip();
+            trayMenu.Items.Add("打开管理器", null, (s, e) => RestoreFromTray());
+            trayMenu.Items.Add("停止服务", null, (s, e) => StopBridge());
+            trayMenu.Items.Add(new ToolStripSeparator());
+            trayMenu.Items.Add("退出", null, (s, e) => ExitApplication());
+
+            trayIcon = new NotifyIcon();
+            trayIcon.Text = "信川 U8 Bridge 管理器";
+            trayIcon.Icon = SystemIcons.Application;
+            trayIcon.ContextMenuStrip = trayMenu;
+            trayIcon.Visible = true;
+            trayIcon.DoubleClick += (s, e) => RestoreFromTray();
         }
     }
 }

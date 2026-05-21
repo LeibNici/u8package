@@ -13,6 +13,7 @@ namespace Xinchuan.U8Bridge.Manager
         private readonly ConfigService configService = new ConfigService();
         private readonly BridgeProcessService processService = new BridgeProcessService();
         private readonly BridgeHttpClient httpClient = new BridgeHttpClient();
+        private bool allowExit;
 
         public MainForm()
         {
@@ -108,6 +109,49 @@ namespace Xinchuan.U8Bridge.Manager
         {
             Directory.CreateDirectory(configService.LogDirectory);
             Process.Start("explorer.exe", configService.LogDirectory);
+        }
+
+        private void OnFormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (allowExit)
+            {
+                processService.Stop();
+                trayIcon.Visible = false;
+                return;
+            }
+
+            e.Cancel = true;
+            HideToTray();
+        }
+
+        private void OnFormResize(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                SetStatus("窗口已最小化");
+            }
+        }
+
+        private void HideToTray()
+        {
+            Hide();
+            ShowInTaskbar = false;
+            SetStatus("管理器已驻留到任务栏通知区域");
+        }
+
+        private void RestoreFromTray()
+        {
+            Show();
+            ShowInTaskbar = true;
+            WindowState = FormWindowState.Normal;
+            Activate();
+            SetStatus("管理器已打开");
+        }
+
+        private void ExitApplication()
+        {
+            allowExit = true;
+            Close();
         }
 
         private void RefreshLog()
