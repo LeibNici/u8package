@@ -13,6 +13,7 @@ namespace Xinchuan.U8Bridge.Manager
         private readonly ConfigService configService = new ConfigService();
         private readonly BridgeProcessService processService = new BridgeProcessService();
         private readonly BridgeHttpClient httpClient = new BridgeHttpClient();
+        private readonly UrlAclService urlAclService = new UrlAclService();
         private bool allowExit;
 
         public MainForm()
@@ -74,6 +75,19 @@ namespace Xinchuan.U8Bridge.Manager
             catch (Exception ex)
             {
                 SetStatus("Bridge 停止失败: " + ex.Message);
+            }
+        }
+
+        private void ConfigureUrlAcl()
+        {
+            try
+            {
+                urlAclService.Configure(baseUrlTextBox.Text);
+                SetStatus("已打开管理员授权窗口，请确认后再启动服务");
+            }
+            catch (Exception ex)
+            {
+                SetStatus("监听权限配置失败: " + ex.Message);
             }
         }
 

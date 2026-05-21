@@ -132,6 +132,7 @@ Xinchuan.U8Bridge-Release-<run_number>.zip
 管理器可完成：
 
 * 填写并保存 `appsettings.json`。
+* 一键配置 Windows `HttpListener` 监听权限。
 * 启动/停止 `Xinchuan.U8Bridge.exe`。
 * 测试 `/health` 和 `/api/u8/login-test`。
 * 查看并打开 `logs` 日志目录。
@@ -143,6 +144,14 @@ Xinchuan.U8Bridge-Release-<run_number>.zip
 * 点击窗口关闭：隐藏到任务栏通知区域，不停止 Bridge。
 * 托盘图标双击：恢复管理器窗口。
 * 托盘右键退出：停止 Bridge 并退出管理器。
+
+如果启动日志出现 `System.Net.HttpListenerException: 拒绝访问`，说明当前 Windows 用户没有监听
+`baseUrl` 的 URL ACL 权限。先在管理器里点击“配置监听权限”，在弹出的管理员授权窗口中确认，
+再点击“启动服务”。等价手工命令如下：
+
+```powershell
+netsh http add urlacl url="http://+:8081/" sddl="D:(A;;GX;;;WD)"
+```
 
 解压 artifact 后，先复制一份配置：
 

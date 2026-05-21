@@ -102,6 +102,7 @@ namespace Xinchuan.U8Bridge.Manager
 
             panel.Controls.Add(CreateButton("加载配置", (s, e) => LoadConfigToForm()));
             panel.Controls.Add(CreateButton("保存配置", (s, e) => SaveConfigFromForm()));
+            panel.Controls.Add(CreateButton("配置监听权限", (s, e) => ConfigureUrlAcl()));
             panel.Controls.Add(CreateButton("启动服务", (s, e) => StartBridge()));
             panel.Controls.Add(CreateButton("停止服务", (s, e) => StopBridge()));
             panel.Controls.Add(CreateButton("测试 Health", (s, e) => TestHealth()));

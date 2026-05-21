@@ -40,6 +40,7 @@
     <Compile Include="Services\BridgeHttpClient.cs" />
     <Compile Include="Services\BridgeProcessService.cs" />
     <Compile Include="Services\ConfigService.cs" />
+    <Compile Include="Services\UrlAclService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
