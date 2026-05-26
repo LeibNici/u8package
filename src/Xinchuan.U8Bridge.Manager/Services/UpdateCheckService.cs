@@ -161,6 +161,11 @@ namespace Xinchuan.U8Bridge.Manager.Services
         {
             MatchCollection matches = Regex.Matches(value ?? "0", @"\d+(?:\.\d+)*");
             string normalized = matches.Count == 0 ? "0" : matches[matches.Count - 1].Value;
+            if (!normalized.Contains("."))
+            {
+                normalized += ".0";
+            }
+
             return Version.TryParse(string.IsNullOrWhiteSpace(normalized) ? "0" : normalized, out var version)
                 ? version
                 : new Version(0, 0);
