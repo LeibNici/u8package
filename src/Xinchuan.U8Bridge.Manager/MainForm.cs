@@ -246,7 +246,7 @@ namespace Xinchuan.U8Bridge.Manager
                 ? "githubRelease"
                 : update.SourceType;
             updateUrlTextBox.Text = update.CheckUrl;
-            updateCurrentVersionTextBox.Text = update.CurrentVersion;
+            updateCurrentVersionTextBox.Text = UpdateCheckService.ResolveCurrentVersion(configService.BaseDirectory);
             updatePrereleaseCheckBox.Checked = update.IncludePrerelease;
         }
 

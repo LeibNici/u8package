@@ -29,9 +29,10 @@ namespace Xinchuan.U8Bridge.Manager
 
         private async void InstallUpdate()
         {
-            if (!CanInstall(lastUpdateResult))
+            string blockedReason = BuildInstallBlockReason(lastUpdateResult);
+            if (!string.IsNullOrWhiteSpace(blockedReason))
             {
-                SetStatus("没有可安装的兼容更新，请先检查更新");
+                SetStatus("不能更新升级: " + blockedReason);
                 return;
             }
 
@@ -66,7 +67,6 @@ namespace Xinchuan.U8Bridge.Manager
                 Enabled = updateEnabledCheckBox.Checked,
                 SourceType = Convert.ToString(updateSourceTypeComboBox.SelectedItem),
                 CheckUrl = updateUrlTextBox.Text.Trim(),
-                CurrentVersion = updateCurrentVersionTextBox.Text.Trim(),
                 IncludePrerelease = updatePrereleaseCheckBox.Checked
             };
         }
@@ -88,15 +88,32 @@ namespace Xinchuan.U8Bridge.Manager
 
         private void RefreshInstallButton(UpdateCheckResult result)
         {
-            updateNowButton.Enabled = CanInstall(result);
+            updateNowButton.Enabled = CanClickInstall(result);
         }
 
-        private static bool CanInstall(UpdateCheckResult result)
+        private static bool CanClickInstall(UpdateCheckResult result)
         {
-            return result != null
-                && result.HasUpdate
-                && result.ConfigCompatible
-                && !string.IsNullOrWhiteSpace(result.DownloadUrl);
+            return result != null && result.HasUpdate;
+        }
+
+        private static string BuildInstallBlockReason(UpdateCheckResult result)
+        {
+            if (result == null)
+            {
+                return "请先检查更新";
+            }
+
+            if (!result.HasUpdate)
+            {
+                return "当前已是最新版本";
+            }
+
+            if (!result.ConfigCompatible)
+            {
+                return result.ConfigMessage;
+            }
+
+            return string.IsNullOrWhiteSpace(result.DownloadUrl) ? "新版本缺少下载地址" : null;
         }
 
         private static bool ConfirmInstall(UpdateCheckResult result)

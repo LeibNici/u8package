@@ -100,6 +100,9 @@ namespace Xinchuan.U8Bridge.Manager
             updateSourceTypeComboBox = AddComboRow(grid, "更新来源", 7, 2, "githubRelease", "manifest");
             updateUrlTextBox = AddWideTextRow(grid, "检测地址", 8, 0);
             updateCurrentVersionTextBox = AddTextRow(grid, "当前版本", 9, 0);
+            updateCurrentVersionTextBox.ReadOnly = true;
+            updateCurrentVersionTextBox.BackColor = SystemColors.Control;
+            updateCurrentVersionTextBox.TabStop = false;
             updatePrereleaseCheckBox = AddCheckRow(grid, "预发布", 9, 2);
             group.Controls.Add(grid);
             return group;

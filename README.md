@@ -237,7 +237,6 @@ logs\u8-bridge-yyyyMMdd.log
     "enabled": true,
     "sourceType": "githubRelease",
     "checkUrl": "https://api.github.com/repos/LeibNici/u8package/releases/latest",
-    "currentVersion": "",
     "includePrerelease": false
   }
 }
@@ -256,8 +255,8 @@ logs\u8-bridge-yyyyMMdd.log
 }
 ```
 
-Release 包会随带 `package-version.json`；若 `update.currentVersion` 留空，管理器会读取该文件作为当前版本。
-若旧包缺少有效版本号，会回退到程序 Assembly 版本。
+Release 包会随带 `package-version.json`，管理器只从该文件读取当前版本；若旧包缺少有效版本号，会回退到程序 Assembly 版本。
+当前版本是只读运行信息，不允许通过 `appsettings.json` 改写。
 
 配置大版本变更时，不建议直接静默升级。Bridge 配置使用 `configSchemaVersion` 标识结构版本；
 manifest 或 GitHub Release notes 可声明 `ConfigSchemaVersion: 2` 与 `MinConfigSchemaVersion: 1`。

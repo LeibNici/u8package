@@ -70,8 +70,6 @@ namespace Xinchuan.U8Bridge.Manager
         public string CheckUrl { get; set; } =
             "https://api.github.com/repos/LeibNici/u8package/releases/latest";
 
-        public string CurrentVersion { get; set; }
-
         public bool IncludePrerelease { get; set; }
     }
 }

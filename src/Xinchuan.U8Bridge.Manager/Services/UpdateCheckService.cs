@@ -25,7 +25,7 @@ namespace Xinchuan.U8Bridge.Manager.Services
             string json = await DownloadJsonAsync(config.CheckUrl).ConfigureAwait(false);
             JToken token = JToken.Parse(json);
             UpdateCheckResult result = ParseResult(config, token);
-            result.CurrentVersion = ResolveCurrentVersion(config, baseDirectory);
+            result.CurrentVersion = ResolveCurrentVersion(baseDirectory);
             result.HasUpdate = CompareVersion(result.LatestVersion, result.CurrentVersion) > 0;
             EvaluateConfigCompatibility(result, currentConfigSchemaVersion);
             return result;
@@ -135,13 +135,8 @@ namespace Xinchuan.U8Bridge.Manager.Services
             return "配置兼容，可直接升级";
         }
 
-        private static string ResolveCurrentVersion(UpdateCheckConfig config, string baseDirectory)
+        public static string ResolveCurrentVersion(string baseDirectory)
         {
-            if (!string.IsNullOrWhiteSpace(config.CurrentVersion))
-            {
-                return config.CurrentVersion.Trim();
-            }
-
             string manifest = Path.Combine(baseDirectory, "package-version.json");
             if (File.Exists(manifest))
             {
