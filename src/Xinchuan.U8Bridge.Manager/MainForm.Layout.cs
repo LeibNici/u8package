@@ -23,6 +23,7 @@ namespace Xinchuan.U8Bridge.Manager
         private TextBox updateUrlTextBox;
         private TextBox updateCurrentVersionTextBox;
         private CheckBox updatePrereleaseCheckBox;
+        private Button updateNowButton;
         private TextBox logTextBox;
         private Label statusLabel;
         private NotifyIcon trayIcon;
@@ -119,6 +120,9 @@ namespace Xinchuan.U8Bridge.Manager
             panel.Controls.Add(CreateButton("测试 Health", (s, e) => TestHealth()));
             panel.Controls.Add(CreateButton("测试 U8 登录", (s, e) => TestLogin()));
             panel.Controls.Add(CreateButton("检查更新", (s, e) => CheckUpdate()));
+            updateNowButton = CreateButton("更新升级", (s, e) => InstallUpdate());
+            updateNowButton.Enabled = false;
+            panel.Controls.Add(updateNowButton);
             panel.Controls.Add(CreateButton("刷新日志", (s, e) => RefreshLog()));
             panel.Controls.Add(CreateButton("打开日志目录", (s, e) => OpenLogDirectory()));
             statusLabel = new Label { AutoSize = true, Padding = new Padding(18, 8, 0, 0) };

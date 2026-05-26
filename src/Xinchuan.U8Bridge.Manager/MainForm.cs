@@ -15,6 +15,8 @@ namespace Xinchuan.U8Bridge.Manager
         private readonly BridgeHttpClient httpClient = new BridgeHttpClient();
         private readonly UrlAclService urlAclService = new UrlAclService();
         private readonly UpdateCheckService updateCheckService = new UpdateCheckService();
+        private readonly UpdateInstallService updateInstallService = new UpdateInstallService();
+        private UpdateCheckResult lastUpdateResult;
         private bool allowExit;
 
         public MainForm()

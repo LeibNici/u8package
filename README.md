@@ -263,6 +263,17 @@ Release 包会随带 `package-version.json`；若 `update.currentVersion` 留空
 manifest 或 GitHub Release notes 可声明 `ConfigSchemaVersion: 2` 与 `MinConfigSchemaVersion: 1`。
 管理器检测更新时会提示配置是否兼容、是否需要迁移；真正替换程序前应先备份 `appsettings.json`。
 
+检测到兼容的新版本后，“更新升级”按钮会变为可点击。点击后管理器会：
+
+* 下载检测结果中的 zip 包到 `updates` 目录。
+* 生成并启动本地升级脚本。
+* 停止当前 Bridge 进程和管理器进程。
+* 备份当前程序目录到 `backup-before-update-yyyyMMddHHmmss`。
+* 解压新包并覆盖程序文件，但保留现场 `appsettings.json`。
+* 升级完成后重新打开 `Xinchuan.U8Bridge.Manager.exe`。
+
+如果升级脚本失败，窗口会停在命令行并显示备份目录，方便现场手工恢复。
+
 ## 当前实现状态
 
 已实现：
