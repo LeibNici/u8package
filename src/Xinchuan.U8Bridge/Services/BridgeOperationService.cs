@@ -109,6 +109,11 @@ namespace Xinchuan.U8Bridge.Services
             return Query(headerRequestId, request, () => databaseQueryService.QueryBomParts(request), "U8 BOM 参数查询成功");
         }
 
+        public BridgeResponse QueryBomTree(string headerRequestId, BomPartLookupRequest request)
+        {
+            return Query(headerRequestId, request, () => databaseQueryService.QueryBomTree(request), "U8 BOM 树查询成功");
+        }
+
         public BridgeResponse LoadBomByCode(string headerRequestId, BomPartLookupRequest request)
         {
             BridgeResponse invalid = ValidateRequestId(headerRequestId, request);

@@ -206,7 +206,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $tag = "u8-bridge-${{ github.run_number }}.0"
+          $tag = "u8-bridge-${{ github.run_number }}"
           $title = "Xinchuan.U8Bridge-Release-${{ github.run_number }}"
           $notes = @(
             "U8 Bridge Release ${{ github.run_number }}",

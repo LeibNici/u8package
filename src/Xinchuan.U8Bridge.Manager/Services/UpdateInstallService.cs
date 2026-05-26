@@ -17,12 +17,16 @@ namespace Xinchuan.U8Bridge.Manager.Services
 
         public async Task<string> PrepareAsync(UpdateCheckResult result, string baseDirectory)
         {
-            Validate(result, baseDirectory);
-            string updateDirectory = CreateUpdateDirectory(baseDirectory, result.LatestVersion);
+            string normalizedBaseDirectory = NormalizePath(baseDirectory, "Bridge 程序目录");
+            Validate(result, normalizedBaseDirectory);
+            string updateDirectory = CreateUpdateDirectory(normalizedBaseDirectory, result.LatestVersion);
             string packagePath = Path.Combine(updateDirectory, PackageFileName);
             await DownloadAsync(result.DownloadUrl, packagePath).ConfigureAwait(false);
             string scriptPath = Path.Combine(updateDirectory, UpgradeScriptName);
-            File.WriteAllText(scriptPath, BuildScript(baseDirectory, updateDirectory, packagePath), Encoding.Default);
+            File.WriteAllText(
+                scriptPath,
+                BuildScript(normalizedBaseDirectory, updateDirectory, packagePath),
+                Encoding.Default);
             return scriptPath;
         }
 
@@ -86,7 +90,8 @@ namespace Xinchuan.U8Bridge.Manager.Services
 
         private static string BuildScript(string baseDirectory, string updateDirectory, string packagePath)
         {
-            string extractDirectory = Path.Combine(updateDirectory, "extract");
+            string extractDirectory = NormalizePath(Path.Combine(updateDirectory, "extract"), "更新解压目录");
+            string normalizedPackagePath = NormalizePath(packagePath, "更新包路径");
             string backupDirectory = Path.Combine(
                 baseDirectory,
                 "backup-before-update-" + DateTime.Now.ToString("yyyyMMddHHmmss"));
@@ -94,7 +99,7 @@ namespace Xinchuan.U8Bridge.Manager.Services
             script.AppendLine("@echo off");
             script.AppendLine("setlocal");
             script.AppendLine("set \"BASE=" + baseDirectory + "\"");
-            script.AppendLine("set \"ZIP=" + packagePath + "\"");
+            script.AppendLine("set \"ZIP=" + normalizedPackagePath + "\"");
             script.AppendLine("set \"EXTRACT=" + extractDirectory + "\"");
             script.AppendLine("set \"BACKUP=" + backupDirectory + "\"");
             script.AppendLine("echo Waiting for U8 Bridge Manager to exit...");
@@ -114,6 +119,22 @@ namespace Xinchuan.U8Bridge.Manager.Services
             script.AppendLine("pause");
             script.AppendLine("exit /b 1");
             return script.ToString();
+        }
+
+        private static string NormalizePath(string value, string label)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new DirectoryNotFoundException(label + "不能为空");
+            }
+
+            string normalized = Path.GetFullPath(value.Trim().Trim('"'));
+            if (normalized.IndexOf('"') >= 0)
+            {
+                throw new InvalidOperationException(label + "不能包含引号: " + normalized);
+            }
+
+            return normalized;
         }
 
         private static string SafeName(string value)

@@ -66,6 +66,8 @@ namespace Xinchuan.U8Bridge.Models
 
         public string VersionOrIdentCode { get; set; }
 
+        public int MaxDepth { get; set; } = 2;
+
         public int PageNo { get; set; } = 1;
 
         public int PageSize { get; set; } = 20;

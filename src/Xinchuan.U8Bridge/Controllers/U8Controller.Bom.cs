@@ -34,6 +34,13 @@ namespace Xinchuan.U8Bridge.Controllers
         }
 
         [HttpPost]
+        [Route("bom/tree-query")]
+        public IHttpActionResult QueryBomTree(BomPartLookupRequest request)
+        {
+            return Bridge(service.QueryBomTree(RequestIdHeader(), request));
+        }
+
+        [HttpPost]
         [Route("bom/audit")]
         public IHttpActionResult AuditBom(BomActionRequest request)
         {
