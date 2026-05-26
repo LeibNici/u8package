@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Xinchuan.U8Bridge.Configuration;
 using Xinchuan.U8Bridge.Models;
 using Xinchuan.U8Bridge.U8;
@@ -103,6 +104,52 @@ namespace Xinchuan.U8Bridge.Services
             return Query(headerRequestId, request, () => databaseQueryService.QueryMaterialPrice(request), "U8 物料价格查询成功");
         }
 
+        public BridgeResponse QueryBomParts(string headerRequestId, BomPartLookupRequest request)
+        {
+            return Query(headerRequestId, request, () => databaseQueryService.QueryBomParts(request), "U8 BOM 参数查询成功");
+        }
+
+        public BridgeResponse LoadBomByCode(string headerRequestId, BomPartLookupRequest request)
+        {
+            BridgeResponse invalid = ValidateRequestId(headerRequestId, request);
+            if (invalid != null)
+            {
+                return invalid;
+            }
+
+            BridgeResponse missingProfile = ResolveProfile(request, out var profile);
+            if (missingProfile != null)
+            {
+                return missingProfile;
+            }
+
+            try
+            {
+                QueryResult lookup = databaseQueryService.QueryBomParts(FirstBomPartLookup(request));
+                if (lookup.Items.Count == 0)
+                {
+                    return BridgeResponse.Fail(
+                        request.RequestId,
+                        BridgeErrorCodes.U8ResultFailed,
+                        "U8 BOM 参数未找到",
+                        "materialCode=" + request.MaterialCode);
+                }
+
+                BomActionRequest action = CreateBomLoadRequest(request, lookup.Items[0]);
+                var call = U8ApiCall.Create(
+                    "U8API/BOM/BomLoad",
+                    "bom-load-by-code",
+                    request.MaterialCode + ":" + action.VersionOrIdentCode,
+                    action);
+                return SafeInvoke(request, profile, call);
+            }
+            catch (Exception ex)
+            {
+                BridgeLogger.Error("U8 BOM load by code failed. RequestId=" + request.RequestId, ex);
+                return BridgeResponse.Fail(request.RequestId, BridgeErrorCodes.U8DatabaseError, "U8 BOM 参数查询失败", ex.Message);
+            }
+        }
+
         private BridgeResponse Query(
             string headerRequestId,
             BaseBusinessRequest request,
@@ -182,6 +229,45 @@ namespace Xinchuan.U8Bridge.Services
             }
 
             return null;
+        }
+
+        private static BomPartLookupRequest FirstBomPartLookup(BomPartLookupRequest request)
+        {
+            return new BomPartLookupRequest
+            {
+                RequestId = request.RequestId,
+                ProfileName = request.ProfileName,
+                MaterialCode = request.MaterialCode,
+                BomType = request.BomType,
+                VersionOrIdentCode = request.VersionOrIdentCode,
+                PageNo = 1,
+                PageSize = 1
+            };
+        }
+
+        private static BomActionRequest CreateBomLoadRequest(
+            BomPartLookupRequest request,
+            IDictionary<string, object> row)
+        {
+            return new BomActionRequest
+            {
+                RequestId = request.RequestId,
+                ProfileName = request.ProfileName,
+                PartId = ReadInt(row, "partId"),
+                BomType = ReadInt(row, "bomType"),
+                VersionOrIdentCode = Convert.ToString(row["versionOrIdentCode"])
+            };
+        }
+
+        private static int ReadInt(IDictionary<string, object> row, string key)
+        {
+            object value;
+            if (!row.TryGetValue(key, out value) || value == null)
+            {
+                throw new InvalidOperationException("U8 BOM 参数缺少 " + key);
+            }
+
+            return Convert.ToInt32(value);
         }
     }
 }

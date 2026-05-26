@@ -201,6 +201,48 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
         "503":
           $ref: "#/components/responses/BridgeResponse"
+  /api/u8/bom/part-lookup:
+    post:
+      summary: Lookup U8 BOM API parameters by material code
+      description: Reads only bas_part/bom_parent/bom_bom headers to find the partId, bomType, and versionOrIdentCode needed by official U8 BOM APIs.
+      operationId: lookupBomPart
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BomPartLookupRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "400":
+          $ref: "#/components/responses/BridgeResponse"
+        "503":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/bom/load-by-code:
+    post:
+      summary: Load U8 BOM by material code
+      description: Looks up official U8 BOM parameters by material code, then calls U8API/BOM/BomLoad. BOM component data still comes from the official U8 API.
+      operationId: loadBomByCode
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BomPartLookupRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "400":
+          $ref: "#/components/responses/BridgeResponse"
+        "422":
+          $ref: "#/components/responses/BridgeResponse"
+        "503":
+          $ref: "#/components/responses/BridgeResponse"
   /api/u8/bom/audit:
     post:
       summary: Audit U8 BOM through official U8 API
@@ -901,6 +943,29 @@ components:
               default: 1
             versionOrIdentCode:
               type: string
+    BomPartLookupRequest:
+      allOf:
+        - $ref: "#/components/schemas/BaseBusinessRequest"
+        - type: object
+          required: [materialCode]
+          properties:
+            materialCode:
+              type: string
+              example: "01001001"
+            bomType:
+              type: integer
+              nullable: true
+              description: Optional U8 BOM type filter. 1 is primary BOM.
+            versionOrIdentCode:
+              type: string
+              nullable: true
+              description: Optional primary version or substitute BOM ident code.
+            pageNo:
+              type: integer
+              default: 1
+            pageSize:
+              type: integer
+              default: 20
     BomComponentItem:
       type: object
       required: [materialCode]

@@ -75,6 +75,7 @@
     <Compile Include="Services\BridgeLogger.cs" />
     <Compile Include="Services\IdempotencyStore.cs" />
     <Compile Include="Services\ServiceRegistry.cs" />
+    <Compile Include="Services\U8DatabaseQueryService.Bom.cs" />
     <Compile Include="Services\U8DatabaseQueryService.Filters.cs" />
     <Compile Include="Services\U8DatabaseQueryService.Helpers.cs" />
     <Compile Include="Services\U8DatabaseQueryService.cs" />

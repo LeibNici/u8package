@@ -280,12 +280,15 @@
 
 ## 11A. BOM 官方 API
 
-Bridge BOM 接口不直读 U8 表，统一调用官方 API：
+Bridge BOM 明细不直读 U8 表，统一调用官方 API。按编码调用时，
+Bridge 只读查询 U8 BOM 表头定位参数，再调用官方 `BomLoad` 读取明细：
 
 | Bridge API | U8 API | 说明 |
 | --- | --- | --- |
 | `/api/u8/bom/add` | `U8API/BOM/BomAdd` | 新增物料清单，传扩展 BO `extbo` |
 | `/api/u8/bom/load` | `U8API/BOM/BomLoad` | 查询物料清单，U8 要求 `partid` |
+| `/api/u8/bom/part-lookup` | 只读参数查询 | 查 `bas_part` / `bom_parent` / `bom_bom` 表头定位参数 |
+| `/api/u8/bom/load-by-code` | `U8API/BOM/BomLoad` | 先查定位参数，再调用官方 API 查询物料清单 |
 | `/api/u8/bom/audit` | `U8API/BOM/BomAuditing` | 审核物料清单 |
 | `/api/u8/bom/delete` | `U8API/BOM/BomDelete` | 删除物料清单 |
 
@@ -296,6 +299,18 @@ Bridge BOM 接口不直读 U8 表，统一调用官方 API：
 | `partId` | `partid` | U8 物料 ID，不能用存货编码替代 |
 | `bomType` | `bomtype` | BOM 类型，1 主 / 2 替代 |
 | `versionOrIdentCode` | `versionoridencode` | 主版本或替代标识 |
+
+`bom/part-lookup` 只读查询字段映射：
+
+| Bridge 字段 | U8 来源 | 说明 |
+| --- | --- | --- |
+| `materialCode` | `bas_part.InvCode` | U8 存货编码 |
+| `partId` | `bas_part.PartId` | 传给官方 API 的物料 ID |
+| `bomId` | `bom_bom.BomId` | BOM 主表 ID |
+| `bomType` | `bom_bom.BomType` | BOM 类型 |
+| `versionOrIdentCode` | `bom_bom.Version` / `IdentCode` | 主 BOM 用版本，替代 BOM 用替代标识 |
+| `versionEffDate` | `bom_bom.VersionEffDate` | 版本生效日期 |
+| `bomState` | `bom_bom.BomState` | U8 BOM 状态 |
 
 `bom/add` 表头映射：
 

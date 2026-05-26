@@ -57,4 +57,17 @@ namespace Xinchuan.U8Bridge.Models
 
         public int PageSize { get; set; } = 200;
     }
+
+    public sealed class BomPartLookupRequest : BaseBusinessRequest
+    {
+        public string MaterialCode { get; set; }
+
+        public int? BomType { get; set; }
+
+        public string VersionOrIdentCode { get; set; }
+
+        public int PageNo { get; set; } = 1;
+
+        public int PageSize { get; set; } = 20;
+    }
 }

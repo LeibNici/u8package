@@ -20,6 +20,20 @@ namespace Xinchuan.U8Bridge.Controllers
         }
 
         [HttpPost]
+        [Route("bom/part-lookup")]
+        public IHttpActionResult LookupBomPart(BomPartLookupRequest request)
+        {
+            return Bridge(service.QueryBomParts(RequestIdHeader(), request));
+        }
+
+        [HttpPost]
+        [Route("bom/load-by-code")]
+        public IHttpActionResult LoadBomByCode(BomPartLookupRequest request)
+        {
+            return Bridge(service.LoadBomByCode(RequestIdHeader(), request));
+        }
+
+        [HttpPost]
         [Route("bom/audit")]
         public IHttpActionResult AuditBom(BomActionRequest request)
         {

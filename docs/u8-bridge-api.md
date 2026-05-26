@@ -212,17 +212,22 @@ POST /api/u8/login-test
 
 ### 8.4 BOM 官方 API
 
-BOM 不走 U8 账套表直读。Bridge 只封装 U8 官方 API：
+BOM 明细不走 U8 账套表直读。Bridge 只封装 U8 官方 API；为了让业务系统可以按存货编码调用，
+`part-lookup` 仅只读查询 U8 `bas_part` / `bom_parent` / `bom_bom` 表头定位参数，
+不读取 BOM 子件明细。
 
 | 接口 | U8 API | 用途 |
 | --- | --- | --- |
 | `POST /api/u8/bom/add` | `U8API/BOM/BomAdd` | 新增物料清单 |
 | `POST /api/u8/bom/load` | `U8API/BOM/BomLoad` | 查询物料清单 |
+| `POST /api/u8/bom/part-lookup` | 只读参数查询 | 按存货编码查询 `partId`、`bomType`、`versionOrIdentCode` |
+| `POST /api/u8/bom/load-by-code` | `U8API/BOM/BomLoad` | 先按存货编码查参数，再调用官方 API 查询物料清单 |
 | `POST /api/u8/bom/audit` | `U8API/BOM/BomAuditing` | 审核物料清单 |
 | `POST /api/u8/bom/delete` | `U8API/BOM/BomDelete` | 删除物料清单 |
 
 `bom/load`、`bom/audit`、`bom/delete` 按 U8 官方参数传 `partId`、`bomType`、`versionOrIdentCode`；
-不能用 APS 型号或 U8 存货编码替代 `partId`。
+不能用 APS 型号或 U8 存货编码替代 `partId`。如果只知道 U8 存货编码，先调用 `bom/part-lookup`，
+或直接调用 `bom/load-by-code`。
 
 通用主数据查询请求：
 
@@ -265,20 +270,23 @@ BOM 不走 U8 账套表直读。Bridge 只封装 U8 官方 API：
 
 如果数据库未启用、连接失败、现场表字段与当前适配口径不一致，返回 `U8_DATABASE_ERROR`，`rawMessage` 中记录实际原因供联调定位。
 
-BOM 查询请求：
+按编码查询 BOM 请求：
 
 ```json
 {
-  "requestId": "U8-BOM-QUERY-001",
+  "requestId": "U8-BOM-LOAD-BY-CODE-001",
   "profileName": "prod-100",
-  "productModel": "P001",
-  "version": "",
+  "materialCode": "01001001",
+  "bomType": 1,
+  "versionOrIdentCode": "10",
   "pageNo": 1,
-  "pageSize": 200
+  "pageSize": 20
 }
 ```
 
-BOM 查询返回 `data.items[]` 字段包括：`productModel`、`rootMaterialCode`、`version`、`parentMaterialCode`、`materialCode`、`materialName`、`materialSpecification`、`unit`、`quantity`、`baseQuantity`、`baseBaseQuantity`、`lossRate`、`processLineNo`、`levelNo`、`sortOrder`。APS BOM 管理从该接口同步，不再调用 PLM。
+`bom/part-lookup` 返回 `data.items[]`，字段包括：`partId`、`materialCode`、`materialName`、
+`specification`、`bomId`、`bomType`、`versionOrIdentCode`、`versionEffDate`、`bomState`。
+`bom/load-by-code` 返回结构与 `bom/load` 一致，BOM 明细来自 U8 官方 `BomLoad`。
 
 ### 8.4 销售订单新增
 

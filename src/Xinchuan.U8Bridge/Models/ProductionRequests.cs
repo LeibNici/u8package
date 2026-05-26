@@ -82,6 +82,7 @@ namespace Xinchuan.U8Bridge.Models
     public sealed class BomActionRequest : BaseBusinessRequest
     {
         [Required]
+        [Range(1, int.MaxValue)]
         public int? PartId { get; set; }
 
         public int BomType { get; set; } = 1;
