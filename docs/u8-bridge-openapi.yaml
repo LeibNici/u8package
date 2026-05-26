@@ -161,6 +161,26 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
         "503":
           $ref: "#/components/responses/BridgeResponse"
+  /api/u8/bom/query:
+    post:
+      summary: Query U8 product BOM
+      description: Reads product BOM rows from the Bridge-owned read-only U8 database config for APS BOM sync.
+      operationId: queryBom
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BomQueryRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "400":
+          $ref: "#/components/responses/BridgeResponse"
+        "503":
+          $ref: "#/components/responses/BridgeResponse"
   /api/u8/sales-order/save:
     post:
       summary: Create or update U8 sales order
@@ -764,6 +784,23 @@ components:
             priceDate:
               type: string
               format: date
+            pageNo:
+              type: integer
+              default: 1
+            pageSize:
+              type: integer
+              default: 200
+    BomQueryRequest:
+      allOf:
+        - $ref: "#/components/schemas/BaseBusinessRequest"
+        - type: object
+          required: [productModel]
+          properties:
+            productModel:
+              type: string
+              description: U8 parent material code / APS product model
+            version:
+              type: string
             pageNo:
               type: integer
               default: 1

@@ -209,6 +209,7 @@ POST /api/u8/login-test
 | `POST /api/u8/inventory/query` | 库存现存量查询 | 读 `CurrentStock` |
 | `POST /api/u8/in-transit/query` | 采购在途查询 | 读 `PO_Podetails` + `PO_Pomain` |
 | `POST /api/u8/material-price/query` | 物料价格查询 | 读 `Inventory` 价格字段 |
+| `POST /api/u8/bom/query` | 产品 BOM 同步 | 读 `bom_bom` / `bom_parent` / `bom_opcomponent` / `bom_component` / `bas_part` / `Inventory` |
 
 通用主数据查询请求：
 
@@ -250,6 +251,21 @@ POST /api/u8/login-test
 ```
 
 如果数据库未启用、连接失败、现场表字段与当前适配口径不一致，返回 `U8_DATABASE_ERROR`，`rawMessage` 中记录实际原因供联调定位。
+
+BOM 查询请求：
+
+```json
+{
+  "requestId": "U8-BOM-QUERY-001",
+  "profileName": "prod-100",
+  "productModel": "P001",
+  "version": "",
+  "pageNo": 1,
+  "pageSize": 200
+}
+```
+
+BOM 查询返回 `data.items[]` 字段包括：`productModel`、`rootMaterialCode`、`version`、`parentMaterialCode`、`materialCode`、`materialName`、`materialSpecification`、`unit`、`quantity`、`baseQuantity`、`baseBaseQuantity`、`lossRate`、`processLineNo`、`levelNo`、`sortOrder`。APS BOM 管理从该接口同步，不再调用 PLM。
 
 ### 8.4 销售订单新增
 

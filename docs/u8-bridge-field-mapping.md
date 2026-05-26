@@ -278,6 +278,28 @@
 
 生产订单新增/更新使用扩展业务对象 `extbo`，包含表头、`Mom_OrderDetail`、`Mom_MoAllocate` 子件结构。
 
+## 11A. 产品 BOM 查询
+
+Bridge API：`POST /api/u8/bom/query`
+
+用途：APS BOM 管理从 U8 同步产品 BOM 数据。该接口为读类接口，使用 Bridge 只读数据库配置，不调用 U8 官方写入 API。
+
+| Bridge 字段 | U8 来源字段 | 说明 |
+| --- | --- | --- |
+| `productModel` / `rootMaterialCode` | `bas_part.InvCode`（母件） | APS 产品型号 / U8 母件编码 |
+| `version` | `bom_bom.Version` | BOM 版本 |
+| `parentMaterialCode` | `bas_part.InvCode`（母件） | 当前首版按直接母件返回 |
+| `materialCode` | `bas_part.InvCode`（子件） | 子件编码 |
+| `materialName` | `Inventory.cInvName` | 子件名称 |
+| `materialSpecification` | `Inventory.cInvStd` | 子件规格 |
+| `unit` | `Inventory.cComUnitCode` | 计量单位编码 |
+| `quantity` | `BaseQtyN / BaseQtyD` | APS 展开口径用量 |
+| `baseQuantity` | `bom_component.BaseQtyN` | 基本用量 |
+| `baseBaseQuantity` | `bom_component.BaseQtyD` | 基础数量 |
+| `lossRate` | `bom_component.CompScrap` | 子件损耗率 |
+| `processLineNo` | `bom_opcomponent.OpSeq` | 工序行号 |
+| `sortOrder` | `bom_opcomponent.SortSeq` | 子件排序 |
+
 ### 11.1 表头 extbo 映射
 
 | 信川字段 | U8 字段 | 必填 | 说明 |

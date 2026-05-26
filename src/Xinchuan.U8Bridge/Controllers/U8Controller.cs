@@ -61,6 +61,13 @@ namespace Xinchuan.U8Bridge.Controllers
         }
 
         [HttpPost]
+        [Route("bom/query")]
+        public IHttpActionResult QueryBom(BomQueryRequest request)
+        {
+            return Bridge(service.QueryBom(RequestIdHeader(), request));
+        }
+
+        [HttpPost]
         [Route("sales-order/save")]
         public IHttpActionResult SaveSalesOrder(SalesOrderSaveRequest request)
         {

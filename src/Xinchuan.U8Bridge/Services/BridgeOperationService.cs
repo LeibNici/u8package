@@ -103,6 +103,11 @@ namespace Xinchuan.U8Bridge.Services
             return Query(headerRequestId, request, () => databaseQueryService.QueryMaterialPrice(request), "U8 物料价格查询成功");
         }
 
+        public BridgeResponse QueryBom(string headerRequestId, BomQueryRequest request)
+        {
+            return Query(headerRequestId, request, () => databaseQueryService.QueryBom(request), "U8 BOM 查询成功");
+        }
+
         private BridgeResponse Query(
             string headerRequestId,
             BaseBusinessRequest request,
