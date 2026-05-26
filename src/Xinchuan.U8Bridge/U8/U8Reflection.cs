@@ -118,6 +118,17 @@ namespace Xinchuan.U8Bridge.U8
                 new object[] { name });
         }
 
+        public int GetExtItemCount(object entity)
+        {
+            object value = entity.GetType().InvokeMember(
+                "ItemCount",
+                BindingFlags.GetProperty,
+                null,
+                entity,
+                null);
+            return Convert.ToInt32(value);
+        }
+
         public void SetExtValue(object item, string field, object value)
         {
             item.GetType().InvokeMember(
@@ -126,6 +137,16 @@ namespace Xinchuan.U8Bridge.U8
                 null,
                 item,
                 new[] { field, value ?? string.Empty });
+        }
+
+        public object GetExtValue(object item, string field)
+        {
+            return item.GetType().InvokeMember(
+                "Item",
+                BindingFlags.GetProperty,
+                null,
+                item,
+                new object[] { field });
         }
 
         public object CreateDomDocument()

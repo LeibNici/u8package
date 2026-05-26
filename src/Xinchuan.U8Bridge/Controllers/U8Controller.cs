@@ -7,7 +7,7 @@ using Xinchuan.U8Bridge.Services;
 namespace Xinchuan.U8Bridge.Controllers
 {
     [RoutePrefix("api/u8")]
-    public sealed class U8Controller : ApiController
+    public sealed partial class U8Controller : ApiController
     {
         private readonly BridgeOperationService service = ServiceRegistry.OperationService;
 
@@ -58,13 +58,6 @@ namespace Xinchuan.U8Bridge.Controllers
         public IHttpActionResult QueryMaterialPrice(MaterialPriceQueryRequest request)
         {
             return Bridge(service.QueryMaterialPrice(RequestIdHeader(), request));
-        }
-
-        [HttpPost]
-        [Route("bom/query")]
-        public IHttpActionResult QueryBom(BomQueryRequest request)
-        {
-            return Bridge(service.QueryBom(RequestIdHeader(), request));
         }
 
         [HttpPost]

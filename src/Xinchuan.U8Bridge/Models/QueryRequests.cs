@@ -57,15 +57,4 @@ namespace Xinchuan.U8Bridge.Models
 
         public int PageSize { get; set; } = 200;
     }
-
-    public sealed class BomQueryRequest : BaseBusinessRequest
-    {
-        public string ProductModel { get; set; }
-
-        public string Version { get; set; }
-
-        public int PageNo { get; set; } = 1;
-
-        public int PageSize { get; set; } = 200;
-    }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Xinchuan.U8Bridge.Models;
 
@@ -18,6 +19,8 @@ namespace Xinchuan.U8Bridge.U8
         public IList<U8BoObject> BusinessObjects { get; } = new List<U8BoObject>();
 
         public IList<U8ExtBoObject> ExtensionObjects { get; } = new List<U8ExtBoObject>();
+
+        public Func<object, U8Reflection, object> DataReader { get; set; }
 
         public void ApplyTo(object broker, U8Reflection reflection)
         {

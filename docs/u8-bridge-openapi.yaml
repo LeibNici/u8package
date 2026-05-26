@@ -161,11 +161,11 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
         "503":
           $ref: "#/components/responses/BridgeResponse"
-  /api/u8/bom/query:
+  /api/u8/bom/add:
     post:
-      summary: Query U8 product BOM
-      description: Reads product BOM rows from the Bridge-owned read-only U8 database config for APS BOM sync.
-      operationId: queryBom
+      summary: Add U8 BOM through official U8 API
+      description: Calls U8API/BOM/BomAdd with extbo and Bom_Component rows.
+      operationId: addBom
       parameters:
         - $ref: "#/components/parameters/RequestIdHeader"
       requestBody:
@@ -173,7 +173,67 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BomQueryRequest"
+              $ref: "#/components/schemas/BomAddRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "400":
+          $ref: "#/components/responses/BridgeResponse"
+        "503":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/bom/load:
+    post:
+      summary: Load U8 BOM through official U8 API
+      description: Calls U8API/BOM/BomLoad. U8 requires partId, bomType, and versionOrIdentCode.
+      operationId: loadBom
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BomActionRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "400":
+          $ref: "#/components/responses/BridgeResponse"
+        "503":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/bom/audit:
+    post:
+      summary: Audit U8 BOM through official U8 API
+      description: Calls U8API/BOM/BomAuditing.
+      operationId: auditBom
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BomActionRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/BridgeResponse"
+        "400":
+          $ref: "#/components/responses/BridgeResponse"
+        "503":
+          $ref: "#/components/responses/BridgeResponse"
+  /api/u8/bom/delete:
+    post:
+      summary: Delete U8 BOM through official U8 API
+      description: Calls U8API/BOM/BomDelete.
+      operationId: deleteBom
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BomActionRequest"
       responses:
         "200":
           $ref: "#/components/responses/BridgeResponse"
@@ -790,23 +850,100 @@ components:
             pageSize:
               type: integer
               default: 200
-    BomQueryRequest:
+    BomAddRequest:
       allOf:
         - $ref: "#/components/schemas/BaseBusinessRequest"
         - type: object
-          required: [productModel]
+          required: [parentMaterialCode, items]
           properties:
-            productModel:
+            parentMaterialCode:
               type: string
-              description: U8 parent material code / APS product model
-            version:
+            parentMaterialName:
               type: string
-            pageNo:
+            parentSpecification:
+              type: string
+            parentUnitName:
+              type: string
+            parentUnitCode:
+              type: string
+            maker:
+              type: string
+            createDate:
+              type: string
+              format: date
+            createTime:
+              type: string
+            bomType:
               type: integer
               default: 1
-            pageSize:
+            version:
               type: integer
-              default: 200
+              default: 1
+            versionDesc:
+              type: string
+            versionEffDate:
+              type: string
+              format: date
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/BomComponentItem"
+    BomActionRequest:
+      allOf:
+        - $ref: "#/components/schemas/BaseBusinessRequest"
+        - type: object
+          required: [partId, versionOrIdentCode]
+          properties:
+            partId:
+              type: integer
+            bomType:
+              type: integer
+              default: 1
+            versionOrIdentCode:
+              type: string
+    BomComponentItem:
+      type: object
+      required: [materialCode]
+      properties:
+        lineNo:
+          type: integer
+        operationSeq:
+          type: string
+          default: "0000"
+        materialCode:
+          type: string
+        materialName:
+          type: string
+        specification:
+          type: string
+        unitCode:
+          type: string
+        unitName:
+          type: string
+        baseQtyNumerator:
+          type: number
+          default: 1
+        baseQtyDenominator:
+          type: number
+          default: 1
+        quantity:
+          type: number
+          default: 1
+        scrapRate:
+          type: number
+          default: 0
+        effectiveDate:
+          type: string
+          format: date
+        expireDate:
+          type: string
+          format: date
+        warehouseCode:
+          type: string
+        departmentCode:
+          type: string
+        remark:
+          type: string
     SalesOrderSaveRequest:
       allOf:
         - $ref: "#/components/schemas/BaseBusinessRequest"

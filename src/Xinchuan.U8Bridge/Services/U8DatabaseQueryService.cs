@@ -104,49 +104,6 @@ namespace Xinchuan.U8Bridge.Services
             return QuerySingle("Inventory", columns, request, filters, "cInvCode");
         }
 
-        public QueryResult QueryBom(BomQueryRequest request)
-        {
-            EnsureEnabled();
-            if (request == null || string.IsNullOrWhiteSpace(request.ProductModel))
-            {
-                throw new InvalidOperationException("U8 BOM 查询缺少 productModel");
-            }
-
-            using (var connection = new SqlConnection(BuildConnectionString()))
-            {
-                connection.Open();
-                QueryResult result = CreateResult(request);
-                using (var command = new SqlCommand(BuildBomSql(request), connection))
-                {
-                    command.CommandTimeout = DefaultCommandTimeoutSeconds;
-                    AddPagingParameters(command, result);
-                    command.Parameters.Add("@ProductModel", SqlDbType.NVarChar, 80).Value =
-                        request.ProductModel.Trim();
-                    if (!string.IsNullOrWhiteSpace(request.Version))
-                    {
-                        command.Parameters.Add("@Version", SqlDbType.NVarChar, 50).Value =
-                            request.Version.Trim();
-                    }
-
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            result.Items.Add(ReadRow(reader));
-                        }
-                    }
-                }
-
-                result.HasMore = result.Items.Count > result.PageSize;
-                if (result.HasMore)
-                {
-                    result.Items.RemoveAt(result.Items.Count - 1);
-                }
-
-                return result;
-            }
-        }
-
         private QueryResult QuerySingle(
             string table,
             ColumnSpec[] columns,

@@ -209,7 +209,20 @@ POST /api/u8/login-test
 | `POST /api/u8/inventory/query` | 库存现存量查询 | 读 `CurrentStock` |
 | `POST /api/u8/in-transit/query` | 采购在途查询 | 读 `PO_Podetails` + `PO_Pomain` |
 | `POST /api/u8/material-price/query` | 物料价格查询 | 读 `Inventory` 价格字段 |
-| `POST /api/u8/bom/query` | 产品 BOM 同步 | 读 `bom_bom` / `bom_parent` / `bom_opcomponent` / `bom_component` / `bas_part` / `Inventory` |
+
+### 8.4 BOM 官方 API
+
+BOM 不走 U8 账套表直读。Bridge 只封装 U8 官方 API：
+
+| 接口 | U8 API | 用途 |
+| --- | --- | --- |
+| `POST /api/u8/bom/add` | `U8API/BOM/BomAdd` | 新增物料清单 |
+| `POST /api/u8/bom/load` | `U8API/BOM/BomLoad` | 查询物料清单 |
+| `POST /api/u8/bom/audit` | `U8API/BOM/BomAuditing` | 审核物料清单 |
+| `POST /api/u8/bom/delete` | `U8API/BOM/BomDelete` | 删除物料清单 |
+
+`bom/load`、`bom/audit`、`bom/delete` 按 U8 官方参数传 `partId`、`bomType`、`versionOrIdentCode`；
+不能用 APS 型号或 U8 存货编码替代 `partId`。
 
 通用主数据查询请求：
 

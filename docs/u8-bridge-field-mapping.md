@@ -278,27 +278,56 @@
 
 生产订单新增/更新使用扩展业务对象 `extbo`，包含表头、`Mom_OrderDetail`、`Mom_MoAllocate` 子件结构。
 
-## 11A. 产品 BOM 查询
+## 11A. BOM 官方 API
 
-Bridge API：`POST /api/u8/bom/query`
+Bridge BOM 接口不直读 U8 表，统一调用官方 API：
 
-用途：APS BOM 管理从 U8 同步产品 BOM 数据。该接口为读类接口，使用 Bridge 只读数据库配置，不调用 U8 官方写入 API。
-
-| Bridge 字段 | U8 来源字段 | 说明 |
+| Bridge API | U8 API | 说明 |
 | --- | --- | --- |
-| `productModel` / `rootMaterialCode` | `bas_part.InvCode`（母件） | APS 产品型号 / U8 母件编码 |
-| `version` | `bom_bom.Version` | BOM 版本 |
-| `parentMaterialCode` | `bas_part.InvCode`（母件） | 当前首版按直接母件返回 |
-| `materialCode` | `bas_part.InvCode`（子件） | 子件编码 |
-| `materialName` | `Inventory.cInvName` | 子件名称 |
-| `materialSpecification` | `Inventory.cInvStd` | 子件规格 |
-| `unit` | `Inventory.cComUnitCode` | 计量单位编码 |
-| `quantity` | `BaseQtyN / BaseQtyD` | APS 展开口径用量 |
-| `baseQuantity` | `bom_component.BaseQtyN` | 基本用量 |
-| `baseBaseQuantity` | `bom_component.BaseQtyD` | 基础数量 |
-| `lossRate` | `bom_component.CompScrap` | 子件损耗率 |
-| `processLineNo` | `bom_opcomponent.OpSeq` | 工序行号 |
-| `sortOrder` | `bom_opcomponent.SortSeq` | 子件排序 |
+| `/api/u8/bom/add` | `U8API/BOM/BomAdd` | 新增物料清单，传扩展 BO `extbo` |
+| `/api/u8/bom/load` | `U8API/BOM/BomLoad` | 查询物料清单，U8 要求 `partid` |
+| `/api/u8/bom/audit` | `U8API/BOM/BomAuditing` | 审核物料清单 |
+| `/api/u8/bom/delete` | `U8API/BOM/BomDelete` | 删除物料清单 |
+
+`bom/load`、`bom/audit`、`bom/delete` 参数映射：
+
+| Bridge 字段 | U8 参数 | 说明 |
+| --- | --- | --- |
+| `partId` | `partid` | U8 物料 ID，不能用存货编码替代 |
+| `bomType` | `bomtype` | BOM 类型，1 主 / 2 替代 |
+| `versionOrIdentCode` | `versionoridencode` | 主版本或替代标识 |
+
+`bom/add` 表头映射：
+
+| Bridge 字段 | U8 extbo 字段 |
+| --- | --- |
+| `parentMaterialCode` | `extbo[0]["InvCode"]` |
+| `parentMaterialName` | `extbo[0]["InvName"]` |
+| `parentSpecification` | `extbo[0]["InvStd"]` |
+| `parentUnitName` | `extbo[0]["InvUnitName"]` |
+| `parentUnitCode` | `extbo[0]["InvUnit"]` |
+| `maker` | `extbo[0]["CreateUser"]` / `ModifyUser` |
+| `bomType` | `extbo[0]["BomType"]` |
+| `version` | `extbo[0]["Version"]` |
+| `versionDesc` | `extbo[0]["VersionDesc"]` |
+| `versionEffDate` | `extbo[0]["VersionEffDate"]` |
+
+`bom/add` 子件映射：
+
+| Bridge 字段 | U8 `Bom_Component` 字段 |
+| --- | --- |
+| `items[].lineNo` | `DSortSeq` |
+| `items[].operationSeq` | `DOpSeq` |
+| `items[].materialCode` | `DInvCode` |
+| `items[].baseQtyNumerator` | `DBaseQtyN` |
+| `items[].baseQtyDenominator` | `DBaseQtyD` |
+| `items[].quantity` | `DQty` |
+| `items[].scrapRate` | `DCompScrap` |
+| `items[].effectiveDate` | `DEffBegDate` |
+| `items[].expireDate` | `DEffEndDate` |
+| `items[].warehouseCode` | `DWhCode` |
+| `items[].departmentCode` | `DDeptCode` |
+| `items[].remark` | `DRemark` |
 
 ### 11.1 表头 extbo 映射
 

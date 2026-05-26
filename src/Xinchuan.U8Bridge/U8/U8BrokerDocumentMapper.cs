@@ -47,6 +47,13 @@ namespace Xinchuan.U8Bridge.U8
                 case "U8API/MaterialOut/CancelAudit":
                 case "U8API/MaterialOut/Delete":
                     return U8AdvancedDocumentMapper.MapMaterialOutAction((StockAuditRequest)call.Payload, false);
+                case "U8API/BOM/BomAdd":
+                    return U8BomDocumentMapper.MapAdd((BomAddRequest)call.Payload);
+                case "U8API/BOM/BomLoad":
+                    return U8BomDocumentMapper.MapAction((BomActionRequest)call.Payload, true);
+                case "U8API/BOM/BomAuditing":
+                case "U8API/BOM/BomDelete":
+                    return U8BomDocumentMapper.MapAction((BomActionRequest)call.Payload, false);
                 default:
                     throw new InvalidOperationException("Unsupported U8 API address: " + call.ApiAddress);
             }

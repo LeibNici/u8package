@@ -46,6 +46,50 @@ namespace Xinchuan.U8Bridge.Models
         public string BusinessType { get; set; } = "普通采购";
     }
 
+    public sealed class BomAddRequest : BaseBusinessRequest
+    {
+        [Required]
+        public string ParentMaterialCode { get; set; }
+
+        public string ParentMaterialName { get; set; }
+
+        public string ParentSpecification { get; set; }
+
+        public string ParentUnitName { get; set; }
+
+        public string ParentUnitCode { get; set; }
+
+        public string Maker { get; set; }
+
+        public string CreateDate { get; set; }
+
+        public string CreateTime { get; set; }
+
+        public int BomType { get; set; } = 1;
+
+        public int Version { get; set; } = 1;
+
+        public string VersionDesc { get; set; }
+
+        public string VersionEffDate { get; set; }
+
+        public decimal ParentScrap { get; set; }
+
+        [Required]
+        public IList<BomComponentItem> Items { get; set; }
+    }
+
+    public sealed class BomActionRequest : BaseBusinessRequest
+    {
+        [Required]
+        public int? PartId { get; set; }
+
+        public int BomType { get; set; } = 1;
+
+        [Required]
+        public string VersionOrIdentCode { get; set; }
+    }
+
     public sealed class ManufactureOrderItem
     {
         public int LineNo { get; set; }
@@ -100,6 +144,48 @@ namespace Xinchuan.U8Bridge.Models
         public string WarehouseCode { get; set; }
 
         public string BatchNo { get; set; }
+
+        public string Remark { get; set; }
+    }
+
+    public sealed class BomComponentItem
+    {
+        public int LineNo { get; set; }
+
+        public string OperationSeq { get; set; } = "0000";
+
+        [Required]
+        public string MaterialCode { get; set; }
+
+        public string MaterialName { get; set; }
+
+        public string Specification { get; set; }
+
+        public string UnitCode { get; set; }
+
+        public string UnitName { get; set; }
+
+        public decimal BaseQtyNumerator { get; set; } = 1;
+
+        public decimal BaseQtyDenominator { get; set; } = 1;
+
+        public decimal Quantity { get; set; } = 1;
+
+        public decimal ScrapRate { get; set; }
+
+        public int FixedQtyFlag { get; set; } = 1;
+
+        public int SupplyType { get; set; } = 1;
+
+        public string EffectiveDate { get; set; }
+
+        public string ExpireDate { get; set; }
+
+        public decimal PlanRate { get; set; } = 100;
+
+        public string WarehouseCode { get; set; }
+
+        public string DepartmentCode { get; set; }
 
         public string Remark { get; set; }
     }
