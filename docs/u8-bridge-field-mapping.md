@@ -310,7 +310,7 @@ Bridge 只读查询 U8 BOM 表头定位参数，再调用官方 `BomLoad` 读取
 | `bomType` | `bom_bom.BomType` | BOM 类型 |
 | `versionOrIdentCode` | `bom_bom.Version` / `IdentCode` | 主 BOM 用版本，替代 BOM 用替代标识 |
 | `versionEffDate` | `bom_bom.VersionEffDate` | 版本生效日期 |
-| `bomState` | `bom_bom.BomState` | U8 BOM 状态 |
+| `bomState` | 保留字段 | 现场 U8 表可能无状态列，参数查询返回空值；BOM 明细状态以官方 `BomLoad` 返回为准 |
 
 `bom/add` 表头映射：
 

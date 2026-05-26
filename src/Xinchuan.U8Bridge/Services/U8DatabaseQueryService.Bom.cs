@@ -20,7 +20,7 @@ FROM (
            b.BomType AS [bomType],
            CAST(CASE WHEN b.BomType = 1 THEN b.Version ELSE b.IdentCode END AS NVARCHAR(64)) AS [versionOrIdentCode],
            b.VersionEffDate AS [versionEffDate],
-           b.BomState AS [bomState],
+           CAST(NULL AS INT) AS [bomState],
            ROW_NUMBER() OVER (ORDER BY b.VersionEffDate DESC, b.BomId DESC) AS rn
     FROM bas_part p
     INNER JOIN bom_parent bp ON bp.ParentId = p.PartId
