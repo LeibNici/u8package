@@ -12,7 +12,6 @@ namespace Xinchuan.U8Bridge.Manager.Services
 {
     public sealed class UpdateCheckService
     {
-        private const string GitHubApiHost = "api.github.com";
         private const string GitHubHost = "github.com";
 
         public async Task<UpdateCheckResult> CheckAsync(
@@ -25,14 +24,11 @@ namespace Xinchuan.U8Bridge.Manager.Services
                 throw new InvalidOperationException("更新检测未启用");
             }
 
-            string checkUrl = BuildProxiedGitHubUrl(
-                config.CheckUrl,
-                config.GithubProxyPrefix,
-                IsGitHubApiUrl);
+            string checkUrl = BuildOriginalCheckUrl(config.CheckUrl, config.DownloadProxyPrefix);
             string json = await DownloadJsonAsync(checkUrl).ConfigureAwait(false);
             JToken token = JToken.Parse(json);
             UpdateCheckResult result = ParseResult(config, token);
-            ApplyGitHubProxy(result, config.GithubProxyPrefix);
+            ApplyDownloadProxy(result, config.DownloadProxyPrefix);
             result.CurrentVersion = ResolveCurrentVersion(baseDirectory);
             result.HasUpdate = CompareVersion(result.LatestVersion, result.CurrentVersion) > 0;
             EvaluateConfigCompatibility(result, currentConfigSchemaVersion);
@@ -108,15 +104,28 @@ namespace Xinchuan.U8Bridge.Manager.Services
             };
         }
 
-        private static void ApplyGitHubProxy(UpdateCheckResult result, string proxyPrefix)
+        private static void ApplyDownloadProxy(UpdateCheckResult result, string proxyPrefix)
         {
             if (result == null)
             {
                 return;
             }
 
-            result.ReleaseUrl = BuildProxiedGitHubUrl(result.ReleaseUrl, proxyPrefix, IsGitHubWebUrl);
             result.DownloadUrl = BuildProxiedGitHubUrl(result.DownloadUrl, proxyPrefix, IsGitHubWebUrl);
+        }
+
+        private static string BuildOriginalCheckUrl(string url, string proxyPrefix)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                return url;
+            }
+
+            string trimmedUrl = url.Trim();
+            string prefix = NormalizeProxyPrefix(proxyPrefix);
+            return string.IsNullOrEmpty(prefix) || !HasProxyPrefix(trimmedUrl, prefix)
+                ? trimmedUrl
+                : trimmedUrl.Substring(prefix.Length);
         }
 
         private static string BuildProxiedGitHubUrl(
@@ -162,11 +171,6 @@ namespace Xinchuan.U8Bridge.Manager.Services
             }
 
             return uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps;
-        }
-
-        private static bool IsGitHubApiUrl(Uri uri)
-        {
-            return IsHost(uri, GitHubApiHost);
         }
 
         private static bool IsGitHubWebUrl(Uri uri)

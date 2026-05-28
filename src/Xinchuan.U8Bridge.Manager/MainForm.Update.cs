@@ -67,7 +67,7 @@ namespace Xinchuan.U8Bridge.Manager
                 Enabled = updateEnabledCheckBox.Checked,
                 SourceType = Convert.ToString(updateSourceTypeComboBox.SelectedItem),
                 CheckUrl = updateUrlTextBox.Text.Trim(),
-                GithubProxyPrefix = updateProxyPrefixTextBox.Text.Trim(),
+                DownloadProxyPrefix = updateProxyPrefixTextBox.Text.Trim(),
                 IncludePrerelease = updatePrereleaseCheckBox.Checked
             };
         }

@@ -70,7 +70,26 @@ namespace Xinchuan.U8Bridge.Manager
         public string CheckUrl { get; set; } =
             "https://api.github.com/repos/LeibNici/u8package/releases/latest";
 
-        public string GithubProxyPrefix { get; set; }
+        [JsonProperty("downloadProxyPrefix")]
+        public string DownloadProxyPrefix { get; set; }
+
+        [JsonProperty("githubProxyPrefix")]
+        public string GithubProxyPrefix
+        {
+            get => DownloadProxyPrefix;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(DownloadProxyPrefix))
+                {
+                    DownloadProxyPrefix = value;
+                }
+            }
+        }
+
+        public bool ShouldSerializeGithubProxyPrefix()
+        {
+            return false;
+        }
 
         public bool IncludePrerelease { get; set; }
     }
