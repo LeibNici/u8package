@@ -68,7 +68,7 @@ X-Request-ID: <global-request-id>
 说明：
 
 * `X-API-KEY` 用于 Bridge 入站鉴权。
-* `X-Request-ID` 用于链路追踪。若请求体内也包含 `requestId`，两者必须一致或 Bridge 记录不一致告警。
+* `X-Request-ID` 用于链路追踪。若请求体内也包含 `requestId`，两者必须一致，否则返回 `REQUEST_ID_MISMATCH`。
 
 ## 6. 通用响应格式
 

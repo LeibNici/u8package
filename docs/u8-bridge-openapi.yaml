@@ -11461,7 +11461,7 @@ components:
             $ref: "#/components/schemas/OfficialExtBoObjectRequest"
     OfficialSpecialValue:
       type: object
-      description: normalValues/contextValues 中创建 COM/DOM 特殊对象的约定值。
+      description: normalValues、contextValues、businessObjects、extensionObjects 中创建 COM/DOM 特殊对象的约定值。
       properties:
         special:
           type: string

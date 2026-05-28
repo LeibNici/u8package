@@ -21,6 +21,7 @@ namespace Xinchuan.U8Bridge.Manager
         private CheckBox updateEnabledCheckBox;
         private ComboBox updateSourceTypeComboBox;
         private TextBox updateUrlTextBox;
+        private TextBox updateProxyPrefixTextBox;
         private TextBox updateCurrentVersionTextBox;
         private CheckBox updatePrereleaseCheckBox;
         private Button updateNowButton;
@@ -33,8 +34,8 @@ namespace Xinchuan.U8Bridge.Manager
         {
             Text = "信川 U8 Bridge 管理器";
             StartPosition = FormStartPosition.CenterScreen;
-            MinimumSize = new Size(980, 680);
-            Size = new Size(1100, 760);
+            MinimumSize = new Size(980, 720);
+            Size = new Size(1100, 800);
             Font = new Font("Microsoft YaHei UI", 9F);
             FormClosing += OnFormClosing;
             Resize += OnFormResize;
@@ -58,7 +59,7 @@ namespace Xinchuan.U8Bridge.Manager
             root.Padding = new Padding(12);
             root.RowCount = 3;
             root.ColumnCount = 1;
-            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 450));
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 490));
             root.RowStyles.Add(new RowStyle(SizeType.Absolute, 54));
             root.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             return root;
@@ -71,12 +72,12 @@ namespace Xinchuan.U8Bridge.Manager
             grid.Dock = DockStyle.Fill;
             grid.Padding = new Padding(10);
             grid.ColumnCount = 4;
-            grid.RowCount = 10;
+            grid.RowCount = 11;
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 115));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 115));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 11; i++)
             {
                 grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 38));
             }
@@ -99,11 +100,12 @@ namespace Xinchuan.U8Bridge.Manager
             updateEnabledCheckBox = AddCheckRow(grid, "检测更新", 7, 0);
             updateSourceTypeComboBox = AddComboRow(grid, "更新来源", 7, 2, "githubRelease", "manifest");
             updateUrlTextBox = AddWideTextRow(grid, "检测地址", 8, 0);
-            updateCurrentVersionTextBox = AddTextRow(grid, "当前版本", 9, 0);
+            updateProxyPrefixTextBox = AddWideTextRow(grid, "GitHub加速", 9, 0);
+            updateCurrentVersionTextBox = AddTextRow(grid, "当前版本", 10, 0);
             updateCurrentVersionTextBox.ReadOnly = true;
             updateCurrentVersionTextBox.BackColor = SystemColors.Control;
             updateCurrentVersionTextBox.TabStop = false;
-            updatePrereleaseCheckBox = AddCheckRow(grid, "预发布", 9, 2);
+            updatePrereleaseCheckBox = AddCheckRow(grid, "预发布", 10, 2);
             group.Controls.Add(grid);
             return group;
         }

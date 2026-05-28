@@ -184,6 +184,7 @@ copy .\appsettings.sample.json .\appsettings.json
 * `userId`、`password`、`loginDate`：按客户 U8 登录信息填写。
 * `update.sourceType`：更新检测来源，`githubRelease` 或 `manifest`。
 * `update.checkUrl`：更新检测地址。GitHub Release 可填 `https://api.github.com/repos/<owner>/<repo>/releases/latest`；自定义地址返回 JSON manifest。
+* `update.githubProxyPrefix`：GitHub 加速代理前缀。国内现场可填 `https://v4.gh-proxy.org/`；留空则保持直连。
 
 `subId`、`accountId`、`year`、`serial` 不需要现场用户配置。Bridge 内部默认 `subId=AS`、`serial` 为空，并会从库名
 `ufdata_100_2018` 推导账套 `100` 与年度 `2018`；如果客户库名不符合该格式，再按现场 U8 登录失败日志补充兼容逻辑。
@@ -237,10 +238,18 @@ logs\u8-bridge-yyyyMMdd.log
     "enabled": true,
     "sourceType": "githubRelease",
     "checkUrl": "https://api.github.com/repos/LeibNici/u8package/releases/latest",
+    "githubProxyPrefix": "https://v4.gh-proxy.org/",
     "includePrerelease": false
   }
 }
 ```
+
+在管理器 GUI 中，`检测地址` 保持填写原始 GitHub API，例如
+`https://api.github.com/repos/<owner>/<repo>/releases/latest`；`GitHub加速` 填
+`https://v4.gh-proxy.org/`。管理器会在实际检测和下载时临时拼成
+`https://v4.gh-proxy.org/https://api.github.com/repos/...` 或
+`https://v4.gh-proxy.org/https://github.com/...`，配置文件仍保存原始 `checkUrl`
+与单独的 `githubProxyPrefix`。
 
 如果不用 GitHub Release，可以把 `sourceType` 改成 `manifest`，`checkUrl` 指向自定义 JSON：
 

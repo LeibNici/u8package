@@ -12,6 +12,9 @@ namespace Xinchuan.U8Bridge.Manager.Services
 {
     public sealed class UpdateCheckService
     {
+        private const string GitHubApiHost = "api.github.com";
+        private const string GitHubHost = "github.com";
+
         public async Task<UpdateCheckResult> CheckAsync(
             UpdateCheckConfig config,
             string baseDirectory,
@@ -22,9 +25,14 @@ namespace Xinchuan.U8Bridge.Manager.Services
                 throw new InvalidOperationException("更新检测未启用");
             }
 
-            string json = await DownloadJsonAsync(config.CheckUrl).ConfigureAwait(false);
+            string checkUrl = BuildProxiedGitHubUrl(
+                config.CheckUrl,
+                config.GithubProxyPrefix,
+                IsGitHubApiUrl);
+            string json = await DownloadJsonAsync(checkUrl).ConfigureAwait(false);
             JToken token = JToken.Parse(json);
             UpdateCheckResult result = ParseResult(config, token);
+            ApplyGitHubProxy(result, config.GithubProxyPrefix);
             result.CurrentVersion = ResolveCurrentVersion(baseDirectory);
             result.HasUpdate = CompareVersion(result.LatestVersion, result.CurrentVersion) > 0;
             EvaluateConfigCompatibility(result, currentConfigSchemaVersion);
@@ -98,6 +106,77 @@ namespace Xinchuan.U8Bridge.Manager.Services
                 LatestConfigSchemaVersion = IntValue(manifest, "configSchemaVersion", BridgeConfig.CurrentConfigSchemaVersion),
                 MinConfigSchemaVersion = IntValue(manifest, "minConfigSchemaVersion", BridgeConfig.CurrentConfigSchemaVersion)
             };
+        }
+
+        private static void ApplyGitHubProxy(UpdateCheckResult result, string proxyPrefix)
+        {
+            if (result == null)
+            {
+                return;
+            }
+
+            result.ReleaseUrl = BuildProxiedGitHubUrl(result.ReleaseUrl, proxyPrefix, IsGitHubWebUrl);
+            result.DownloadUrl = BuildProxiedGitHubUrl(result.DownloadUrl, proxyPrefix, IsGitHubWebUrl);
+        }
+
+        private static string BuildProxiedGitHubUrl(
+            string url,
+            string proxyPrefix,
+            Func<Uri, bool> includeUrl)
+        {
+            string prefix = NormalizeProxyPrefix(proxyPrefix);
+            if (string.IsNullOrWhiteSpace(url) || string.IsNullOrEmpty(prefix))
+            {
+                return url;
+            }
+
+            string trimmedUrl = url.Trim();
+            if (HasProxyPrefix(trimmedUrl, prefix) || !TryCreateHttpUri(trimmedUrl, out var uri))
+            {
+                return trimmedUrl;
+            }
+
+            return includeUrl(uri) ? prefix + trimmedUrl : trimmedUrl;
+        }
+
+        private static string NormalizeProxyPrefix(string proxyPrefix)
+        {
+            if (!TryCreateHttpUri(proxyPrefix == null ? null : proxyPrefix.Trim(), out _))
+            {
+                return null;
+            }
+
+            return proxyPrefix.Trim().TrimEnd('/') + "/";
+        }
+
+        private static bool HasProxyPrefix(string url, string proxyPrefix)
+        {
+            return url.StartsWith(proxyPrefix, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool TryCreateHttpUri(string url, out Uri uri)
+        {
+            if (!Uri.TryCreate(url, UriKind.Absolute, out uri))
+            {
+                return false;
+            }
+
+            return uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps;
+        }
+
+        private static bool IsGitHubApiUrl(Uri uri)
+        {
+            return IsHost(uri, GitHubApiHost);
+        }
+
+        private static bool IsGitHubWebUrl(Uri uri)
+        {
+            return IsHost(uri, GitHubHost);
+        }
+
+        private static bool IsHost(Uri uri, string host)
+        {
+            return string.Equals(uri.Host, host, StringComparison.OrdinalIgnoreCase);
         }
 
         private static void EvaluateConfigCompatibility(UpdateCheckResult result, int currentConfigSchemaVersion)
