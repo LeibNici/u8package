@@ -139,8 +139,10 @@ Bridge 必须按业务单号做幂等，避免重复生成 U8 单据。
 ## 8. API 清单
 
 Swagger 按中文业务分类维护接口：系统、主数据查询、采购查询、销售管理、库存管理、生产制造-BOM、
-生产制造-生产订单、官方 U8 API 等。官方 C# 示例索引见 `u8-official-api-catalog.md`，Bridge REST 与官方地址对照见
-`u8-bridge-official-api-map.md`。
+生产制造-生产订单等。官方 C# 示例生成的 `/api/u8/official/...` 通用入口不再统一放入“官方 U8 API”，
+而是优先使用 `x-u8-document` 作为 Swagger tag；为空时使用 `x-u8-category`；仍为空才兜底为
+`官方U8 API`。这样付款申请单源管理器、应收单核日志等官方单据/分类会在 Swagger UI 左侧归到各自分组。
+官方 C# 示例索引见 `u8-official-api-catalog.md`，Bridge REST 与官方地址对照见 `u8-bridge-official-api-map.md`。
 
 本版本同时暴露所有官方唯一 API 地址的通用入口：
 

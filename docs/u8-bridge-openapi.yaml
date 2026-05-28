@@ -14,32 +14,184 @@ servers:
 security:
   - ApiKeyAuth: []
 tags:
-  - name: 系统
-    description: Bridge 进程健康、文档和 U8 登录环境验证。
-  - name: 主数据查询
-    description: 通过 Bridge 只读 U8 数据库查询客户、供应商、存货、价格等基础资料。
-  - name: 库存查询
-    description: 通过 Bridge 只读 U8 数据库查询现存量等库存状态。
-  - name: 采购查询
-    description: 通过 Bridge 只读 U8 数据库查询采购在途等采购状态。
-  - name: 生产制造-BOM
-    description: 对接官方生产制造物料清单 U8 API，并提供只读参数查询。
-  - name: 销售管理
-    description: 对接官方销售管理 U8 API。
-  - name: 库存管理
-    description: 对接官方库存管理 U8 API。
-  - name: 生产制造-生产订单
-    description: 对接官方生产订单 U8 API。
-  - name: 采购管理
-    description: 对接官方采购管理 U8 API。
-  - name: 生产制造-计划
-    description: 生产计划相关 Bridge 预留入口。
-  - name: 生产制造-报工
-    description: 工序流转卡完工单 / 报工相关 Bridge 预留入口。
-  - name: 生产制造-退料
-    description: 生产退料相关 Bridge 预留入口。
-  - name: 官方U8 API
-    description: 从官方 C# 示例 catalog 生成的 U8 API 通用调用入口。
+  - name: "系统"
+    description: "Bridge 进程健康、文档和 U8 登录环境验证。"
+  - name: "主数据查询"
+    description: "通过 Bridge 只读 U8 数据库查询客户、供应商、存货、价格等基础资料。"
+  - name: "库存查询"
+    description: "通过 Bridge 只读 U8 数据库查询现存量等库存状态。"
+  - name: "采购查询"
+    description: "通过 Bridge 只读 U8 数据库查询采购在途等采购状态。"
+  - name: "生产制造-BOM"
+    description: "对接官方生产制造物料清单 U8 API，并提供只读参数查询。"
+  - name: "销售管理"
+    description: "对接官方销售管理 U8 API。"
+  - name: "库存管理"
+    description: "对接官方库存管理 U8 API。"
+  - name: "生产制造-生产订单"
+    description: "对接官方生产订单 U8 API。"
+  - name: "采购管理"
+    description: "对接官方采购管理 U8 API。"
+  - name: "生产制造-计划"
+    description: "生产计划相关 Bridge 预留入口。"
+  - name: "生产制造-报工"
+    description: "工序流转卡完工单 / 报工相关 Bridge 预留入口。"
+  - name: "生产制造-退料"
+    description: "生产退料相关 Bridge 预留入口。"
+  - name: "付款申请单源管理器"
+    description: "官方 C# 示例来源模块：应付款管理源管理器。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "付款单源管理器"
+    description: "官方 C# 示例来源模块：应付款管理源管理器。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "应付单源管理器"
+    description: "官方 C# 示例来源模块：应付款管理源管理器。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "收款单理源管理器"
+    description: "官方 C# 示例来源模块：应收款管理源管理器。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "应收单核日志"
+    description: "官方 C# 示例来源模块：应收款管理源管理器。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "来料检验单(外部事务)r"
+    description: "官方 C# 示例来源模块：质量管理存(外部事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "来料报检单(外部事务)r"
+    description: "官方 C# 示例来源模块：质量管理存(外部事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "采购到货单(退货单)"
+    description: "官方 C# 示例来源模块：采购管理存事件。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "物料清单单API.TransVouch.Save_Before"
+    description: "官方 C# 示例来源模块：生产制造照档案API.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "服务接口核日志"
+    description: "官方 C# 示例来源模块：合同管理核日志。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "销售发货单理单事务)r"
+    description: "官方 C# 示例来源模块：销售管理理单事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "销售签回单件存日志r"
+    description: "官方 C# 示例来源模块：销售管理理单事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "委托代销发货单存日志r"
+    description: "官方 C# 示例来源模块：销售管理理单事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "委托代销退货单存日志r"
+    description: "官方 C# 示例来源模块：销售管理理单事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "服务接口事件志"
+    description: "官方 C# 示例来源模块：电商订单中心日志。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "ECN单单API.TransVouch.Save_Before"
+    description: "官方 C# 示例来源模块：生产制造照档案API.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "资源资料单API.TransVouch.Save_Before"
+    description: "官方 C# 示例来源模块：生产制造照档案API.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "产品预测订单API.TransVouch.Save_Before"
+    description: "官方 C# 示例来源模块：生产制造照档案API.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "组装单和修改志r"
+    description: "官方 C# 示例来源模块：库存管理增和修改志r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "生产订单测订单API.TransVouch.Save_Before"
+    description: "官方 C# 示例来源模块：生产制造照档案API.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "材料出库单收，领料都调用此接口"
+    description: "官方 C# 示例来源模块：库存管理增和修改志r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "工序资料单单API.TransVouch.Save_Before"
+    description: "官方 C# 示例来源模块：生产制造照档案API.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "订单报工料单API.TransVouch.Save_Before"
+    description: "官方 C# 示例来源模块：生产制造照档案API.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "普通发票单存日志r"
+    description: "官方 C# 示例来源模块：销售管理理单事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "工序转移单单API.TransVouch.Save_Before"
+    description: "官方 C# 示例来源模块：生产制造照档案API.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "订单物料清单API.TransVouch.Save_Before"
+    description: "官方 C# 示例来源模块：生产制造照档案API.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "工序流转卡完工单API.TransVouch.Save_Before"
+    description: "官方 C# 示例来源模块：生产制造照档案API.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "服务接口调价单err"
+    description: "官方 C# 示例来源模块：采购管理存事件。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "采购发票源管理器"
+    description: "官方 C# 示例来源模块：应付款管理源管理器。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "在库检验单单事务)r"
+    description: "官方 C# 示例来源模块：质量管理存(外部事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "在库报检单单事务)r"
+    description: "官方 C# 示例来源模块：质量管理存(外部事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "计划范围录单工单PI.TransVouch.Save_Before"
+    description: "官方 C# 示例来源模块：生产制造照档案API.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "产品检验理单事务)r"
+    description: "官方 C# 示例来源模块：质量管理存(外部事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "产品报检理单事务)r"
+    description: "官方 C# 示例来源模块：质量管理存(外部事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "产成品入库单后事件调用此接口"
+    description: "官方 C# 示例来源模块：库存管理增和修改志r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "采购入库单后事件调用此接口"
+    description: "官方 C# 示例来源模块：库存管理增和修改志r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "采购专用发票件err"
+    description: "官方 C# 示例来源模块：采购管理存事件。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "采购订单件err"
+    description: "官方 C# 示例来源模块：采购管理存事件。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "请购单改事件fterr"
+    description: "官方 C# 示例来源模块：采购管理存事件。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "期初不合格品前事件调用此接口"
+    description: "官方 C# 示例来源模块：库存管理增和修改志r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "红字普通发票存日志r"
+    description: "官方 C# 示例来源模块：销售管理理单事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "红字零售日报存日志r"
+    description: "官方 C# 示例来源模块：销售管理理单事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "红字专用发票存日志r"
+    description: "官方 C# 示例来源模块：销售管理理单事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "零售日报存日志r"
+    description: "官方 C# 示例来源模块：销售管理理单事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "退货单改存日志r"
+    description: "官方 C# 示例来源模块：销售管理理单事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "工艺路线围工单PI.TransVouch.Save_Before"
+    description: "官方 C# 示例来源模块：生产制造照档案API.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "服务接口存日志志r"
+    description: "官方 C# 示例来源模块：销售管理理单事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "销售发票核日志"
+    description: "官方 C# 示例来源模块：应收款管理源管理器。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "销售订单件日志r"
+    description: "官方 C# 示例来源模块：销售管理理单事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "销售报价单日志志r"
+    description: "官方 C# 示例来源模块：销售管理理单事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "不合格品处理单事件用此接口"
+    description: "官方 C# 示例来源模块：库存管理增和修改志r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "不合格品记录单事件用此接口"
+    description: "官方 C# 示例来源模块：库存管理增和修改志r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "拆卸单单事件用此接口"
+    description: "官方 C# 示例来源模块：库存管理增和修改志r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "形态转换单单事件用此接口"
+    description: "官方 C# 示例来源模块：库存管理增和修改志r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "专用发票存日志志r"
+    description: "官方 C# 示例来源模块：销售管理理单事务)r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "调拨申请单单事件用此接口"
+    description: "官方 C# 示例来源模块：库存管理增和修改志r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "调拨单单事件用此接口"
+    description: "官方 C# 示例来源模块：库存管理增和修改志r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "供应商存货调价单件err"
+    description: "官方 C# 示例来源模块：采购管理存事件。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "工时记录单工单PI.TransVouch.Save_Before"
+    description: "官方 C# 示例来源模块：生产制造照档案API.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "盘点单增和修改志r"
+    description: "官方 C# 示例来源模块：库存管理增和修改志r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "限额领料单和修改志r"
+    description: "官方 C# 示例来源模块：库存管理增和修改志r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "领料申请单收，领料都调用此接口"
+    description: "官方 C# 示例来源模块：库存管理增和修改志r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "委外订单发票"
+    description: "官方 C# 示例来源模块：委外管理发票。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "其他入库单存事件调用此接口"
+    description: "官方 C# 示例来源模块：库存管理增和修改志r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "其他出库单除后事件调用此接口"
+    description: "官方 C# 示例来源模块：库存管理增和修改志r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "采购普通发票件err"
+    description: "官方 C# 示例来源模块：采购管理存事件。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "销售出库单前事件调用此接口"
+    description: "官方 C# 示例来源模块：库存管理增和修改志r。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "采购运费发票调价单err"
+    description: "官方 C# 示例来源模块：采购管理存事件。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "应付系统kFlowPI.TransVouch.Save_Before"
+    description: "官方 C# 示例来源模块：U8WorkFlowPI.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "应收系统冲预算服务PI.TransVouch.Save_Before"
+    description: "官方 C# 示例来源模块：U8WorkFlowPI.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "审批审服务算服务PI.TransVouch.Save_Before"
+    description: "官方 C# 示例来源模块：U8WorkFlowPI.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "合同管理价检查自动服务务消息交消息.Save_Before"
+    description: "官方 C# 示例来源模块：U8WorkFlowPI.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "费用预算务查自动服务务消息交消息.Save_Before"
+    description: "官方 C# 示例来源模块：U8WorkFlowPI.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "结算中心整单终审服务务消息交消息.Save_Before"
+    description: "官方 C# 示例来源模块：U8WorkFlowPI.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "人力资源作流终审接口务消息交消息.Save_Before"
+    description: "官方 C# 示例来源模块：U8WorkFlowPI.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "网上报销码得到职级别值人员息交消息.Save_Before"
+    description: "官方 C# 示例来源模块：U8WorkFlowPI.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
+  - name: "UAP自动服务算信息值人员息交消息.Save_Before / 工作流系统务算信息值人员息交消息.Save_Before"
+    description: "官方 C# 示例来源模块：U8WorkFlowPI.TransVouch.Save_Before。通过 U8 Bridge 官方通用入口调用，扩展字段保留官方地址、序号和示例来源。"
 paths:
   /health:
     get:
@@ -947,7 +1099,7 @@ paths:
   # BEGIN GENERATED OFFICIAL U8 API PATHS
   "/api/u8/official/U8API/APApplyPay/CancelSign":
     post:
-      tags: [官方U8 API]
+      tags: ["付款申请单源管理器"]
       summary: "付款申请单源管理器 - 弃审单据"
       description: "通用调用官方 U8 API U8API/APApplyPay/CancelSign。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api005
@@ -976,7 +1128,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/APApplyPay/DeleteVouch":
     post:
-      tags: [官方U8 API]
+      tags: ["付款申请单源管理器"]
       summary: "付款申请单源管理器 - 删除单据"
       description: "通用调用官方 U8 API U8API/APApplyPay/DeleteVouch。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api003
@@ -1005,7 +1157,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/APApplyPay/GetVouchData":
     post:
-      tags: [官方U8 API]
+      tags: ["付款申请单源管理器"]
       summary: "付款申请单源管理器 - 装载单据"
       description: "通用调用官方 U8 API U8API/APApplyPay/GetVouchData。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api002
@@ -1034,7 +1186,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/APApplyPay/SaveVouch":
     post:
-      tags: [官方U8 API]
+      tags: ["付款申请单源管理器"]
       summary: "付款申请单源管理器 - 新增或修改"
       description: "通用调用官方 U8 API U8API/APApplyPay/SaveVouch。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api001
@@ -1063,7 +1215,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/APApplyPay/Sign":
     post:
-      tags: [官方U8 API]
+      tags: ["付款申请单源管理器"]
       summary: "付款申请单源管理器 - 审核单据"
       description: "通用调用官方 U8 API U8API/APApplyPay/Sign。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api004
@@ -1092,7 +1244,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/APClose/CancelSign":
     post:
-      tags: [官方U8 API]
+      tags: ["付款单源管理器"]
       summary: "付款单源管理器 - 弃审单据"
       description: "通用调用官方 U8 API U8API/APClose/CancelSign。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api010
@@ -1121,7 +1273,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/APClose/DeleteVouch":
     post:
-      tags: [官方U8 API]
+      tags: ["付款单源管理器"]
       summary: "付款单源管理器 - 删除单据"
       description: "通用调用官方 U8 API U8API/APClose/DeleteVouch。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api008
@@ -1150,7 +1302,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/APClose/GetVouchData":
     post:
-      tags: [官方U8 API]
+      tags: ["付款单源管理器"]
       summary: "付款单源管理器 - 装载单据"
       description: "通用调用官方 U8 API U8API/APClose/GetVouchData。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api007
@@ -1179,7 +1331,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/APClose/SaveVouch":
     post:
-      tags: [官方U8 API]
+      tags: ["付款单源管理器"]
       summary: "付款单源管理器 - 新增或修改"
       description: "通用调用官方 U8 API U8API/APClose/SaveVouch。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api006
@@ -1208,7 +1360,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/APClose/Sign":
     post:
-      tags: [官方U8 API]
+      tags: ["付款单源管理器"]
       summary: "付款单源管理器 - 审核单据"
       description: "通用调用官方 U8 API U8API/APClose/Sign。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api009
@@ -1237,7 +1389,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/APVouch/CancelSign":
     post:
-      tags: [官方U8 API]
+      tags: ["应付单源管理器"]
       summary: "应付单源管理器 - 弃审单据"
       description: "通用调用官方 U8 API U8API/APVouch/CancelSign。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api015
@@ -1266,7 +1418,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/APVouch/DeleteVouch":
     post:
-      tags: [官方U8 API]
+      tags: ["应付单源管理器"]
       summary: "应付单源管理器 - 删除单据"
       description: "通用调用官方 U8 API U8API/APVouch/DeleteVouch。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api013
@@ -1295,7 +1447,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/APVouch/GetVouchData":
     post:
-      tags: [官方U8 API]
+      tags: ["应付单源管理器"]
       summary: "应付单源管理器 - 装载单据"
       description: "通用调用官方 U8 API U8API/APVouch/GetVouchData。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api012
@@ -1324,7 +1476,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/APVouch/SaveVouch":
     post:
-      tags: [官方U8 API]
+      tags: ["应付单源管理器"]
       summary: "应付单源管理器 - 新增或修改"
       description: "通用调用官方 U8 API U8API/APVouch/SaveVouch。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api011
@@ -1353,7 +1505,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/APVouch/Sign":
     post:
-      tags: [官方U8 API]
+      tags: ["应付单源管理器"]
       summary: "应付单源管理器 - 审核单据"
       description: "通用调用官方 U8 API U8API/APVouch/Sign。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api014
@@ -1382,7 +1534,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ARClose/CancelSign":
     post:
-      tags: [官方U8 API]
+      tags: ["收款单理源管理器"]
       summary: "收款单理源管理器 - 弃审单据"
       description: "通用调用官方 U8 API U8API/ARClose/CancelSign。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api022
@@ -1411,7 +1563,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ARClose/DeleteVouch":
     post:
-      tags: [官方U8 API]
+      tags: ["收款单理源管理器"]
       summary: "收款单理源管理器 - 删除单据"
       description: "通用调用官方 U8 API U8API/ARClose/DeleteVouch。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api020
@@ -1440,7 +1592,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ARClose/GetVouchData":
     post:
-      tags: [官方U8 API]
+      tags: ["收款单理源管理器"]
       summary: "收款单理源管理器 - 装载单据"
       description: "通用调用官方 U8 API U8API/ARClose/GetVouchData。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api019
@@ -1469,7 +1621,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ARClose/SaveVouch":
     post:
-      tags: [官方U8 API]
+      tags: ["收款单理源管理器"]
       summary: "收款单理源管理器 - 新增或修改"
       description: "通用调用官方 U8 API U8API/ARClose/SaveVouch。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api018
@@ -1498,7 +1650,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ARClose/Sign":
     post:
-      tags: [官方U8 API]
+      tags: ["收款单理源管理器"]
       summary: "收款单理源管理器 - 审核单据"
       description: "通用调用官方 U8 API U8API/ARClose/Sign。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api021
@@ -1527,7 +1679,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ARVouch/CancelSign":
     post:
-      tags: [官方U8 API]
+      tags: ["应收单核日志"]
       summary: "应收单核日志 - 弃审单据"
       description: "通用调用官方 U8 API U8API/ARVouch/CancelSign。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api027
@@ -1556,7 +1708,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ARVouch/DeleteVouch":
     post:
-      tags: [官方U8 API]
+      tags: ["应收单核日志"]
       summary: "应收单核日志 - 删除单据"
       description: "通用调用官方 U8 API U8API/ARVouch/DeleteVouch。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api025
@@ -1585,7 +1737,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ARVouch/GetVouchData":
     post:
-      tags: [官方U8 API]
+      tags: ["应收单核日志"]
       summary: "应收单核日志 - 装载单据"
       description: "通用调用官方 U8 API U8API/ARVouch/GetVouchData。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api024
@@ -1614,7 +1766,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ARVouch/SaveVouch":
     post:
-      tags: [官方U8 API]
+      tags: ["应收单核日志"]
       summary: "应收单核日志 - 新增或修改"
       description: "通用调用官方 U8 API U8API/ARVouch/SaveVouch。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api023
@@ -1643,7 +1795,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ARVouch/Sign":
     post:
-      tags: [官方U8 API]
+      tags: ["应收单核日志"]
       summary: "应收单核日志 - 审核单据"
       description: "通用调用官方 U8 API U8API/ARVouch/Sign。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api026
@@ -1672,7 +1824,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ArrCheck/VoucherOperate":
     post:
-      tags: [官方U8 API]
+      tags: ["来料检验单(外部事务)r"]
       summary: "来料检验单(外部事务)r - 统一接口(外部事务)r"
       description: "通用调用官方 U8 API U8API/ArrCheck/VoucherOperate。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api062
@@ -1701,7 +1853,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ArrInspect/VoucherOperate":
     post:
-      tags: [官方U8 API]
+      tags: ["来料报检单(外部事务)r"]
       summary: "来料报检单(外部事务)r - 统一接口(外部事务)r"
       description: "通用调用官方 U8 API U8API/ArrInspect/VoucherOperate。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api063
@@ -1730,7 +1882,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ArrivedGoods/CancelconfirmArr":
     post:
-      tags: [官方U8 API]
+      tags: ["采购到货单(退货单)"]
       summary: "采购到货单(退货单) - 弃审采购到货单"
       description: "通用调用官方 U8 API U8API/ArrivedGoods/CancelconfirmArr。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api036
@@ -1759,7 +1911,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ArrivedGoods/ConfirmArr":
     post:
-      tags: [官方U8 API]
+      tags: ["采购到货单(退货单)"]
       summary: "采购到货单(退货单) - 审核采购到货单"
       description: "通用调用官方 U8 API U8API/ArrivedGoods/ConfirmArr。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api037
@@ -1788,7 +1940,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ArrivedGoods/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["采购到货单(退货单)"]
       summary: "采购到货单(退货单) - 删除单据"
       description: "通用调用官方 U8 API U8API/ArrivedGoods/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api038
@@ -1817,7 +1969,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ArrivedGoods/GetVoucherData":
     post:
-      tags: [官方U8 API]
+      tags: ["采购到货单(退货单)"]
       summary: "采购到货单(退货单) - 装载单据"
       description: "通用调用官方 U8 API U8API/ArrivedGoods/GetVoucherData。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api039
@@ -1846,7 +1998,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ArrivedGoods/VoucherSave":
     post:
-      tags: [官方U8 API]
+      tags: ["采购到货单(退货单)"]
       summary: "采购到货单(退货单) - 新增或修改"
       description: "通用调用官方 U8 API U8API/ArrivedGoods/VoucherSave。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api040
@@ -1875,7 +2027,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/BOM/BomAdd":
     post:
-      tags: [官方U8 API]
+      tags: ["物料清单单API.TransVouch.Save_Before"]
       summary: "物料清单单API.TransVouch.Save_Before - 新增物料清单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/BOM/BomAdd。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api227
@@ -1904,7 +2056,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/BOM/BomAuditing":
     post:
-      tags: [官方U8 API]
+      tags: ["物料清单单API.TransVouch.Save_Before"]
       summary: "物料清单单API.TransVouch.Save_Before - 审核物料清单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/BOM/BomAuditing。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api228
@@ -1933,7 +2085,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/BOM/BomDelete":
     post:
-      tags: [官方U8 API]
+      tags: ["物料清单单API.TransVouch.Save_Before"]
       summary: "物料清单单API.TransVouch.Save_Before - 删除物料清单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/BOM/BomDelete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api229
@@ -1962,7 +2114,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/BOM/BomLoad":
     post:
-      tags: [官方U8 API]
+      tags: ["物料清单单API.TransVouch.Save_Before"]
       summary: "物料清单单API.TransVouch.Save_Before - 查询物料清单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/BOM/BomLoad。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api230
@@ -1991,7 +2143,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/BOM/BomUnauditing":
     post:
-      tags: [官方U8 API]
+      tags: ["物料清单单API.TransVouch.Save_Before"]
       summary: "物料清单单API.TransVouch.Save_Before - 弃审物料清单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/BOM/BomUnauditing。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api231
@@ -2020,7 +2172,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/BOM/BomUpdate":
     post:
-      tags: [官方U8 API]
+      tags: ["物料清单单API.TransVouch.Save_Before"]
       summary: "物料清单单API.TransVouch.Save_Before - 更新物料清单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/BOM/BomUpdate。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api232
@@ -2049,7 +2201,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/CM/DeleteVouch":
     post:
-      tags: [官方U8 API]
+      tags: ["服务接口核日志"]
       summary: "服务接口核日志 - 删除单据"
       description: "通用调用官方 U8 API U8API/CM/DeleteVouch。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api030
@@ -2078,7 +2230,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/CM/QueryVouch":
     post:
-      tags: [官方U8 API]
+      tags: ["服务接口核日志"]
       summary: "服务接口核日志 - 查询单据"
       description: "通用调用官方 U8 API U8API/CM/QueryVouch。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api031
@@ -2107,7 +2259,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/CM/SaveVouch":
     post:
-      tags: [官方U8 API]
+      tags: ["服务接口核日志"]
       summary: "服务接口核日志 - 新增或修改"
       description: "通用调用官方 U8 API U8API/CM/SaveVouch。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api032
@@ -2136,7 +2288,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Consignment/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["销售发货单理单事务)r"]
       summary: "销售发货单理单事务)r - 审核或弃审"
       description: "通用调用官方 U8 API U8API/Consignment/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api068
@@ -2165,7 +2317,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Consignment/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["销售发货单理单事务)r"]
       summary: "销售发货单理单事务)r - 删除单据"
       description: "通用调用官方 U8 API U8API/Consignment/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api069
@@ -2194,7 +2346,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Consignment/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["销售发货单理单事务)r"]
       summary: "销售发货单理单事务)r - 装载单据"
       description: "通用调用官方 U8 API U8API/Consignment/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api070
@@ -2223,7 +2375,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Consignment/Save":
     post:
-      tags: [官方U8 API]
+      tags: ["销售发货单理单事务)r"]
       summary: "销售发货单理单事务)r - 新增或修改"
       description: "通用调用官方 U8 API U8API/Consignment/Save。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api071
@@ -2252,7 +2404,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ConsignmentSignIn/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["销售签回单件存日志r"]
       summary: "销售签回单件存日志r - 审核"
       description: "通用调用官方 U8 API U8API/ConsignmentSignIn/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api072
@@ -2281,7 +2433,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ConsignmentSignIn/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["销售签回单件存日志r"]
       summary: "销售签回单件存日志r - 装载单据"
       description: "通用调用官方 U8 API U8API/ConsignmentSignIn/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api073
@@ -2310,7 +2462,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ConsignmentSignIn/Save":
     post:
-      tags: [官方U8 API]
+      tags: ["销售签回单件存日志r"]
       summary: "销售签回单件存日志r - 新增或修改"
       description: "通用调用官方 U8 API U8API/ConsignmentSignIn/Save。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api074
@@ -2339,7 +2491,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/DelegateConsignment/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["委托代销发货单存日志r"]
       summary: "委托代销发货单存日志r - 审核或弃审"
       description: "通用调用官方 U8 API U8API/DelegateConsignment/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api075
@@ -2368,7 +2520,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/DelegateConsignment/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["委托代销发货单存日志r"]
       summary: "委托代销发货单存日志r - 删除单据"
       description: "通用调用官方 U8 API U8API/DelegateConsignment/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api076
@@ -2397,7 +2549,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/DelegateConsignment/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["委托代销发货单存日志r"]
       summary: "委托代销发货单存日志r - 装载单据"
       description: "通用调用官方 U8 API U8API/DelegateConsignment/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api077
@@ -2426,7 +2578,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/DelegateConsignment/Save":
     post:
-      tags: [官方U8 API]
+      tags: ["委托代销发货单存日志r"]
       summary: "委托代销发货单存日志r - 新增或修改"
       description: "通用调用官方 U8 API U8API/DelegateConsignment/Save。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api078
@@ -2455,7 +2607,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/DelegateReturnOrder/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["委托代销退货单存日志r"]
       summary: "委托代销退货单存日志r - 审核或弃审"
       description: "通用调用官方 U8 API U8API/DelegateReturnOrder/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api079
@@ -2484,7 +2636,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/DelegateReturnOrder/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["委托代销退货单存日志r"]
       summary: "委托代销退货单存日志r - 删除单据"
       description: "通用调用官方 U8 API U8API/DelegateReturnOrder/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api080
@@ -2513,7 +2665,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/DelegateReturnOrder/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["委托代销退货单存日志r"]
       summary: "委托代销退货单存日志r - 装载单据"
       description: "通用调用官方 U8 API U8API/DelegateReturnOrder/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api081
@@ -2542,7 +2694,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/DelegateReturnOrder/Save":
     post:
-      tags: [官方U8 API]
+      tags: ["委托代销退货单存日志r"]
       summary: "委托代销退货单存日志r - 新增或修改"
       description: "通用调用官方 U8 API U8API/DelegateReturnOrder/Save。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api082
@@ -2571,7 +2723,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/EB/EBItem_Add":
     post:
-      tags: [官方U8 API]
+      tags: ["服务接口事件志"]
       summary: "服务接口事件志 - 店铺商品新增"
       description: "通用调用官方 U8 API U8API/EB/EBItem_Add。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api033
@@ -2600,7 +2752,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/EB/EBTrade_Add":
     post:
-      tags: [官方U8 API]
+      tags: ["服务接口事件志"]
       summary: "服务接口事件志 - 电商订单新增志"
       description: "通用调用官方 U8 API U8API/EB/EBTrade_Add。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api034
@@ -2629,7 +2781,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/EcnDoc/EcnDocAdd":
     post:
-      tags: [官方U8 API]
+      tags: ["ECN单单API.TransVouch.Save_Before"]
       summary: "ECN单单API.TransVouch.Save_Before - 新增ECN单"
       description: "通用调用官方 U8 API U8API/EcnDoc/EcnDocAdd。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api234
@@ -2658,7 +2810,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/EcnDoc/EcnDocAuditing":
     post:
-      tags: [官方U8 API]
+      tags: ["ECN单单API.TransVouch.Save_Before"]
       summary: "ECN单单API.TransVouch.Save_Before - 审核ECN单"
       description: "通用调用官方 U8 API U8API/EcnDoc/EcnDocAuditing。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api237
@@ -2687,7 +2839,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/EcnDoc/EcnDocDelete":
     post:
-      tags: [官方U8 API]
+      tags: ["ECN单单API.TransVouch.Save_Before"]
       summary: "ECN单单API.TransVouch.Save_Before - 删除ECN单"
       description: "通用调用官方 U8 API U8API/EcnDoc/EcnDocDelete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api236
@@ -2716,7 +2868,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/EcnDoc/EcnDocLoad":
     post:
-      tags: [官方U8 API]
+      tags: ["ECN单单API.TransVouch.Save_Before"]
       summary: "ECN单单API.TransVouch.Save_Before - 查询ECN单"
       description: "通用调用官方 U8 API U8API/EcnDoc/EcnDocLoad。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api233
@@ -2745,7 +2897,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/EcnDoc/EcnDocModify":
     post:
-      tags: [官方U8 API]
+      tags: ["ECN单单API.TransVouch.Save_Before"]
       summary: "ECN单单API.TransVouch.Save_Before - 更新ECN单"
       description: "通用调用官方 U8 API U8API/EcnDoc/EcnDocModify。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api235
@@ -2774,7 +2926,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/EcnDoc/EcnDocUnauditing":
     post:
-      tags: [官方U8 API]
+      tags: ["ECN单单API.TransVouch.Save_Before"]
       summary: "ECN单单API.TransVouch.Save_Before - 弃审ECN单"
       description: "通用调用官方 U8 API U8API/EcnDoc/EcnDocUnauditing。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api238
@@ -2803,7 +2955,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/FCResource/FCResourceAdd":
     post:
-      tags: [官方U8 API]
+      tags: ["资源资料单API.TransVouch.Save_Before"]
       summary: "资源资料单API.TransVouch.Save_Before - 新增资源资料API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/FCResource/FCResourceAdd。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api240
@@ -2832,7 +2984,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/FCResource/FCResourceDelete":
     post:
-      tags: [官方U8 API]
+      tags: ["资源资料单API.TransVouch.Save_Before"]
       summary: "资源资料单API.TransVouch.Save_Before - 删除资源资料API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/FCResource/FCResourceDelete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api242
@@ -2861,7 +3013,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/FCResource/FCResourceLoad":
     post:
-      tags: [官方U8 API]
+      tags: ["资源资料单API.TransVouch.Save_Before"]
       summary: "资源资料单API.TransVouch.Save_Before - 查询资源资料API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/FCResource/FCResourceLoad。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api239
@@ -2890,7 +3042,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/FCResource/FCResourceModify":
     post:
-      tags: [官方U8 API]
+      tags: ["资源资料单API.TransVouch.Save_Before"]
       summary: "资源资料单API.TransVouch.Save_Before - 更新资源资料API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/FCResource/FCResourceModify。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api241
@@ -2919,7 +3071,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Forecast/ForecastAdd":
     post:
-      tags: [官方U8 API]
+      tags: ["产品预测订单API.TransVouch.Save_Before"]
       summary: "产品预测订单API.TransVouch.Save_Before - 新增产品预测订单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/Forecast/ForecastAdd。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api244
@@ -2948,7 +3100,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Forecast/ForecastAuditing":
     post:
-      tags: [官方U8 API]
+      tags: ["产品预测订单API.TransVouch.Save_Before"]
       summary: "产品预测订单API.TransVouch.Save_Before - 审核产品预测订单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/Forecast/ForecastAuditing。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api247
@@ -2977,7 +3129,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Forecast/ForecastDelete":
     post:
-      tags: [官方U8 API]
+      tags: ["产品预测订单API.TransVouch.Save_Before"]
       summary: "产品预测订单API.TransVouch.Save_Before - 删除产品预测订单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/Forecast/ForecastDelete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api246
@@ -3006,7 +3158,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Forecast/ForecastLoad":
     post:
-      tags: [官方U8 API]
+      tags: ["产品预测订单API.TransVouch.Save_Before"]
       summary: "产品预测订单API.TransVouch.Save_Before - 查询产品预测订单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/Forecast/ForecastLoad。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api243
@@ -3035,7 +3187,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Forecast/ForecastModify":
     post:
-      tags: [官方U8 API]
+      tags: ["产品预测订单API.TransVouch.Save_Before"]
       summary: "产品预测订单API.TransVouch.Save_Before - 更新产品预测订单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/Forecast/ForecastModify。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api245
@@ -3064,7 +3216,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Forecast/ForecastUnauditing":
     post:
-      tags: [官方U8 API]
+      tags: ["产品预测订单API.TransVouch.Save_Before"]
       summary: "产品预测订单API.TransVouch.Save_Before - 弃审产品预测订单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/Forecast/ForecastUnauditing。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api248
@@ -3093,7 +3245,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/GroupVouch/Add":
     post:
-      tags: [官方U8 API]
+      tags: ["组装单和修改志r"]
       summary: "组装单和修改志r - 添加新单据"
       description: "通用调用官方 U8 API U8API/GroupVouch/Add。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api131
@@ -3122,7 +3274,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/GroupVouch/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["组装单和修改志r"]
       summary: "组装单和修改志r - 审核单据"
       description: "通用调用官方 U8 API U8API/GroupVouch/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api132
@@ -3151,7 +3303,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/GroupVouch/CancelAudit":
     post:
-      tags: [官方U8 API]
+      tags: ["组装单和修改志r"]
       summary: "组装单和修改志r - 弃审单据"
       description: "通用调用官方 U8 API U8API/GroupVouch/CancelAudit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api133
@@ -3180,7 +3332,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/GroupVouch/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["组装单和修改志r"]
       summary: "组装单和修改志r - 删除单据"
       description: "通用调用官方 U8 API U8API/GroupVouch/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api134
@@ -3209,7 +3361,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/GroupVouch/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["组装单和修改志r"]
       summary: "组装单和修改志r - 装载单据"
       description: "通用调用官方 U8 API U8API/GroupVouch/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api135
@@ -3238,7 +3390,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/GroupVouch/Update":
     post:
-      tags: [官方U8 API]
+      tags: ["组装单和修改志r"]
       summary: "组装单和修改志r - 修改单据"
       description: "通用调用官方 U8 API U8API/GroupVouch/Update。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api136
@@ -3267,7 +3419,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/MOrder/MOrderAdd":
     post:
-      tags: [官方U8 API]
+      tags: ["生产订单测订单API.TransVouch.Save_Before"]
       summary: "生产订单测订单API.TransVouch.Save_Before - 新增生产订单单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/MOrder/MOrderAdd。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api249
@@ -3296,7 +3448,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/MOrder/MOrderAuditing":
     post:
-      tags: [官方U8 API]
+      tags: ["生产订单测订单API.TransVouch.Save_Before"]
       summary: "生产订单测订单API.TransVouch.Save_Before - 审核生产订单单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/MOrder/MOrderAuditing。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api250
@@ -3325,7 +3477,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/MOrder/MOrderDelete":
     post:
-      tags: [官方U8 API]
+      tags: ["生产订单测订单API.TransVouch.Save_Before"]
       summary: "生产订单测订单API.TransVouch.Save_Before - 删除生产订单单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/MOrder/MOrderDelete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api251
@@ -3354,7 +3506,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/MOrder/MOrderLoad":
     post:
-      tags: [官方U8 API]
+      tags: ["生产订单测订单API.TransVouch.Save_Before"]
       summary: "生产订单测订单API.TransVouch.Save_Before - 查询生产订单单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/MOrder/MOrderLoad。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api252
@@ -3383,7 +3535,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/MOrder/MOrderUnauditing":
     post:
-      tags: [官方U8 API]
+      tags: ["生产订单测订单API.TransVouch.Save_Before"]
       summary: "生产订单测订单API.TransVouch.Save_Before - 弃审生产订单单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/MOrder/MOrderUnauditing。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api253
@@ -3412,7 +3564,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/MOrder/MOrderUpdate":
     post:
-      tags: [官方U8 API]
+      tags: ["生产订单测订单API.TransVouch.Save_Before"]
       summary: "生产订单测订单API.TransVouch.Save_Before - 更新生产订单单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/MOrder/MOrderUpdate。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api254
@@ -3441,7 +3593,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/MaterialOut/Add":
     post:
-      tags: [官方U8 API]
+      tags: ["材料出库单收，领料都调用此接口"]
       summary: "材料出库单收，领料都调用此接口 - 添加新单据"
       description: "通用调用官方 U8 API U8API/MaterialOut/Add。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api149
@@ -3470,7 +3622,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/MaterialOut/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["材料出库单收，领料都调用此接口"]
       summary: "材料出库单收，领料都调用此接口 - 审核单据"
       description: "通用调用官方 U8 API U8API/MaterialOut/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api150
@@ -3499,7 +3651,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/MaterialOut/CancelAudit":
     post:
-      tags: [官方U8 API]
+      tags: ["材料出库单收，领料都调用此接口"]
       summary: "材料出库单收，领料都调用此接口 - 弃审单据"
       description: "通用调用官方 U8 API U8API/MaterialOut/CancelAudit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api151
@@ -3528,7 +3680,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/MaterialOut/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["材料出库单收，领料都调用此接口"]
       summary: "材料出库单收，领料都调用此接口 - 删除单据"
       description: "通用调用官方 U8 API U8API/MaterialOut/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api152
@@ -3557,7 +3709,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/MaterialOut/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["材料出库单收，领料都调用此接口"]
       summary: "材料出库单收，领料都调用此接口 - 装载单据"
       description: "通用调用官方 U8 API U8API/MaterialOut/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api153
@@ -3586,7 +3738,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/MaterialOut/Update":
     post:
-      tags: [官方U8 API]
+      tags: ["材料出库单收，领料都调用此接口"]
       summary: "材料出库单收，领料都调用此接口 - 修改单据"
       description: "通用调用官方 U8 API U8API/MaterialOut/Update。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api154
@@ -3615,7 +3767,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/MoRouting/MoRoutingLoad":
     post:
-      tags: [官方U8 API]
+      tags: ["工序资料单单API.TransVouch.Save_Before"]
       summary: "工序资料单单API.TransVouch.Save_Before - 查询工序资料单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/MoRouting/MoRoutingLoad。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api255
@@ -3644,7 +3796,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/MoRoutingBill/MoRoutingBillAdd":
     post:
-      tags: [官方U8 API]
+      tags: ["订单报工料单API.TransVouch.Save_Before"]
       summary: "订单报工料单API.TransVouch.Save_Before - 订单报工新增"
       description: "通用调用官方 U8 API U8API/MoRoutingBill/MoRoutingBillAdd。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api256
@@ -3673,7 +3825,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/NormalInvoice/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["普通发票单存日志r"]
       summary: "普通发票单存日志r - 审核或弃审"
       description: "通用调用官方 U8 API U8API/NormalInvoice/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api083
@@ -3702,7 +3854,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/NormalInvoice/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["普通发票单存日志r"]
       summary: "普通发票单存日志r - 删除单据"
       description: "通用调用官方 U8 API U8API/NormalInvoice/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api084
@@ -3731,7 +3883,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/NormalInvoice/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["普通发票单存日志r"]
       summary: "普通发票单存日志r - 装载单据"
       description: "通用调用官方 U8 API U8API/NormalInvoice/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api085
@@ -3760,7 +3912,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/NormalInvoice/Save":
     post:
-      tags: [官方U8 API]
+      tags: ["普通发票单存日志r"]
       summary: "普通发票单存日志r - 新增或修改"
       description: "通用调用官方 U8 API U8API/NormalInvoice/Save。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api086
@@ -3789,7 +3941,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/OpTransform/OpTransformAdd":
     post:
-      tags: [官方U8 API]
+      tags: ["工序转移单单API.TransVouch.Save_Before"]
       summary: "工序转移单单API.TransVouch.Save_Before - 新增工序转移单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/OpTransform/OpTransformAdd。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api257
@@ -3818,7 +3970,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/OpTransform/OpTransformDelete":
     post:
-      tags: [官方U8 API]
+      tags: ["工序转移单单API.TransVouch.Save_Before"]
       summary: "工序转移单单API.TransVouch.Save_Before - 删除工序转移单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/OpTransform/OpTransformDelete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api259
@@ -3847,7 +3999,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/OpTransform/OpTransformLoad":
     post:
-      tags: [官方U8 API]
+      tags: ["工序转移单单API.TransVouch.Save_Before"]
       summary: "工序转移单单API.TransVouch.Save_Before - 查询工序转移单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/OpTransform/OpTransformLoad。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api258
@@ -3876,7 +4028,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/OrderBom/OrderBomAdd":
     post:
-      tags: [官方U8 API]
+      tags: ["订单物料清单API.TransVouch.Save_Before"]
       summary: "订单物料清单API.TransVouch.Save_Before - 新增订单物料清单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/OrderBom/OrderBomAdd。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api260
@@ -3905,7 +4057,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/OrderBom/OrderBomAuditing":
     post:
-      tags: [官方U8 API]
+      tags: ["订单物料清单API.TransVouch.Save_Before"]
       summary: "订单物料清单API.TransVouch.Save_Before - 审核订单物料清单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/OrderBom/OrderBomAuditing。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api261
@@ -3934,7 +4086,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/OrderBom/OrderBomDelete":
     post:
-      tags: [官方U8 API]
+      tags: ["订单物料清单API.TransVouch.Save_Before"]
       summary: "订单物料清单API.TransVouch.Save_Before - 删除订单物料清单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/OrderBom/OrderBomDelete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api262
@@ -3963,7 +4115,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/OrderBom/OrderBomLoad":
     post:
-      tags: [官方U8 API]
+      tags: ["订单物料清单API.TransVouch.Save_Before"]
       summary: "订单物料清单API.TransVouch.Save_Before - 查询订单物料清单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/OrderBom/OrderBomLoad。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api263
@@ -3992,7 +4144,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/OrderBom/OrderBomUnauditing":
     post:
-      tags: [官方U8 API]
+      tags: ["订单物料清单API.TransVouch.Save_Before"]
       summary: "订单物料清单API.TransVouch.Save_Before - 弃审订单物料清单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/OrderBom/OrderBomUnauditing。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api264
@@ -4021,7 +4173,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/OrderBom/OrderBomUpdate":
     post:
-      tags: [官方U8 API]
+      tags: ["订单物料清单API.TransVouch.Save_Before"]
       summary: "订单物料清单API.TransVouch.Save_Before - 更新订单物料清单API.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/OrderBom/OrderBomUpdate。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api265
@@ -4050,7 +4202,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PFReport/PFReport2WorkHRNote":
     post:
-      tags: [官方U8 API]
+      tags: ["工序流转卡完工单API.TransVouch.Save_Before"]
       summary: "工序流转卡完工单API.TransVouch.Save_Before - 生成工时记录单工单PI.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/PFReport/PFReport2WorkHRNote。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api270
@@ -4079,7 +4231,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PFReport/PFReportAdd":
     post:
-      tags: [官方U8 API]
+      tags: ["工序流转卡完工单API.TransVouch.Save_Before"]
       summary: "工序流转卡完工单API.TransVouch.Save_Before - 新增工序流转卡完工单"
       description: "通用调用官方 U8 API U8API/PFReport/PFReportAdd。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api266
@@ -4108,7 +4260,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PFReport/PFReportDelete":
     post:
-      tags: [官方U8 API]
+      tags: ["工序流转卡完工单API.TransVouch.Save_Before"]
       summary: "工序流转卡完工单API.TransVouch.Save_Before - 删除工序流转卡完工单"
       description: "通用调用官方 U8 API U8API/PFReport/PFReportDelete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api268
@@ -4137,7 +4289,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PFReport/PFReportLoad":
     post:
-      tags: [官方U8 API]
+      tags: ["工序流转卡完工单API.TransVouch.Save_Before"]
       summary: "工序流转卡完工单API.TransVouch.Save_Before - 查询工序流转卡完工单"
       description: "通用调用官方 U8 API U8API/PFReport/PFReportLoad。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api269
@@ -4166,7 +4318,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PFReport/PFReportUpdate":
     post:
-      tags: [官方U8 API]
+      tags: ["工序流转卡完工单API.TransVouch.Save_Before"]
       summary: "工序流转卡完工单API.TransVouch.Save_Before - 更新工序流转卡完工单"
       description: "通用调用官方 U8 API U8API/PFReport/PFReportUpdate。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api267
@@ -4195,7 +4347,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PU/VoucherSave2":
     post:
-      tags: [官方U8 API]
+      tags: ["服务接口调价单err"]
       summary: "服务接口调价单err - 采购单据保存(外部事务)"
       description: "通用调用官方 U8 API U8API/PU/VoucherSave2。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api061
@@ -4224,7 +4376,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PUInvoice/CancelSign":
     post:
-      tags: [官方U8 API]
+      tags: ["采购发票源管理器"]
       summary: "采购发票源管理器 - 弃审单据"
       description: "通用调用官方 U8 API U8API/PUInvoice/CancelSign。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api017
@@ -4253,7 +4405,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PUInvoice/Sign":
     post:
-      tags: [官方U8 API]
+      tags: ["采购发票源管理器"]
       summary: "采购发票源管理器 - 审核单据"
       description: "通用调用官方 U8 API U8API/PUInvoice/Sign。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api016
@@ -4282,7 +4434,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PerCheck/VoucherOperate":
     post:
-      tags: [官方U8 API]
+      tags: ["在库检验单单事务)r"]
       summary: "在库检验单单事务)r - 统一接口单事务)r"
       description: "通用调用官方 U8 API U8API/PerCheck/VoucherOperate。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api064
@@ -4311,7 +4463,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PerInspect/VoucherOperate":
     post:
-      tags: [官方U8 API]
+      tags: ["在库报检单单事务)r"]
       summary: "在库报检单单事务)r - 统一接口单事务)r"
       description: "通用调用官方 U8 API U8API/PerInspect/VoucherOperate。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api065
@@ -4340,7 +4492,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PlanRange/PlanRangeAdd":
     post:
-      tags: [官方U8 API]
+      tags: ["计划范围录单工单PI.TransVouch.Save_Before"]
       summary: "计划范围录单工单PI.TransVouch.Save_Before - 新增计划范围"
       description: "通用调用官方 U8 API U8API/PlanRange/PlanRangeAdd。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api272
@@ -4369,7 +4521,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PlanRange/PlanRangeDelete":
     post:
-      tags: [官方U8 API]
+      tags: ["计划范围录单工单PI.TransVouch.Save_Before"]
       summary: "计划范围录单工单PI.TransVouch.Save_Before - 删除计划范围"
       description: "通用调用官方 U8 API U8API/PlanRange/PlanRangeDelete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api274
@@ -4398,7 +4550,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PlanRange/PlanRangeLoad":
     post:
-      tags: [官方U8 API]
+      tags: ["计划范围录单工单PI.TransVouch.Save_Before"]
       summary: "计划范围录单工单PI.TransVouch.Save_Before - 查询计划范围"
       description: "通用调用官方 U8 API U8API/PlanRange/PlanRangeLoad。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api271
@@ -4427,7 +4579,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PlanRange/PlanRangeUpdate":
     post:
-      tags: [官方U8 API]
+      tags: ["计划范围录单工单PI.TransVouch.Save_Before"]
       summary: "计划范围录单工单PI.TransVouch.Save_Before - 更新计划范围"
       description: "通用调用官方 U8 API U8API/PlanRange/PlanRangeUpdate。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api273
@@ -4456,7 +4608,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ProCheck/VoucherOperate":
     post:
-      tags: [官方U8 API]
+      tags: ["产品检验理单事务)r"]
       summary: "产品检验理单事务)r - 统一接口理单事务)r"
       description: "通用调用官方 U8 API U8API/ProCheck/VoucherOperate。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api066
@@ -4485,7 +4637,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ProInspect/VoucherOperate":
     post:
-      tags: [官方U8 API]
+      tags: ["产品报检理单事务)r"]
       summary: "产品报检理单事务)r - 统一接口理单事务)r"
       description: "通用调用官方 U8 API U8API/ProInspect/VoucherOperate。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api067
@@ -4514,7 +4666,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ProductIn/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["产成品入库单后事件调用此接口"]
       summary: "产成品入库单后事件调用此接口 - 审核单据"
       description: "通用调用官方 U8 API U8API/ProductIn/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api168
@@ -4543,7 +4695,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ProductIn/CancelAudit":
     post:
-      tags: [官方U8 API]
+      tags: ["产成品入库单后事件调用此接口"]
       summary: "产成品入库单后事件调用此接口 - 弃审单据"
       description: "通用调用官方 U8 API U8API/ProductIn/CancelAudit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api169
@@ -4572,7 +4724,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ProductIn/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["产成品入库单后事件调用此接口"]
       summary: "产成品入库单后事件调用此接口 - 删除单据"
       description: "通用调用官方 U8 API U8API/ProductIn/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api170
@@ -4601,7 +4753,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ProductIn/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["产成品入库单后事件调用此接口"]
       summary: "产成品入库单后事件调用此接口 - 装载单据"
       description: "通用调用官方 U8 API U8API/ProductIn/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api171
@@ -4630,7 +4782,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ProductIn/Update":
     post:
-      tags: [官方U8 API]
+      tags: ["产成品入库单后事件调用此接口"]
       summary: "产成品入库单后事件调用此接口 - 修改单据"
       description: "通用调用官方 U8 API U8API/ProductIn/Update。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api172
@@ -4659,7 +4811,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PuStoreIn/Add":
     post:
-      tags: [官方U8 API]
+      tags: ["采购入库单后事件调用此接口"]
       summary: "采购入库单后事件调用此接口 - 添加新单据"
       description: "通用调用官方 U8 API U8API/PuStoreIn/Add。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api173
@@ -4688,7 +4840,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PuStoreIn/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["采购入库单后事件调用此接口"]
       summary: "采购入库单后事件调用此接口 - 审核单据"
       description: "通用调用官方 U8 API U8API/PuStoreIn/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api174
@@ -4717,7 +4869,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PuStoreIn/CancelAudit":
     post:
-      tags: [官方U8 API]
+      tags: ["采购入库单后事件调用此接口"]
       summary: "采购入库单后事件调用此接口 - 弃审单据"
       description: "通用调用官方 U8 API U8API/PuStoreIn/CancelAudit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api175
@@ -4746,7 +4898,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PuStoreIn/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["采购入库单后事件调用此接口"]
       summary: "采购入库单后事件调用此接口 - 删除单据"
       description: "通用调用官方 U8 API U8API/PuStoreIn/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api176
@@ -4775,7 +4927,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PuStoreIn/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["采购入库单后事件调用此接口"]
       summary: "采购入库单后事件调用此接口 - 装载单据"
       description: "通用调用官方 U8 API U8API/PuStoreIn/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api177
@@ -4804,7 +4956,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PuStoreIn/Update":
     post:
-      tags: [官方U8 API]
+      tags: ["采购入库单后事件调用此接口"]
       summary: "采购入库单后事件调用此接口 - 修改单据"
       description: "通用调用官方 U8 API U8API/PuStoreIn/Update。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api178
@@ -4833,7 +4985,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PurBill/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["采购专用发票件err"]
       summary: "采购专用发票件err - 删除单据"
       description: "通用调用官方 U8 API U8API/PurBill/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api044
@@ -4862,7 +5014,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PurBill/GetVoucherData":
     post:
-      tags: [官方U8 API]
+      tags: ["采购专用发票件err"]
       summary: "采购专用发票件err - 装载单据"
       description: "通用调用官方 U8 API U8API/PurBill/GetVoucherData。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api045
@@ -4891,7 +5043,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PurBill/VoucherSave":
     post:
-      tags: [官方U8 API]
+      tags: ["采购专用发票件err"]
       summary: "采购专用发票件err - 新增或修改"
       description: "通用调用官方 U8 API U8API/PurBill/VoucherSave。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api046
@@ -4920,7 +5072,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PurchaseOrder/CancelconfirmPo":
     post:
-      tags: [官方U8 API]
+      tags: ["采购订单件err"]
       summary: "采购订单件err - 弃审订单"
       description: "通用调用官方 U8 API U8API/PurchaseOrder/CancelconfirmPo。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api047
@@ -4949,7 +5101,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PurchaseOrder/ConfirmPO":
     post:
-      tags: [官方U8 API]
+      tags: ["采购订单件err"]
       summary: "采购订单件err - 审核订单"
       description: "通用调用官方 U8 API U8API/PurchaseOrder/ConfirmPO。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api048
@@ -4978,7 +5130,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PurchaseOrder/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["采购订单件err"]
       summary: "采购订单件err - 删除单据"
       description: "通用调用官方 U8 API U8API/PurchaseOrder/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api049
@@ -5007,7 +5159,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PurchaseOrder/GetVoucherData":
     post:
-      tags: [官方U8 API]
+      tags: ["采购订单件err"]
       summary: "采购订单件err - 装载单据"
       description: "通用调用官方 U8 API U8API/PurchaseOrder/GetVoucherData。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api050
@@ -5036,7 +5188,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PurchaseOrder/VoucherSave":
     post:
-      tags: [官方U8 API]
+      tags: ["采购订单件err"]
       summary: "采购订单件err - 新增或修改"
       description: "通用调用官方 U8 API U8API/PurchaseOrder/VoucherSave。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api051
@@ -5065,7 +5217,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PurchaseRequisition/CancelconfirmApp":
     post:
-      tags: [官方U8 API]
+      tags: ["请购单改事件fterr"]
       summary: "请购单改事件fterr - 弃审请购单"
       description: "通用调用官方 U8 API U8API/PurchaseRequisition/CancelconfirmApp。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api052
@@ -5094,7 +5246,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PurchaseRequisition/ConfirmApp":
     post:
-      tags: [官方U8 API]
+      tags: ["请购单改事件fterr"]
       summary: "请购单改事件fterr - 审核请购单"
       description: "通用调用官方 U8 API U8API/PurchaseRequisition/ConfirmApp。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api053
@@ -5123,7 +5275,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PurchaseRequisition/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["请购单改事件fterr"]
       summary: "请购单改事件fterr - 删除单据"
       description: "通用调用官方 U8 API U8API/PurchaseRequisition/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api054
@@ -5152,7 +5304,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PurchaseRequisition/GetVoucherData":
     post:
-      tags: [官方U8 API]
+      tags: ["请购单改事件fterr"]
       summary: "请购单改事件fterr - 装载单据"
       description: "通用调用官方 U8 API U8API/PurchaseRequisition/GetVoucherData。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api055
@@ -5181,7 +5333,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/PurchaseRequisition/VoucherSave":
     post:
-      tags: [官方U8 API]
+      tags: ["请购单改事件fterr"]
       summary: "请购单改事件fterr - 新增或修改"
       description: "通用调用官方 U8 API U8API/PurchaseRequisition/VoucherSave。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api056
@@ -5210,7 +5362,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/QcScrapVouch/Add":
     post:
-      tags: [官方U8 API]
+      tags: ["期初不合格品前事件调用此接口"]
       summary: "期初不合格品前事件调用此接口 - 添加新单据"
       description: "通用调用官方 U8 API U8API/QcScrapVouch/Add。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api179
@@ -5239,7 +5391,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/QcScrapVouch/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["期初不合格品前事件调用此接口"]
       summary: "期初不合格品前事件调用此接口 - 审核单据"
       description: "通用调用官方 U8 API U8API/QcScrapVouch/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api180
@@ -5268,7 +5420,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/QcScrapVouch/CancelAudit":
     post:
-      tags: [官方U8 API]
+      tags: ["期初不合格品前事件调用此接口"]
       summary: "期初不合格品前事件调用此接口 - 弃审单据"
       description: "通用调用官方 U8 API U8API/QcScrapVouch/CancelAudit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api181
@@ -5297,7 +5449,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/QcScrapVouch/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["期初不合格品前事件调用此接口"]
       summary: "期初不合格品前事件调用此接口 - 删除单据"
       description: "通用调用官方 U8 API U8API/QcScrapVouch/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api182
@@ -5326,7 +5478,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/QcScrapVouch/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["期初不合格品前事件调用此接口"]
       summary: "期初不合格品前事件调用此接口 - 装载单据"
       description: "通用调用官方 U8 API U8API/QcScrapVouch/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api183
@@ -5355,7 +5507,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/QcScrapVouch/Update":
     post:
-      tags: [官方U8 API]
+      tags: ["期初不合格品前事件调用此接口"]
       summary: "期初不合格品前事件调用此接口 - 修改单据"
       description: "通用调用官方 U8 API U8API/QcScrapVouch/Update。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api184
@@ -5384,7 +5536,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/RedNormalInvoice/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["红字普通发票存日志r"]
       summary: "红字普通发票存日志r - 审核或弃审"
       description: "通用调用官方 U8 API U8API/RedNormalInvoice/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api087
@@ -5413,7 +5565,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/RedNormalInvoice/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["红字普通发票存日志r"]
       summary: "红字普通发票存日志r - 删除单据"
       description: "通用调用官方 U8 API U8API/RedNormalInvoice/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api088
@@ -5442,7 +5594,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/RedNormalInvoice/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["红字普通发票存日志r"]
       summary: "红字普通发票存日志r - 装载单据"
       description: "通用调用官方 U8 API U8API/RedNormalInvoice/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api089
@@ -5471,7 +5623,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/RedNormalInvoice/Save":
     post:
-      tags: [官方U8 API]
+      tags: ["红字普通发票存日志r"]
       summary: "红字普通发票存日志r - 新增或修改"
       description: "通用调用官方 U8 API U8API/RedNormalInvoice/Save。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api090
@@ -5500,7 +5652,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/RedRetaildailyreport/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["红字零售日报存日志r"]
       summary: "红字零售日报存日志r - 审核或弃审"
       description: "通用调用官方 U8 API U8API/RedRetaildailyreport/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api091
@@ -5529,7 +5681,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/RedRetaildailyreport/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["红字零售日报存日志r"]
       summary: "红字零售日报存日志r - 删除单据"
       description: "通用调用官方 U8 API U8API/RedRetaildailyreport/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api092
@@ -5558,7 +5710,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/RedRetaildailyreport/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["红字零售日报存日志r"]
       summary: "红字零售日报存日志r - 装载单据"
       description: "通用调用官方 U8 API U8API/RedRetaildailyreport/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api093
@@ -5587,7 +5739,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/RedRetaildailyreport/Save":
     post:
-      tags: [官方U8 API]
+      tags: ["红字零售日报存日志r"]
       summary: "红字零售日报存日志r - 新增或修改"
       description: "通用调用官方 U8 API U8API/RedRetaildailyreport/Save。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api094
@@ -5616,7 +5768,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/RedSpecialInvoice/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["红字专用发票存日志r"]
       summary: "红字专用发票存日志r - 审核或弃审"
       description: "通用调用官方 U8 API U8API/RedSpecialInvoice/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api095
@@ -5645,7 +5797,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/RedSpecialInvoice/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["红字专用发票存日志r"]
       summary: "红字专用发票存日志r - 删除单据"
       description: "通用调用官方 U8 API U8API/RedSpecialInvoice/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api096
@@ -5674,7 +5826,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/RedSpecialInvoice/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["红字专用发票存日志r"]
       summary: "红字专用发票存日志r - 装载单据"
       description: "通用调用官方 U8 API U8API/RedSpecialInvoice/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api097
@@ -5703,7 +5855,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/RedSpecialInvoice/Save":
     post:
-      tags: [官方U8 API]
+      tags: ["红字专用发票存日志r"]
       summary: "红字专用发票存日志r - 新增或修改"
       description: "通用调用官方 U8 API U8API/RedSpecialInvoice/Save。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api098
@@ -5732,7 +5884,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Retaildailyreport/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["零售日报存日志r"]
       summary: "零售日报存日志r - 审核或弃审"
       description: "通用调用官方 U8 API U8API/Retaildailyreport/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api099
@@ -5761,7 +5913,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Retaildailyreport/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["零售日报存日志r"]
       summary: "零售日报存日志r - 删除单据"
       description: "通用调用官方 U8 API U8API/Retaildailyreport/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api100
@@ -5790,7 +5942,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Retaildailyreport/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["零售日报存日志r"]
       summary: "零售日报存日志r - 装载单据"
       description: "通用调用官方 U8 API U8API/Retaildailyreport/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api101
@@ -5819,7 +5971,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Retaildailyreport/Save":
     post:
-      tags: [官方U8 API]
+      tags: ["零售日报存日志r"]
       summary: "零售日报存日志r - 新增或修改"
       description: "通用调用官方 U8 API U8API/Retaildailyreport/Save。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api102
@@ -5848,7 +6000,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ReturnOrder/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["退货单改存日志r"]
       summary: "退货单改存日志r - 审核或弃审"
       description: "通用调用官方 U8 API U8API/ReturnOrder/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api103
@@ -5877,7 +6029,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ReturnOrder/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["退货单改存日志r"]
       summary: "退货单改存日志r - 删除单据"
       description: "通用调用官方 U8 API U8API/ReturnOrder/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api104
@@ -5906,7 +6058,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ReturnOrder/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["退货单改存日志r"]
       summary: "退货单改存日志r - 装载单据"
       description: "通用调用官方 U8 API U8API/ReturnOrder/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api105
@@ -5935,7 +6087,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ReturnOrder/Save":
     post:
-      tags: [官方U8 API]
+      tags: ["退货单改存日志r"]
       summary: "退货单改存日志r - 新增或修改"
       description: "通用调用官方 U8 API U8API/ReturnOrder/Save。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api106
@@ -5964,7 +6116,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Routing/RoutingAdd":
     post:
-      tags: [官方U8 API]
+      tags: ["工艺路线围工单PI.TransVouch.Save_Before"]
       summary: "工艺路线围工单PI.TransVouch.Save_Before - 新增工艺路线工单PI.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/Routing/RoutingAdd。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api275
@@ -5993,7 +6145,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Routing/RoutingAuditing":
     post:
-      tags: [官方U8 API]
+      tags: ["工艺路线围工单PI.TransVouch.Save_Before"]
       summary: "工艺路线围工单PI.TransVouch.Save_Before - 审核工艺路线工单PI.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/Routing/RoutingAuditing。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api276
@@ -6022,7 +6174,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Routing/RoutingDelete":
     post:
-      tags: [官方U8 API]
+      tags: ["工艺路线围工单PI.TransVouch.Save_Before"]
       summary: "工艺路线围工单PI.TransVouch.Save_Before - 删除工艺路线工单PI.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/Routing/RoutingDelete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api277
@@ -6051,7 +6203,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Routing/RoutingLoad":
     post:
-      tags: [官方U8 API]
+      tags: ["工艺路线围工单PI.TransVouch.Save_Before"]
       summary: "工艺路线围工单PI.TransVouch.Save_Before - 查询工艺路线工单PI.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/Routing/RoutingLoad。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api278
@@ -6080,7 +6232,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Routing/RoutingUnauditing":
     post:
-      tags: [官方U8 API]
+      tags: ["工艺路线围工单PI.TransVouch.Save_Before"]
       summary: "工艺路线围工单PI.TransVouch.Save_Before - 弃审工艺路线工单PI.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/Routing/RoutingUnauditing。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api279
@@ -6109,7 +6261,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/Routing/RoutingUpdate":
     post:
-      tags: [官方U8 API]
+      tags: ["工艺路线围工单PI.TransVouch.Save_Before"]
       summary: "工艺路线围工单PI.TransVouch.Save_Before - 更新工艺路线工单PI.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8API/Routing/RoutingUpdate。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api280
@@ -6138,7 +6290,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SA/SAVoucher_Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["服务接口存日志志r"]
       summary: "服务接口存日志志r - 销售单据审核或弃审"
       description: "通用调用官方 U8 API U8API/SA/SAVoucher_Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api121
@@ -6167,7 +6319,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SA/SAVoucher_Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["服务接口存日志志r"]
       summary: "服务接口存日志志r - 销售单据删除"
       description: "通用调用官方 U8 API U8API/SA/SAVoucher_Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api122
@@ -6196,7 +6348,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SA/SAVoucher_Load":
     post:
-      tags: [官方U8 API]
+      tags: ["服务接口存日志志r"]
       summary: "服务接口存日志志r - 销售单据装载"
       description: "通用调用官方 U8 API U8API/SA/SAVoucher_Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api123
@@ -6225,7 +6377,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SA/SAVoucher_Save":
     post:
-      tags: [官方U8 API]
+      tags: ["服务接口存日志志r"]
       summary: "服务接口存日志志r - 销售单据新增和修改"
       description: "通用调用官方 U8 API U8API/SA/SAVoucher_Save。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api124
@@ -6254,7 +6406,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SAInvoice/CancelSign":
     post:
-      tags: [官方U8 API]
+      tags: ["销售发票核日志"]
       summary: "销售发票核日志 - 弃审单据"
       description: "通用调用官方 U8 API U8API/SAInvoice/CancelSign。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api029
@@ -6283,7 +6435,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SAInvoice/Sign":
     post:
-      tags: [官方U8 API]
+      tags: ["销售发票核日志"]
       summary: "销售发票核日志 - 审核单据"
       description: "通用调用官方 U8 API U8API/SAInvoice/Sign。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api028
@@ -6312,7 +6464,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SaleOrder/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["销售订单件日志r"]
       summary: "销售订单件日志r - 审核或弃审"
       description: "通用调用官方 U8 API U8API/SaleOrder/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api107
@@ -6341,7 +6493,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SaleOrder/Close":
     post:
-      tags: [官方U8 API]
+      tags: ["销售订单件日志r"]
       summary: "销售订单件日志r - 关闭或打开"
       description: "通用调用官方 U8 API U8API/SaleOrder/Close。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api112
@@ -6370,7 +6522,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SaleOrder/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["销售订单件日志r"]
       summary: "销售订单件日志r - 删除单据"
       description: "通用调用官方 U8 API U8API/SaleOrder/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api108
@@ -6399,7 +6551,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SaleOrder/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["销售订单件日志r"]
       summary: "销售订单件日志r - 装载单据"
       description: "通用调用官方 U8 API U8API/SaleOrder/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api109
@@ -6428,7 +6580,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SaleOrder/Lock":
     post:
-      tags: [官方U8 API]
+      tags: ["销售订单件日志r"]
       summary: "销售订单件日志r - 锁定或解锁日志志r"
       description: "通用调用官方 U8 API U8API/SaleOrder/Lock。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api111
@@ -6457,7 +6609,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SaleOrder/Save":
     post:
-      tags: [官方U8 API]
+      tags: ["销售订单件日志r"]
       summary: "销售订单件日志r - 新增或修改"
       description: "通用调用官方 U8 API U8API/SaleOrder/Save。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api110
@@ -6486,7 +6638,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SaleQuotation/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["销售报价单日志志r"]
       summary: "销售报价单日志志r - 审核或弃审"
       description: "通用调用官方 U8 API U8API/SaleQuotation/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api113
@@ -6515,7 +6667,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SaleQuotation/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["销售报价单日志志r"]
       summary: "销售报价单日志志r - 删除单据"
       description: "通用调用官方 U8 API U8API/SaleQuotation/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api114
@@ -6544,7 +6696,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SaleQuotation/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["销售报价单日志志r"]
       summary: "销售报价单日志志r - 装载单据"
       description: "通用调用官方 U8 API U8API/SaleQuotation/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api115
@@ -6573,7 +6725,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SaleQuotation/Save":
     post:
-      tags: [官方U8 API]
+      tags: ["销售报价单日志志r"]
       summary: "销售报价单日志志r - 新增或修改"
       description: "通用调用官方 U8 API U8API/SaleQuotation/Save。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api116
@@ -6602,7 +6754,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ScrapOut/Add":
     post:
-      tags: [官方U8 API]
+      tags: ["不合格品处理单事件用此接口"]
       summary: "不合格品处理单事件用此接口 - 添加新单据"
       description: "通用调用官方 U8 API U8API/ScrapOut/Add。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api191
@@ -6631,7 +6783,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ScrapOut/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["不合格品处理单事件用此接口"]
       summary: "不合格品处理单事件用此接口 - 审核单据"
       description: "通用调用官方 U8 API U8API/ScrapOut/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api192
@@ -6660,7 +6812,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ScrapOut/CancelAudit":
     post:
-      tags: [官方U8 API]
+      tags: ["不合格品处理单事件用此接口"]
       summary: "不合格品处理单事件用此接口 - 弃审单据"
       description: "通用调用官方 U8 API U8API/ScrapOut/CancelAudit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api193
@@ -6689,7 +6841,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ScrapOut/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["不合格品处理单事件用此接口"]
       summary: "不合格品处理单事件用此接口 - 删除单据"
       description: "通用调用官方 U8 API U8API/ScrapOut/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api194
@@ -6718,7 +6870,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ScrapOut/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["不合格品处理单事件用此接口"]
       summary: "不合格品处理单事件用此接口 - 装载单据"
       description: "通用调用官方 U8 API U8API/ScrapOut/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api195
@@ -6747,7 +6899,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ScrapOut/Update":
     post:
-      tags: [官方U8 API]
+      tags: ["不合格品处理单事件用此接口"]
       summary: "不合格品处理单事件用此接口 - 修改单据"
       description: "通用调用官方 U8 API U8API/ScrapOut/Update。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api196
@@ -6776,7 +6928,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ScrapVouch/Add":
     post:
-      tags: [官方U8 API]
+      tags: ["不合格品记录单事件用此接口"]
       summary: "不合格品记录单事件用此接口 - 添加新单据"
       description: "通用调用官方 U8 API U8API/ScrapVouch/Add。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api197
@@ -6805,7 +6957,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ScrapVouch/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["不合格品记录单事件用此接口"]
       summary: "不合格品记录单事件用此接口 - 审核单据"
       description: "通用调用官方 U8 API U8API/ScrapVouch/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api198
@@ -6834,7 +6986,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ScrapVouch/CancelAudit":
     post:
-      tags: [官方U8 API]
+      tags: ["不合格品记录单事件用此接口"]
       summary: "不合格品记录单事件用此接口 - 弃审单据"
       description: "通用调用官方 U8 API U8API/ScrapVouch/CancelAudit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api199
@@ -6863,7 +7015,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ScrapVouch/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["不合格品记录单事件用此接口"]
       summary: "不合格品记录单事件用此接口 - 删除单据"
       description: "通用调用官方 U8 API U8API/ScrapVouch/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api200
@@ -6892,7 +7044,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ScrapVouch/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["不合格品记录单事件用此接口"]
       summary: "不合格品记录单事件用此接口 - 装载单据"
       description: "通用调用官方 U8 API U8API/ScrapVouch/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api201
@@ -6921,7 +7073,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ScrapVouch/Update":
     post:
-      tags: [官方U8 API]
+      tags: ["不合格品记录单事件用此接口"]
       summary: "不合格品记录单事件用此接口 - 修改单据"
       description: "通用调用官方 U8 API U8API/ScrapVouch/Update。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api202
@@ -6950,7 +7102,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SepVouch/Add":
     post:
-      tags: [官方U8 API]
+      tags: ["拆卸单单事件用此接口"]
       summary: "拆卸单单事件用此接口 - 添加新单据"
       description: "通用调用官方 U8 API U8API/SepVouch/Add。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api203
@@ -6979,7 +7131,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SepVouch/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["拆卸单单事件用此接口"]
       summary: "拆卸单单事件用此接口 - 审核单据"
       description: "通用调用官方 U8 API U8API/SepVouch/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api204
@@ -7008,7 +7160,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SepVouch/CancelAudit":
     post:
-      tags: [官方U8 API]
+      tags: ["拆卸单单事件用此接口"]
       summary: "拆卸单单事件用此接口 - 弃审单据"
       description: "通用调用官方 U8 API U8API/SepVouch/CancelAudit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api205
@@ -7037,7 +7189,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SepVouch/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["拆卸单单事件用此接口"]
       summary: "拆卸单单事件用此接口 - 删除单据"
       description: "通用调用官方 U8 API U8API/SepVouch/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api206
@@ -7066,7 +7218,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SepVouch/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["拆卸单单事件用此接口"]
       summary: "拆卸单单事件用此接口 - 装载单据"
       description: "通用调用官方 U8 API U8API/SepVouch/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api207
@@ -7095,7 +7247,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SepVouch/Update":
     post:
-      tags: [官方U8 API]
+      tags: ["拆卸单单事件用此接口"]
       summary: "拆卸单单事件用此接口 - 修改单据"
       description: "通用调用官方 U8 API U8API/SepVouch/Update。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api208
@@ -7124,7 +7276,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ShapeChangVouch/Add":
     post:
-      tags: [官方U8 API]
+      tags: ["形态转换单单事件用此接口"]
       summary: "形态转换单单事件用此接口 - 添加新单据"
       description: "通用调用官方 U8 API U8API/ShapeChangVouch/Add。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api209
@@ -7153,7 +7305,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ShapeChangVouch/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["形态转换单单事件用此接口"]
       summary: "形态转换单单事件用此接口 - 审核单据"
       description: "通用调用官方 U8 API U8API/ShapeChangVouch/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api210
@@ -7182,7 +7334,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ShapeChangVouch/CancelAudit":
     post:
-      tags: [官方U8 API]
+      tags: ["形态转换单单事件用此接口"]
       summary: "形态转换单单事件用此接口 - 弃审单据"
       description: "通用调用官方 U8 API U8API/ShapeChangVouch/CancelAudit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api211
@@ -7211,7 +7363,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ShapeChangVouch/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["形态转换单单事件用此接口"]
       summary: "形态转换单单事件用此接口 - 删除单据"
       description: "通用调用官方 U8 API U8API/ShapeChangVouch/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api212
@@ -7240,7 +7392,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ShapeChangVouch/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["形态转换单单事件用此接口"]
       summary: "形态转换单单事件用此接口 - 装载单据"
       description: "通用调用官方 U8 API U8API/ShapeChangVouch/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api213
@@ -7269,7 +7421,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ShapeChangVouch/Update":
     post:
-      tags: [官方U8 API]
+      tags: ["形态转换单单事件用此接口"]
       summary: "形态转换单单事件用此接口 - 修改单据"
       description: "通用调用官方 U8 API U8API/ShapeChangVouch/Update。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api214
@@ -7298,7 +7450,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SpecialInvoice/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["专用发票存日志志r"]
       summary: "专用发票存日志志r - 审核或弃审"
       description: "通用调用官方 U8 API U8API/SpecialInvoice/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api117
@@ -7327,7 +7479,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SpecialInvoice/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["专用发票存日志志r"]
       summary: "专用发票存日志志r - 删除单据"
       description: "通用调用官方 U8 API U8API/SpecialInvoice/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api118
@@ -7356,7 +7508,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SpecialInvoice/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["专用发票存日志志r"]
       summary: "专用发票存日志志r - 装载单据"
       description: "通用调用官方 U8 API U8API/SpecialInvoice/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api119
@@ -7385,7 +7537,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/SpecialInvoice/Save":
     post:
-      tags: [官方U8 API]
+      tags: ["专用发票存日志志r"]
       summary: "专用发票存日志志r - 新增或修改"
       description: "通用调用官方 U8 API U8API/SpecialInvoice/Save。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api120
@@ -7414,7 +7566,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/TransRequestVouch/Add":
     post:
-      tags: [官方U8 API]
+      tags: ["调拨申请单单事件用此接口"]
       summary: "调拨申请单单事件用此接口 - 添加新单据"
       description: "通用调用官方 U8 API U8API/TransRequestVouch/Add。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api215
@@ -7443,7 +7595,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/TransRequestVouch/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["调拨申请单单事件用此接口"]
       summary: "调拨申请单单事件用此接口 - 审核单据"
       description: "通用调用官方 U8 API U8API/TransRequestVouch/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api216
@@ -7472,7 +7624,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/TransRequestVouch/CancelAudit":
     post:
-      tags: [官方U8 API]
+      tags: ["调拨申请单单事件用此接口"]
       summary: "调拨申请单单事件用此接口 - 弃审单据"
       description: "通用调用官方 U8 API U8API/TransRequestVouch/CancelAudit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api217
@@ -7501,7 +7653,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/TransRequestVouch/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["调拨申请单单事件用此接口"]
       summary: "调拨申请单单事件用此接口 - 删除单据"
       description: "通用调用官方 U8 API U8API/TransRequestVouch/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api218
@@ -7530,7 +7682,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/TransRequestVouch/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["调拨申请单单事件用此接口"]
       summary: "调拨申请单单事件用此接口 - 装载单据"
       description: "通用调用官方 U8 API U8API/TransRequestVouch/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api219
@@ -7559,7 +7711,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/TransRequestVouch/Update":
     post:
-      tags: [官方U8 API]
+      tags: ["调拨申请单单事件用此接口"]
       summary: "调拨申请单单事件用此接口 - 修改单据"
       description: "通用调用官方 U8 API U8API/TransRequestVouch/Update。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api220
@@ -7588,7 +7740,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/TransVouch/Add":
     post:
-      tags: [官方U8 API]
+      tags: ["调拨单单事件用此接口"]
       summary: "调拨单单事件用此接口 - 添加新单据"
       description: "通用调用官方 U8 API U8API/TransVouch/Add。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api221
@@ -7617,7 +7769,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/TransVouch/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["调拨单单事件用此接口"]
       summary: "调拨单单事件用此接口 - 审核单据"
       description: "通用调用官方 U8 API U8API/TransVouch/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api222
@@ -7646,7 +7798,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/TransVouch/CancelAudit":
     post:
-      tags: [官方U8 API]
+      tags: ["调拨单单事件用此接口"]
       summary: "调拨单单事件用此接口 - 弃审单据"
       description: "通用调用官方 U8 API U8API/TransVouch/CancelAudit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api223
@@ -7675,7 +7827,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/TransVouch/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["调拨单单事件用此接口"]
       summary: "调拨单单事件用此接口 - 删除单据"
       description: "通用调用官方 U8 API U8API/TransVouch/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api224
@@ -7704,7 +7856,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/TransVouch/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["调拨单单事件用此接口"]
       summary: "调拨单单事件用此接口 - 装载单据"
       description: "通用调用官方 U8 API U8API/TransVouch/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api225
@@ -7733,7 +7885,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/TransVouch/Update":
     post:
-      tags: [官方U8 API]
+      tags: ["调拨单单事件用此接口"]
       summary: "调拨单单事件用此接口 - 修改单据"
       description: "通用调用官方 U8 API U8API/TransVouch/Update。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api226
@@ -7762,7 +7914,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/VenInvPrice/ConfirmVenInvPrice":
     post:
-      tags: [官方U8 API]
+      tags: ["供应商存货调价单件err"]
       summary: "供应商存货调价单件err - 审核供应商存货调价单"
       description: "通用调用官方 U8 API U8API/VenInvPrice/ConfirmVenInvPrice。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api057
@@ -7791,7 +7943,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/WorkHrNote/WorkHrNoteAdd":
     post:
-      tags: [官方U8 API]
+      tags: ["工时记录单工单PI.TransVouch.Save_Before"]
       summary: "工时记录单工单PI.TransVouch.Save_Before - 新增工时记录单"
       description: "通用调用官方 U8 API U8API/WorkHrNote/WorkHrNoteAdd。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api281
@@ -7820,7 +7972,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/WorkHrNote/WorkHrNoteDelete":
     post:
-      tags: [官方U8 API]
+      tags: ["工时记录单工单PI.TransVouch.Save_Before"]
       summary: "工时记录单工单PI.TransVouch.Save_Before - 删除工时记录单"
       description: "通用调用官方 U8 API U8API/WorkHrNote/WorkHrNoteDelete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api282
@@ -7849,7 +8001,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/WorkHrNote/WorkHrNoteLoad":
     post:
-      tags: [官方U8 API]
+      tags: ["工时记录单工单PI.TransVouch.Save_Before"]
       summary: "工时记录单工单PI.TransVouch.Save_Before - 查询工时记录单"
       description: "通用调用官方 U8 API U8API/WorkHrNote/WorkHrNoteLoad。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api283
@@ -7878,7 +8030,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/checkvouch/Add":
     post:
-      tags: [官方U8 API]
+      tags: ["盘点单增和修改志r"]
       summary: "盘点单增和修改志r - 添加新单据"
       description: "通用调用官方 U8 API U8API/checkvouch/Add。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api125
@@ -7907,7 +8059,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/checkvouch/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["盘点单增和修改志r"]
       summary: "盘点单增和修改志r - 审核单据"
       description: "通用调用官方 U8 API U8API/checkvouch/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api126
@@ -7936,7 +8088,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/checkvouch/CancelAudit":
     post:
-      tags: [官方U8 API]
+      tags: ["盘点单增和修改志r"]
       summary: "盘点单增和修改志r - 弃审单据"
       description: "通用调用官方 U8 API U8API/checkvouch/CancelAudit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api127
@@ -7965,7 +8117,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/checkvouch/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["盘点单增和修改志r"]
       summary: "盘点单增和修改志r - 删除单据"
       description: "通用调用官方 U8 API U8API/checkvouch/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api128
@@ -7994,7 +8146,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/checkvouch/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["盘点单增和修改志r"]
       summary: "盘点单增和修改志r - 装载单据"
       description: "通用调用官方 U8 API U8API/checkvouch/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api129
@@ -8023,7 +8175,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/checkvouch/Update":
     post:
-      tags: [官方U8 API]
+      tags: ["盘点单增和修改志r"]
       summary: "盘点单增和修改志r - 修改单据"
       description: "通用调用官方 U8 API U8API/checkvouch/Update。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api130
@@ -8052,7 +8204,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/matchvouch/Add":
     post:
-      tags: [官方U8 API]
+      tags: ["限额领料单和修改志r"]
       summary: "限额领料单和修改志r - 添加新单据"
       description: "通用调用官方 U8 API U8API/matchvouch/Add。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api137
@@ -8081,7 +8233,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/matchvouch/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["限额领料单和修改志r"]
       summary: "限额领料单和修改志r - 审核单据"
       description: "通用调用官方 U8 API U8API/matchvouch/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api138
@@ -8110,7 +8262,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/matchvouch/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["限额领料单和修改志r"]
       summary: "限额领料单和修改志r - 删除单据"
       description: "通用调用官方 U8 API U8API/matchvouch/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api139
@@ -8139,7 +8291,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/matchvouch/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["限额领料单和修改志r"]
       summary: "限额领料单和修改志r - 装载单据"
       description: "通用调用官方 U8 API U8API/matchvouch/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api140
@@ -8168,7 +8320,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/matchvouch/SplitVouch":
     post:
-      tags: [官方U8 API]
+      tags: ["限额领料单和修改志r"]
       summary: "限额领料单和修改志r - 分单"
       description: "通用调用官方 U8 API U8API/matchvouch/SplitVouch。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api141
@@ -8197,7 +8349,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/matchvouch/Update":
     post:
-      tags: [官方U8 API]
+      tags: ["限额领料单和修改志r"]
       summary: "限额领料单和修改志r - 修改单据:签收，领料都调用此接口"
       description: "通用调用官方 U8 API U8API/matchvouch/Update。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api142
@@ -8226,7 +8378,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/materialapp/Add":
     post:
-      tags: [官方U8 API]
+      tags: ["领料申请单收，领料都调用此接口"]
       summary: "领料申请单收，领料都调用此接口 - 添加新单据"
       description: "通用调用官方 U8 API U8API/materialapp/Add。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api143
@@ -8255,7 +8407,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/materialapp/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["领料申请单收，领料都调用此接口"]
       summary: "领料申请单收，领料都调用此接口 - 审核单据"
       description: "通用调用官方 U8 API U8API/materialapp/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api144
@@ -8284,7 +8436,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/materialapp/CancelAudit":
     post:
-      tags: [官方U8 API]
+      tags: ["领料申请单收，领料都调用此接口"]
       summary: "领料申请单收，领料都调用此接口 - 弃审单据"
       description: "通用调用官方 U8 API U8API/materialapp/CancelAudit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api145
@@ -8313,7 +8465,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/materialapp/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["领料申请单收，领料都调用此接口"]
       summary: "领料申请单收，领料都调用此接口 - 删除单据"
       description: "通用调用官方 U8 API U8API/materialapp/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api146
@@ -8342,7 +8494,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/materialapp/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["领料申请单收，领料都调用此接口"]
       summary: "领料申请单收，领料都调用此接口 - 装载单据"
       description: "通用调用官方 U8 API U8API/materialapp/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api147
@@ -8371,7 +8523,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/materialapp/Update":
     post:
-      tags: [官方U8 API]
+      tags: ["领料申请单收，领料都调用此接口"]
       summary: "领料申请单收，领料都调用此接口 - 修改单据"
       description: "通用调用官方 U8 API U8API/materialapp/Update。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api148
@@ -8400,7 +8552,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/omOrder/VoucherOperate":
     post:
-      tags: [官方U8 API]
+      tags: ["委外订单发票"]
       summary: "委外订单发票 - 统一接口存事件"
       description: "通用调用官方 U8 API U8API/omOrder/VoucherOperate。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api035
@@ -8429,7 +8581,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/otherin/Add":
     post:
-      tags: [官方U8 API]
+      tags: ["其他入库单存事件调用此接口"]
       summary: "其他入库单存事件调用此接口 - 添加新单据"
       description: "通用调用官方 U8 API U8API/otherin/Add。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api155
@@ -8458,7 +8610,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/otherin/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["其他入库单存事件调用此接口"]
       summary: "其他入库单存事件调用此接口 - 审核单据"
       description: "通用调用官方 U8 API U8API/otherin/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api156
@@ -8487,7 +8639,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/otherin/CancelAudit":
     post:
-      tags: [官方U8 API]
+      tags: ["其他入库单存事件调用此接口"]
       summary: "其他入库单存事件调用此接口 - 弃审单据"
       description: "通用调用官方 U8 API U8API/otherin/CancelAudit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api157
@@ -8516,7 +8668,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/otherin/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["其他入库单存事件调用此接口"]
       summary: "其他入库单存事件调用此接口 - 删除单据"
       description: "通用调用官方 U8 API U8API/otherin/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api158
@@ -8545,7 +8697,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/otherin/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["其他入库单存事件调用此接口"]
       summary: "其他入库单存事件调用此接口 - 装载单据"
       description: "通用调用官方 U8 API U8API/otherin/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api159
@@ -8574,7 +8726,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/otherin/Update":
     post:
-      tags: [官方U8 API]
+      tags: ["其他入库单存事件调用此接口"]
       summary: "其他入库单存事件调用此接口 - 修改单据"
       description: "通用调用官方 U8 API U8API/otherin/Update。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api160
@@ -8603,7 +8755,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/otherout/Add":
     post:
-      tags: [官方U8 API]
+      tags: ["其他出库单除后事件调用此接口"]
       summary: "其他出库单除后事件调用此接口 - 添加新单据"
       description: "通用调用官方 U8 API U8API/otherout/Add。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api161
@@ -8632,7 +8784,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/otherout/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["其他出库单除后事件调用此接口"]
       summary: "其他出库单除后事件调用此接口 - 审核单据"
       description: "通用调用官方 U8 API U8API/otherout/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api162
@@ -8661,7 +8813,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/otherout/CancelAudit":
     post:
-      tags: [官方U8 API]
+      tags: ["其他出库单除后事件调用此接口"]
       summary: "其他出库单除后事件调用此接口 - 弃审单据"
       description: "通用调用官方 U8 API U8API/otherout/CancelAudit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api163
@@ -8690,7 +8842,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/otherout/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["其他出库单除后事件调用此接口"]
       summary: "其他出库单除后事件调用此接口 - 删除单据"
       description: "通用调用官方 U8 API U8API/otherout/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api164
@@ -8719,7 +8871,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/otherout/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["其他出库单除后事件调用此接口"]
       summary: "其他出库单除后事件调用此接口 - 装载单据"
       description: "通用调用官方 U8 API U8API/otherout/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api165
@@ -8748,7 +8900,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/otherout/Update":
     post:
-      tags: [官方U8 API]
+      tags: ["产成品入库单后事件调用此接口"]
       summary: "产成品入库单后事件调用此接口 - 修改单据"
       description: "通用调用官方 U8 API U8API/otherout/Update。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api167
@@ -8777,7 +8929,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ppurbill/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["采购普通发票件err"]
       summary: "采购普通发票件err - 删除单据"
       description: "通用调用官方 U8 API U8API/ppurbill/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api041
@@ -8806,7 +8958,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ppurbill/GetVoucherData":
     post:
-      tags: [官方U8 API]
+      tags: ["采购普通发票件err"]
       summary: "采购普通发票件err - 装载单据"
       description: "通用调用官方 U8 API U8API/ppurbill/GetVoucherData。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api042
@@ -8835,7 +8987,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ppurbill/VoucherSave":
     post:
-      tags: [官方U8 API]
+      tags: ["采购普通发票件err"]
       summary: "采购普通发票件err - 新增或修改"
       description: "通用调用官方 U8 API U8API/ppurbill/VoucherSave。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api043
@@ -8864,7 +9016,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/saleout/Add":
     post:
-      tags: [官方U8 API]
+      tags: ["销售出库单前事件调用此接口"]
       summary: "销售出库单前事件调用此接口 - 添加新单据"
       description: "通用调用官方 U8 API U8API/saleout/Add。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api185
@@ -8893,7 +9045,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/saleout/Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["销售出库单前事件调用此接口"]
       summary: "销售出库单前事件调用此接口 - 审核单据"
       description: "通用调用官方 U8 API U8API/saleout/Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api186
@@ -8922,7 +9074,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/saleout/CancelAudit":
     post:
-      tags: [官方U8 API]
+      tags: ["销售出库单前事件调用此接口"]
       summary: "销售出库单前事件调用此接口 - 弃审单据"
       description: "通用调用官方 U8 API U8API/saleout/CancelAudit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api187
@@ -8951,7 +9103,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/saleout/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["销售出库单前事件调用此接口"]
       summary: "销售出库单前事件调用此接口 - 删除单据"
       description: "通用调用官方 U8 API U8API/saleout/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api188
@@ -8980,7 +9132,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/saleout/Load":
     post:
-      tags: [官方U8 API]
+      tags: ["销售出库单前事件调用此接口"]
       summary: "销售出库单前事件调用此接口 - 装载单据"
       description: "通用调用官方 U8 API U8API/saleout/Load。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api189
@@ -9009,7 +9161,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/saleout/Update":
     post:
-      tags: [官方U8 API]
+      tags: ["销售出库单前事件调用此接口"]
       summary: "销售出库单前事件调用此接口 - 修改单据"
       description: "通用调用官方 U8 API U8API/saleout/Update。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api190
@@ -9038,7 +9190,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ypurbill/Delete":
     post:
-      tags: [官方U8 API]
+      tags: ["采购运费发票调价单err"]
       summary: "采购运费发票调价单err - 删除单据"
       description: "通用调用官方 U8 API U8API/ypurbill/Delete。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api058
@@ -9067,7 +9219,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ypurbill/GetVoucherData":
     post:
-      tags: [官方U8 API]
+      tags: ["采购运费发票调价单err"]
       summary: "采购运费发票调价单err - 装载单据"
       description: "通用调用官方 U8 API U8API/ypurbill/GetVoucherData。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api059
@@ -9096,7 +9248,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8API/ypurbill/VoucherSave":
     post:
-      tags: [官方U8 API]
+      tags: ["采购运费发票调价单err"]
       summary: "采购运费发票调价单err - 新增或修改"
       description: "通用调用官方 U8 API U8API/ypurbill/VoucherSave。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api060
@@ -9125,7 +9277,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/AP/APWorkFlowSrv.clsBudgetPlug":
     post:
-      tags: [官方U8 API]
+      tags: ["应付系统kFlowPI.TransVouch.Save_Before"]
       summary: "应付系统kFlowPI.TransVouch.Save_Before - 应付系统扣减预算服务PI.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/AP/APWorkFlowSrv.clsBudgetPlug。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api285
@@ -9154,7 +9306,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/AP/APWorkFlowSrv.clsCloseFinalVerifySrv":
     post:
-      tags: [官方U8 API]
+      tags: ["应付系统kFlowPI.TransVouch.Save_Before"]
       summary: "应付系统kFlowPI.TransVouch.Save_Before - 应付终审服务lowPI.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/AP/APWorkFlowSrv.clsCloseFinalVerifySrv。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api284
@@ -9183,7 +9335,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/AP/APWorkFlowSrv.clsUnBudgetPlug":
     post:
-      tags: [官方U8 API]
+      tags: ["应付系统kFlowPI.TransVouch.Save_Before"]
       summary: "应付系统kFlowPI.TransVouch.Save_Before - 应付系统回冲预算服务PI.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/AP/APWorkFlowSrv.clsUnBudgetPlug。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api286
@@ -9212,7 +9364,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/AR/APWorkFlowSrv.clsCloseFinalVerifySrv":
     post:
-      tags: [官方U8 API]
+      tags: ["应收系统冲预算服务PI.TransVouch.Save_Before"]
       summary: "应收系统冲预算服务PI.TransVouch.Save_Before - 应收终审服务算服务PI.TransVouch.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/AR/APWorkFlowSrv.clsCloseFinalVerifySrv。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api287
@@ -9241,7 +9393,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/GSWorkFlowSrv.clsGSWorkFlowSrv":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - GSP管理终审服务变动.提交消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/GSWorkFlowSrv.clsGSWorkFlowSrv。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api288
@@ -9270,7 +9422,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/HYEP_PuWFAuditSrv.clsLastAuditMsgAPI":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 采购订单终审发送消息服务务消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/HYEP_PuWFAuditSrv.clsLastAuditMsgAPI。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api317
@@ -9299,7 +9451,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/OMWorkFlowSrv.clsOMWorkFlowSrvAuto":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 委外管理终审服务动服务.提交消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/OMWorkFlowSrv.clsOMWorkFlowSrvAuto。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api299
@@ -9328,7 +9480,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/PUWorkFlowSrv.clsBudgetService":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 采购管理扣减预算服务动服务消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/PUWorkFlowSrv.clsBudgetService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api311
@@ -9357,7 +9509,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/PUWorkFlowSrv.clsPUWorkFlowSrvAuto":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 采购终审终审服务变动.提交消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/PUWorkFlowSrv.clsPUWorkFlowSrvAuto。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api289
@@ -9386,7 +9538,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/PUWorkFlowSrv.clsUnBudgetService":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 采购管理回冲预算服务动服务消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/PUWorkFlowSrv.clsUnBudgetService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api312
@@ -9415,7 +9567,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/QMWorkFlowSrv.clsQMWorkFlowSrv":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 质量管理终审服务变动.提交消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/QMWorkFlowSrv.clsQMWorkFlowSrv。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api290
@@ -9444,7 +9596,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/SAWorkFlowSrv.clsDateCusAutoService":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 销售管理客户信用账期自动服务交消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/SAWorkFlowSrv.clsDateCusAutoService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api303
@@ -9473,7 +9625,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/SAWorkFlowSrv.clsDateDepAutoService":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 销售管理部门信用账期自动服务交消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/SAWorkFlowSrv.clsDateDepAutoService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api304
@@ -9502,7 +9654,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/SAWorkFlowSrv.clsDatePerAutoService":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 销售管理业务员信用账期自动服务消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/SAWorkFlowSrv.clsDatePerAutoService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api305
@@ -9531,7 +9683,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/SAWorkFlowSrv.clsMinPriceAutoService":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 销售最低售价检查自动服务"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/SAWorkFlowSrv.clsMinPriceAutoService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api319
@@ -9560,7 +9712,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/SAWorkFlowSrv.clsMoneyCusAutoService":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 销售管理客户信用额度自动服务消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/SAWorkFlowSrv.clsMoneyCusAutoService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api308
@@ -9589,7 +9741,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/SAWorkFlowSrv.clsMoneyDepAutoService":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 销售管理部门信用额度自动服务消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/SAWorkFlowSrv.clsMoneyDepAutoService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api307
@@ -9618,7 +9770,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/SAWorkFlowSrv.clsMoneyPerAutoService":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 销售管理业务员信用额度自动服务消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/SAWorkFlowSrv.clsMoneyPerAutoService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api306
@@ -9647,7 +9799,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/SAWorkFlowSrv.clsSAAutoSrv":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 销售管理终审服务变动.提交消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/SAWorkFlowSrv.clsSAAutoSrv。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api291
@@ -9676,7 +9828,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/STWorkFlowSrv.clsSTVouchAutoSrv":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 库存管理终审服务变动.提交消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/STWorkFlowSrv.clsSTVouchAutoSrv。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api292
@@ -9705,7 +9857,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/SZDZ_HU_WorkFlowSrv.clsWorkFlowSrvAuto":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 采购询价终审服务服务务消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/SZDZ_HU_WorkFlowSrv.clsWorkFlowSrvAuto。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api316
@@ -9734,7 +9886,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/TurboCRMWorkFLowSrv.clsCRMVerifySrv":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - CRM自动终审服务服务务消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/TurboCRMWorkFLowSrv.clsCRMVerifySrv。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api315
@@ -9763,7 +9915,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/UFDIA.U8.BM.AuditPlugs.AuditService.AutoAudition":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 预算调整单自动终审服务.提交消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/UFDIA.U8.BM.AuditPlugs.AuditService.AutoAudition。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api300
@@ -9792,7 +9944,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/UFDIA.U8.BM.AuditPlugs.AuditService.AutoOverBudgetService":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 超预算审批流自动终审服务务消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/UFDIA.U8.BM.AuditPlugs.AuditService.AutoOverBudgetService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api313
@@ -9821,7 +9973,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/UFIDA.U8.Audit.ChangeService.VoucherChangeService":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 变更等待服务用额度自动服务消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/UFIDA.U8.Audit.ChangeService.VoucherChangeService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api309
@@ -9850,7 +10002,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/UFIDA.U8.Audit.ChangeService.VoucherChangeService.DoAction":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 变更唤醒服务"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/UFIDA.U8.Audit.ChangeService.VoucherChangeService.DoAction。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api310
@@ -9879,7 +10031,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/UFIDA.U8.HR.WorkFlow.HM":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 人事变动自动终审服务.提交消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/UFIDA.U8.HR.WorkFlow.HM。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api301
@@ -9908,7 +10060,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/UFIDA.U8.HR.WorkFlow.TM":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 考勤自动终审服务务.提交消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/UFIDA.U8.HR.WorkFlow.TM。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api302
@@ -9937,7 +10089,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/UFIDA.U8.PF.WorkFlow.Services.AuditService":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 绩效自动终审服务审服务务消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/UFIDA.U8.PF.WorkFlow.Services.AuditService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api314
@@ -9966,7 +10118,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/UFSoft.U8.EX.Credit.AuditService.Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 出口管理终审服务变动.提交消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/UFSoft.U8.EX.Credit.AuditService.Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api293
@@ -9995,7 +10147,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/UFSoft.U8.EX.Credit.CreditService.GetCreditDateService":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 出口管理信用帐期自动服务.提交消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/UFSoft.U8.EX.Credit.CreditService.GetCreditDateService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api297
@@ -10024,7 +10176,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/UFSoft.U8.EX.Credit.CreditService.GetCreditMoneyService":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 出口管理信用额度自动服务.提交消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/UFSoft.U8.EX.Credit.CreditService.GetCreditMoneyService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api296
@@ -10053,7 +10205,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/UFSoft.U8.EX.Credit.LowestPriceService.GetLowestPriceService":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 出口管理最低售价自动服务.提交消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/UFSoft.U8.EX.Credit.LowestPriceService.GetLowestPriceService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api298
@@ -10082,7 +10234,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/UFSoft.U8.IM.WorkFlow.Services.AuditService":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 进口管理终审服务变动.提交消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/UFSoft.U8.IM.WorkFlow.Services.AuditService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api295
@@ -10111,7 +10263,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/UFSoft.U8.U8M.Plugins.U8MService.Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 生产制造终审服务息服务务消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/UFSoft.U8.U8M.Plugins.U8MService.Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api318
@@ -10140,7 +10292,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/Audit/UFsoft.U8.ECN.Service.EcnApplyService.Audit":
     post:
-      tags: [官方U8 API]
+      tags: ["审批审服务算服务PI.TransVouch.Save_Before"]
       summary: "审批审服务算服务PI.TransVouch.Save_Before - 工程变更终审服务变动.提交消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/Audit/UFsoft.U8.ECN.Service.EcnApplyService.Audit。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api294
@@ -10169,7 +10321,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/CM/CMWorkFlowSrv.clsCMFinalVerifyPI":
     post:
-      tags: [官方U8 API]
+      tags: ["合同管理价检查自动服务务消息交消息.Save_Before"]
       summary: "合同管理价检查自动服务务消息交消息.Save_Before - 合同终审服务查自动服务务消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/CM/CMWorkFlowSrv.clsCMFinalVerifyPI。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api320
@@ -10198,7 +10350,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/FB/FBAuditPlug.AuditService":
     post:
-      tags: [官方U8 API]
+      tags: ["费用预算务查自动服务务消息交消息.Save_Before"]
       summary: "费用预算务查自动服务务消息交消息.Save_Before - 费用预算调整单终审服务务消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/FB/FBAuditPlug.AuditService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api321
@@ -10227,7 +10379,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/FD/FDWorkFlow":
     post:
-      tags: [官方U8 API]
+      tags: ["结算中心整单终审服务务消息交消息.Save_Before"]
       summary: "结算中心整单终审服务务消息交消息.Save_Before - 结算中心工作流终审接口务消息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/FD/FDWorkFlow。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api322
@@ -10256,7 +10408,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/HR/HMWorkflowGetDutyLevel":
     post:
-      tags: [官方U8 API]
+      tags: ["人力资源作流终审接口务消息交消息.Save_Before"]
       summary: "人力资源作流终审接口务消息交消息.Save_Before - 根据人员编码得到职务级别值人员息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/HR/HMWorkflowGetDutyLevel。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api326
@@ -10285,7 +10437,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/HR/HMWorkflowGetJobGrade":
     post:
-      tags: [官方U8 API]
+      tags: ["人力资源作流终审接口务消息交消息.Save_Before"]
       summary: "人力资源作流终审接口务消息交消息.Save_Before - 根据人员编码得到职级别值人员息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/HR/HMWorkflowGetJobGrade。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api327
@@ -10314,7 +10466,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/HR/UFIDA.U8.HB.WorkFlow.Services":
     post:
-      tags: [官方U8 API]
+      tags: ["人力资源作流终审接口务消息交消息.Save_Before"]
       summary: "人力资源作流终审接口务消息交消息.Save_Before - 人力资源业务单申请单自动终审服务息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/HR/UFIDA.U8.HB.WorkFlow.Services。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api323
@@ -10343,7 +10495,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/HR/UFIDA.U8.Workflow.HR.Desiger.FindAttributeDesigner":
     post:
-      tags: [官方U8 API]
+      tags: ["人力资源作流终审接口务消息交消息.Save_Before"]
       summary: "人力资源作流终审接口务消息交消息.Save_Before - 获取人员的相关属性服务终审服务息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/HR/UFIDA.U8.Workflow.HR.Desiger.FindAttributeDesigner。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api324
@@ -10372,7 +10524,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/HR/UFIDA.U8.Workflow.HR.Desiger.FindPsnDesigner":
     post:
-      tags: [官方U8 API]
+      tags: ["人力资源作流终审接口务消息交消息.Save_Before"]
       summary: "人力资源作流终审接口务消息交消息.Save_Before - 逐级向上查找某个属性为特定值人员息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/HR/UFIDA.U8.Workflow.HR.Desiger.FindPsnDesigner。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api325
@@ -10401,7 +10553,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/NE/NEAuditPlug.AuditService":
     post:
-      tags: [官方U8 API]
+      tags: ["网上报销码得到职级别值人员息交消息.Save_Before"]
       summary: "网上报销码得到职级别值人员息交消息.Save_Before - 网上报销终审服务级别值人员息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/NE/NEAuditPlug.AuditService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api328
@@ -10430,7 +10582,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/NE/NEAuditPlug.BudgetService":
     post:
-      tags: [官方U8 API]
+      tags: ["网上报销码得到职级别值人员息交消息.Save_Before"]
       summary: "网上报销码得到职级别值人员息交消息.Save_Before - 网上报销扣减预算服务别值人员息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/NE/NEAuditPlug.BudgetService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api329
@@ -10459,7 +10611,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/NE/NEAuditPlug.UnBudgetService":
     post:
-      tags: [官方U8 API]
+      tags: ["网上报销码得到职级别值人员息交消息.Save_Before"]
       summary: "网上报销码得到职级别值人员息交消息.Save_Before - 网上报销回冲预算服务别值人员息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/NE/NEAuditPlug.UnBudgetService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api330
@@ -10488,7 +10640,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/NE/NEGetOverBudgetInfo":
     post:
-      tags: [官方U8 API]
+      tags: ["网上报销码得到职级别值人员息交消息.Save_Before"]
       summary: "网上报销码得到职级别值人员息交消息.Save_Before - 网上报销获取超预算信息值人员息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/NE/NEGetOverBudgetInfo。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api331
@@ -10517,7 +10669,7 @@ paths:
           $ref: "#/components/responses/BridgeResponse"
   "/api/u8/official/U8ERP_V8.70/UAP/UAPFinalAuditService":
     post:
-      tags: [官方U8 API]
+      tags: ["UAP自动服务算信息值人员息交消息.Save_Before / 工作流系统务算信息值人员息交消息.Save_Before"]
       summary: "UAP自动服务算信息值人员息交消息.Save_Before / 工作流系统务算信息值人员息交消息.Save_Before - UAP终审服务算信息值人员息交消息.Save_Before / 工作流引擎(Dynamic)员息交消息.Save_Before"
       description: "通用调用官方 U8 API U8ERP_V8.70/UAP/UAPFinalAuditService。请求体需要按官方示例传 normalValues、contextValues、businessObjects 或 extensionObjects。"
       operationId: invokeOfficialU8Api332
@@ -10625,6 +10777,7 @@ components:
           type: string
           nullable: true
         data:
+          type: object
           nullable: true
           oneOf:
             - $ref: "#/components/schemas/QueryResult"
