@@ -2,14 +2,14 @@
 
 本清单依据 `u8接口联调清单.xlsx` 与当前 Bridge Release-21 能力整理，用于继续向业务、U8 顾问和后端开发确认。
 
-## 尚未实现的接口
+## 尚未强类型化的接口
 
 | 编号 | 清单能力 | 当前 Bridge 状态 | 需要确认/补充 |
 | --- | --- | --- | --- |
-| 6 | 入库单同步 U8 | `/api/u8/inbound/add` 已暴露，占位返回 `U8_API_NOT_SUPPORTED` | 入库单官方 API 路径、单据类型、字段模板、业务触发点 |
-| 10 | 生产计划发布回写 U8 | `/api/u8/production-plan/publish` 已暴露，占位返回 `U8_API_NOT_SUPPORTED` | U8 接收主计划还是计划明细/排产明细，官方 API 示例 |
-| 11 | 生产任务报工回写 U8 | `/api/u8/work-report/save` 已暴露，占位返回 `U8_API_NOT_SUPPORTED` | 报工/完工汇报官方 API 示例，是否仅推 `COMPLETE` |
-| 13 | 生产退料回写 U8 | `/api/u8/material-return/add` 已暴露，占位返回 `U8_API_NOT_SUPPORTED` | 退料对应 U8 单据类型、官方 API 示例、普通退料与总成件退库边界 |
+| 6 | 入库单同步 U8 | `/api/u8/inbound/add` 仍为业务占位；可先用通用入口 `/api/u8/official/U8API/PuStoreIn/Add` 调官方 API | 官方序号 173；仍需确认客户现场单据类型、字段模板、业务触发点 |
+| 10 | 生产计划发布回写 U8 | 可通过 `/api/u8/official/...` 调官方 catalog 中对应地址；业务强类型接口仍待确认 | U8 接收主计划还是计划明细/排产明细，字段模板和业务触发点 |
+| 11 | 生产任务报工回写 U8 | `/api/u8/work-report/save` 仍为业务占位；可先用通用入口 `/api/u8/official/U8API/PFReport/PFReportAdd` 调官方 API | 官方序号 266；仍需确认是否等同客户现场报工、字段模板、是否仅推 `COMPLETE` |
+| 13 | 生产退料回写 U8 | 可通过 `/api/u8/official/...` 调官方 catalog 中对应地址；业务强类型接口仍待确认 | 退料对应 U8 单据类型、普通退料与总成件退库边界 |
 
 ## 已有接口但需业务闭环验收
 

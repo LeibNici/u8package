@@ -138,6 +138,54 @@ Bridge 必须按业务单号做幂等，避免重复生成 U8 单据。
 
 ## 8. API 清单
 
+Swagger 按中文业务分类维护接口：系统、主数据查询、采购查询、销售管理、库存管理、生产制造-BOM、
+生产制造-生产订单、官方 U8 API 等。官方 C# 示例索引见 `u8-official-api-catalog.md`，Bridge REST 与官方地址对照见
+`u8-bridge-official-api-map.md`。
+
+本版本同时暴露所有官方唯一 API 地址的通用入口：
+
+```http
+POST /api/u8/official/{官方地址}
+```
+
+例如：
+
+```http
+POST /api/u8/official/U8API/APApplyPay/SaveVouch
+```
+
+通用入口直接对接 `U8ApiBroker`，请求体需按官方示例传入 `normalValues`、`contextValues`、
+`businessObjects` 或 `extensionObjects`。它用于覆盖尚未沉淀成强类型 DTO 的官方接口；稳定业务流程仍优先使用
+`sales-order/save`、`material-out/add`、`bom/add` 这类强类型接口。
+
+通用入口请求体示例：
+
+```json
+{
+  "requestId": "REQ-202605280001",
+  "profileName": "default",
+  "businessNo": "PAY-001",
+  "documentType": "ap-apply-pay-save",
+  "idempotent": true,
+  "voucherType": 0,
+  "returnIdName": "vNewID",
+  "resultNames": ["vNewID"],
+  "normalValues": {
+    "DomConfig": { "special": "domDocument" }
+  },
+  "businessObjects": [
+    {
+      "name": "domHead",
+      "rows": [
+        {
+          "ccode": "PAY-001"
+        }
+      ]
+    }
+  ]
+}
+```
+
 ### 8.1 健康检查
 
 ```http
@@ -222,10 +270,12 @@ BOM 明细不走 U8 账套表直读。Bridge 只封装 U8 官方 API；为了让
 | `POST /api/u8/bom/load` | `U8API/BOM/BomLoad` | 查询物料清单 |
 | `POST /api/u8/bom/part-lookup` | 只读参数查询 | 按存货编码查询 `partId`、`bomType`、`versionOrIdentCode` |
 | `POST /api/u8/bom/load-by-code` | `U8API/BOM/BomLoad` | 先按存货编码查参数，再调用官方 API 查询物料清单 |
+| `POST /api/u8/bom/tree-query` | 只读树查询 | 按存货编码展开 BOM 树，用于本地排查和对账 |
 | `POST /api/u8/bom/audit` | `U8API/BOM/BomAuditing` | 审核物料清单 |
+| `POST /api/u8/bom/unaudit` | `U8API/BOM/BomUnauditing` | 弃审物料清单 |
 | `POST /api/u8/bom/delete` | `U8API/BOM/BomDelete` | 删除物料清单 |
 
-`bom/load`、`bom/audit`、`bom/delete` 按 U8 官方参数传 `partId`、`bomType`、`versionOrIdentCode`；
+`bom/load`、`bom/audit`、`bom/unaudit`、`bom/delete` 按 U8 官方参数传 `partId`、`bomType`、`versionOrIdentCode`；
 不能用 APS 型号或 U8 存货编码替代 `partId`。如果只知道 U8 存货编码，先调用 `bom/part-lookup`，
 或直接调用 `bom/load-by-code`。
 
@@ -630,7 +680,10 @@ POST /api/u8/inbound/add
 
 当前状态：稳定占位，返回 `U8_API_NOT_SUPPORTED`。
 
-缺少资料：采购入库、产成品入库、其他入库分别对应的官方 U8API 示例，以及业务应使用哪一种入库类型。
+官方候选：`U8API/PuStoreIn/Add`（官方示例序号 `173`，采购入库单新增）。
+
+缺少资料：客户现场入库到底使用采购入库、产成品入库还是其他入库；当前请求模型字段尚未完成
+`PuStoreIn` 表头/表体映射，因此仍不启用写入。
 
 ### 8.18 生产计划发布
 
@@ -650,7 +703,9 @@ POST /api/u8/work-report/save
 
 当前状态：稳定占位，返回 `U8_API_NOT_SUPPORTED`。
 
-缺少资料：报工/完工汇报/工序汇报在客户 U8 中使用的官方 API 示例。
+官方候选：`U8API/PFReport/PFReportAdd`（官方示例序号 `266`，工序流转卡完工单新增）。
+
+缺少资料：客户现场报工业务是否等同于工序流转卡完工单，字段模板和必填项尚未完成确认。
 
 ### 8.20 生产退料回写
 
@@ -707,6 +762,8 @@ xinchuan:
 * WMS 发货后生成“销售发货单”“销售出库单”还是两者都生成。
 * U8 部门、仓库、销售类型、出库类别、制单人、币种、税率等基础档案编码。
 * 客户、物料、供应商、库存、采购在途、价格查询的官方 U8API 示例。
-* 入库类单据对应的官方 U8API 示例。
-* 生产计划、生产报工、生产退料对应的官方 U8API 示例。
+* 入库类单据是否使用 `U8API/PuStoreIn/Add`，以及采购入库/产成品入库/其他入库的业务边界。
+* 生产计划是否有独立“发布”接口，或应拆分为预测订单 / 生产订单接口。
+* 生产报工是否使用 `U8API/PFReport/PFReportAdd`，以及字段模板。
+* 生产退料对应红字材料出库、退料申请或其他 U8 单据的官方 API 示例。
 * 生产订单 `extbo` 中哪些字段为客户现场必填，尤其是生产部门、预入仓库、生产订单类别、子件用量。

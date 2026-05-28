@@ -251,8 +251,14 @@ ORDER BY h.ParentCode, oc.SortSeq";
             int level,
             ISet<string> path)
         {
-            if (level > maxDepth || result.Items.Count >= result.PageSize || !grouped.TryGetValue(parentCode, out var rows))
+            if (level > maxDepth || !grouped.TryGetValue(parentCode, out var rows))
             {
+                return;
+            }
+
+            if (result.Items.Count >= result.PageSize)
+            {
+                result.HasMore = true;
                 return;
             }
 

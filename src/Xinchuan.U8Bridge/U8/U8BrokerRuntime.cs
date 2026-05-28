@@ -55,7 +55,7 @@ namespace Xinchuan.U8Bridge.U8
                    BindingFlags.InvokeMethod,
                    null,
                    env,
-                   new[] { item.Key, item.Value });
+                   new[] { item.Key, U8BrokerCall.ResolveValue(item.Value, reflection) });
             }
 
             object address = Activator.CreateInstance(addressType, apiAddress);

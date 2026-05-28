@@ -48,6 +48,13 @@ namespace Xinchuan.U8Bridge.Controllers
         }
 
         [HttpPost]
+        [Route("bom/unaudit")]
+        public IHttpActionResult UnauditBom(BomActionRequest request)
+        {
+            return Invoke(request, "U8API/BOM/BomUnauditing", "bom-unaudit", BomKey(request), false);
+        }
+
+        [HttpPost]
         [Route("bom/delete")]
         public IHttpActionResult DeleteBom(BomActionRequest request)
         {

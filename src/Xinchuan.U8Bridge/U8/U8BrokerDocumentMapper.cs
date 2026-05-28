@@ -8,6 +8,12 @@ namespace Xinchuan.U8Bridge.U8
     {
         public static U8BrokerCall Map(U8ApiCall call)
         {
+            var officialRequest = call.Payload as OfficialApiInvokeRequest;
+            if (officialRequest != null)
+            {
+                return OfficialU8BrokerMapper.Map(officialRequest);
+            }
+
             switch (call.ApiAddress)
             {
                 case "U8API/SaleOrder/Save":
@@ -52,6 +58,7 @@ namespace Xinchuan.U8Bridge.U8
                 case "U8API/BOM/BomLoad":
                     return U8BomDocumentMapper.MapAction((BomActionRequest)call.Payload, true);
                 case "U8API/BOM/BomAuditing":
+                case "U8API/BOM/BomUnauditing":
                 case "U8API/BOM/BomDelete":
                     return U8BomDocumentMapper.MapAction((BomActionRequest)call.Payload, false);
                 default:

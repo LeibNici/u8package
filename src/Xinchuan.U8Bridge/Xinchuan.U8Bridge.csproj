@@ -60,10 +60,12 @@
     <Compile Include="Configuration\BridgeOptions.cs" />
     <Compile Include="Configuration\BridgeOptionsLoader.cs" />
     <Compile Include="Controllers\U8Controller.Bom.cs" />
+    <Compile Include="Controllers\U8Controller.Official.cs" />
     <Compile Include="Controllers\HealthController.cs" />
     <Compile Include="Controllers\U8Controller.cs" />
     <Compile Include="Models\BridgeErrorCodes.cs" />
     <Compile Include="Models\BridgeResponse.cs" />
+    <Compile Include="Models\OfficialApiRequests.cs" />
     <Compile Include="Models\ProductionRequests.cs" />
     <Compile Include="Models\QueryResponses.cs" />
     <Compile Include="Models\QueryRequests.cs" />
@@ -84,6 +86,7 @@
     <Compile Include="U8\DryRunU8ApiClient.cs" />
     <Compile Include="U8\IU8ApiClient.cs" />
     <Compile Include="U8\OfficialU8ApiClient.cs" />
+    <Compile Include="U8\OfficialU8BrokerMapper.cs" />
     <Compile Include="U8\U8AdvancedDocumentMapper.cs" />
     <Compile Include="U8\U8BomDocumentMapper.cs" />
     <Compile Include="U8\U8BrokerCall.cs" />

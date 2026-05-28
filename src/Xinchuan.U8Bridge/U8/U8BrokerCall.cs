@@ -41,7 +41,7 @@ namespace Xinchuan.U8Bridge.U8
             }
         }
 
-        private static object ResolveValue(object value, U8Reflection reflection)
+        internal static object ResolveValue(object value, U8Reflection reflection)
         {
             var special = value as U8BrokerSpecialValue;
             if (special == null)
@@ -65,7 +65,7 @@ namespace Xinchuan.U8Bridge.U8
             {
                 foreach (KeyValuePair<string, object> field in item.Rows[row])
                 {
-                    reflection.SetBoValue(bo, row, field.Key, field.Value);
+                    reflection.SetBoValue(bo, row, field.Key, ResolveValue(field.Value, reflection));
                 }
             }
         }
@@ -78,7 +78,7 @@ namespace Xinchuan.U8Bridge.U8
                 object extItem = reflection.GetExtItem(entity, row);
                 foreach (KeyValuePair<string, object> field in item.Rows[row].Fields)
                 {
-                    reflection.SetExtValue(extItem, field.Key, field.Value);
+                    reflection.SetExtValue(extItem, field.Key, ResolveValue(field.Value, reflection));
                 }
 
                 foreach (KeyValuePair<string, U8ExtBoObject> child in item.Rows[row].Children)
