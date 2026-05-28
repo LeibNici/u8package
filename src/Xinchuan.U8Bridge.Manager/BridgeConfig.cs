@@ -63,12 +63,31 @@ namespace Xinchuan.U8Bridge.Manager
 
     public sealed class UpdateCheckConfig
     {
+        public const int DefaultAutoCheckIntervalMinutes = 60;
+        public const int DefaultAutoCheckStartupDelaySeconds = 30;
+        public const int MinAutoCheckIntervalMinutes = 5;
+        public const int MaxAutoCheckIntervalMinutes = 1440;
+        public const int MinAutoCheckStartupDelaySeconds = 0;
+        public const int MaxAutoCheckStartupDelaySeconds = 3600;
+
         public bool Enabled { get; set; } = true;
 
         public string SourceType { get; set; } = "githubRelease";
 
         public string CheckUrl { get; set; } =
             "https://api.github.com/repos/LeibNici/u8package/releases/latest";
+
+        [JsonProperty("autoCheckEnabled")]
+        public bool AutoCheckEnabled { get; set; } = true;
+
+        [JsonProperty("autoInstallEnabled")]
+        public bool AutoInstallEnabled { get; set; } = true;
+
+        [JsonProperty("autoCheckIntervalMinutes")]
+        public int AutoCheckIntervalMinutes { get; set; } = DefaultAutoCheckIntervalMinutes;
+
+        [JsonProperty("autoCheckStartupDelaySeconds")]
+        public int AutoCheckStartupDelaySeconds { get; set; } = DefaultAutoCheckStartupDelaySeconds;
 
         [JsonProperty("downloadProxyPrefix")]
         public string DownloadProxyPrefix { get; set; }

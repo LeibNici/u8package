@@ -184,6 +184,10 @@ copy .\appsettings.sample.json .\appsettings.json
 * `userId`、`password`、`loginDate`：按客户 U8 登录信息填写。
 * `update.sourceType`：更新检测来源，`githubRelease` 或 `manifest`。
 * `update.checkUrl`：更新检测地址。GitHub Release 填原始版本检测 API，例如 `https://api.github.com/repos/<owner>/<repo>/releases/latest`；自定义地址返回 JSON manifest。
+* `update.autoCheckEnabled`：是否在管理器启动后自动检查更新；生产现场建议开启。
+* `update.autoInstallEnabled`：发现兼容新版本后是否自动下载并部署；开启后会关闭当前管理器并执行本地升级脚本。旧配置缺少该字段时按 `true` 处理，保证已部署现场能接收成品包自动升级。
+* `update.autoCheckIntervalMinutes`：自动检查间隔，最小 5 分钟。
+* `update.autoCheckStartupDelaySeconds`：管理器启动后首次自动检查延迟，默认 30 秒。
 * `update.downloadProxyPrefix`：下载加速代理前缀。只影响 GitHub ZIP 下载地址，国内现场可填 `https://v4.gh-proxy.org/`；留空则保持直连。
 
 `subId`、`accountId`、`year`、`serial` 不需要现场用户配置。Bridge 内部默认 `subId=AS`、`serial` 为空，并会从库名
@@ -224,7 +228,9 @@ logs\u8-bridge-yyyyMMdd.log
 
 ## 更新检测
 
-管理器“检查更新”只做检测和提示，不会静默替换正在运行的程序。
+管理器支持手动和自动两种更新路径。手动“检查更新”只做检测和提示；手动“更新升级”仍会弹出确认框。
+启用 `autoCheckEnabled` 后，管理器启动延迟一段时间后会自动检查一次，并按 `autoCheckIntervalMinutes`
+周期继续检查。启用 `autoInstallEnabled` 后，发现兼容新版本且存在下载地址时会自动下载 ZIP、生成升级脚本、关闭管理器并让脚本停止进程、备份、覆盖和重启管理器。
 
 推荐把正式交付包发布成 GitHub Release，或由内网文件服务提供 manifest。GitHub Actions artifact
 更适合临时下载和联调，通常有过期时间，不建议作为现场长期自动更新源。
@@ -238,11 +244,17 @@ logs\u8-bridge-yyyyMMdd.log
     "enabled": true,
     "sourceType": "githubRelease",
     "checkUrl": "https://api.github.com/repos/LeibNici/u8package/releases/latest",
+    "autoCheckEnabled": true,
+    "autoInstallEnabled": true,
+    "autoCheckIntervalMinutes": 60,
+    "autoCheckStartupDelaySeconds": 30,
     "downloadProxyPrefix": "https://v4.gh-proxy.org/",
     "includePrerelease": false
   }
 }
 ```
+
+兼容旧配置时，`autoCheckEnabled` 和 `autoInstallEnabled` 缺省都为 `true`；如需禁止自动部署，必须在配置文件或 GUI 中显式关闭。
 
 在管理器 GUI 中，`检测地址` 保持填写原始 GitHub API，例如
 `https://api.github.com/repos/<owner>/<repo>/releases/latest`；`下载加速` 填
@@ -270,6 +282,12 @@ Release 包会随带 `package-version.json`，管理器只从该文件读取当�
 配置大版本变更时，不建议直接静默升级。Bridge 配置使用 `configSchemaVersion` 标识结构版本；
 manifest 或 GitHub Release notes 可声明 `ConfigSchemaVersion: 2` 与 `MinConfigSchemaVersion: 1`。
 管理器检测更新时会提示配置是否兼容、是否需要迁移；真正替换程序前应先备份 `appsettings.json`。
+自动部署只会在 `HasUpdate=true`、配置兼容且下载地址非空时执行；如果配置不兼容或缺少下载地址，只记录状态和日志，不弹窗阻塞。
+
+生产现场建议至少开启自动检查。自动部署适合客户 Windows 部署机没有编译环境、只使用 GitHub Actions
+成品 ZIP 的场景；风险是新 Release 发布后会在下一个检查周期自动替换正在运行的程序。需要关闭时，在管理器
+GUI 取消“自动部署”并保存，或把配置改为 `"autoInstallEnabled": false`；需要完全关闭自动检查时取消“自动检查”
+或设置 `"autoCheckEnabled": false`。
 
 检测到兼容的新版本后，“更新升级”按钮会变为可点击。点击后管理器会：
 

@@ -33,6 +33,7 @@ namespace Xinchuan.U8Bridge.Manager
             {
                 BindConfig(configService.LoadOrDefault());
                 SetStatus("配置已加载");
+                ScheduleAutoUpdateFromForm();
             }
             catch (Exception ex)
             {
@@ -47,6 +48,7 @@ namespace Xinchuan.U8Bridge.Manager
                 BridgeConfig config = BuildConfig();
                 configService.Save(config);
                 SetStatus("配置已保存: " + configService.ConfigPath);
+                ScheduleAutoUpdate(config.Update);
             }
             catch (Exception ex)
             {
@@ -132,6 +134,7 @@ namespace Xinchuan.U8Bridge.Manager
         {
             if (allowExit)
             {
+                StopAutoUpdateSchedule();
                 processService.Stop();
                 trayIcon.Visible = false;
                 return;
@@ -246,6 +249,14 @@ namespace Xinchuan.U8Bridge.Manager
                 ? "githubRelease"
                 : update.SourceType;
             updateUrlTextBox.Text = update.CheckUrl;
+            updateAutoCheckCheckBox.Checked = update.AutoCheckEnabled;
+            updateAutoInstallCheckBox.Checked = update.AutoInstallEnabled;
+            updateIntervalMinutesInput.Value = ClampNumberInput(
+                update.AutoCheckIntervalMinutes,
+                updateIntervalMinutesInput);
+            updateStartupDelaySecondsInput.Value = ClampNumberInput(
+                update.AutoCheckStartupDelaySeconds,
+                updateStartupDelaySecondsInput);
             updateProxyPrefixTextBox.Text = update.DownloadProxyPrefix;
             updateCurrentVersionTextBox.Text = UpdateCheckService.ResolveCurrentVersion(configService.BaseDirectory);
             updatePrereleaseCheckBox.Checked = update.IncludePrerelease;
@@ -272,6 +283,16 @@ namespace Xinchuan.U8Bridge.Manager
         {
             statusLabel.Text = message;
             AppendLog(message);
+        }
+
+        private static decimal ClampNumberInput(int value, NumericUpDown input)
+        {
+            if (value < input.Minimum)
+            {
+                return input.Minimum;
+            }
+
+            return value > input.Maximum ? input.Maximum : value;
         }
     }
 }

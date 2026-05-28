@@ -71,11 +71,34 @@ namespace Xinchuan.U8Bridge.Manager.Services
 
             config.Database = config.Database ?? new U8DatabaseConfig();
             config.Update = config.Update ?? new UpdateCheckConfig();
+            NormalizeUpdate(config.Update);
             config.Profiles = config.Profiles ?? new Dictionary<string, U8ProfileConfig>();
             if (!config.Profiles.Any())
             {
                 config.Profiles[config.DefaultProfileName] = new U8ProfileConfig();
             }
+        }
+
+        private static void NormalizeUpdate(UpdateCheckConfig update)
+        {
+            update.AutoCheckIntervalMinutes = Clamp(
+                update.AutoCheckIntervalMinutes,
+                UpdateCheckConfig.MinAutoCheckIntervalMinutes,
+                UpdateCheckConfig.MaxAutoCheckIntervalMinutes);
+            update.AutoCheckStartupDelaySeconds = Clamp(
+                update.AutoCheckStartupDelaySeconds,
+                UpdateCheckConfig.MinAutoCheckStartupDelaySeconds,
+                UpdateCheckConfig.MaxAutoCheckStartupDelaySeconds);
+        }
+
+        private static int Clamp(int value, int minimum, int maximum)
+        {
+            if (value < minimum)
+            {
+                return minimum;
+            }
+
+            return value > maximum ? maximum : value;
         }
     }
 }

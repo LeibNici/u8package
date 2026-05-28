@@ -39,6 +39,7 @@
     <Compile Include="MainForm.cs" />
     <Compile Include="MainForm.Layout.cs" />
     <Compile Include="MainForm.Update.cs" />
+    <Compile Include="MainForm.UpdateSchedule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Services\BridgeHttpClient.cs" />
     <Compile Include="Services\BridgeProcessService.cs" />
