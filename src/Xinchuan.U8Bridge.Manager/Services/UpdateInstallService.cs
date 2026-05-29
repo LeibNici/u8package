@@ -90,15 +90,16 @@ namespace Xinchuan.U8Bridge.Manager.Services
 
         private static string BuildScript(string baseDirectory, string updateDirectory, string packagePath)
         {
+            string scriptBaseDirectory = TrimEndingDirectorySeparator(baseDirectory);
             string extractDirectory = NormalizePath(Path.Combine(updateDirectory, "extract"), "更新解压目录");
             string normalizedPackagePath = NormalizePath(packagePath, "更新包路径");
             string backupDirectory = Path.Combine(
-                baseDirectory,
+                scriptBaseDirectory,
                 "backup-before-update-" + DateTime.Now.ToString("yyyyMMddHHmmss"));
             var script = new StringBuilder();
             script.AppendLine("@echo off");
             script.AppendLine("setlocal");
-            script.AppendLine("set \"BASE=" + baseDirectory + "\"");
+            script.AppendLine("set \"BASE=" + scriptBaseDirectory + "\"");
             script.AppendLine("set \"ZIP=" + normalizedPackagePath + "\"");
             script.AppendLine("set \"EXTRACT=" + extractDirectory + "\"");
             script.AppendLine("set \"BACKUP=" + backupDirectory + "\"");
@@ -119,6 +120,13 @@ namespace Xinchuan.U8Bridge.Manager.Services
             script.AppendLine("pause");
             script.AppendLine("exit /b 1");
             return script.ToString();
+        }
+
+        private static string TrimEndingDirectorySeparator(string path)
+        {
+            string root = Path.GetPathRoot(path);
+            string trimmed = path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            return trimmed.Length < root.Length ? root : trimmed;
         }
 
         private static string NormalizePath(string value, string label)
