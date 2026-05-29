@@ -70,13 +70,18 @@ namespace Xinchuan.U8Bridge.U8
         {
             var call = CreateSaveCall(12, "vNewID");
             var head = OneRow("domHead");
-            Put(head, "id", 0, "csocode", request.OrderNo, "ddate", request.OrderDate);
-            Put(head, "cbustype", "普通销售", "cstname", Any(request.SalesTypeName, request.SalesTypeCode));
-            Put(head, "cstcode", request.SalesTypeCode, "ccuscode", request.CustomerCode);
-            Put(head, "ccusname", request.CustomerName, "ccusabbname", Any(request.CustomerName, request.CustomerCode));
-            Put(head, "cdepcode", request.DepartmentCode, "cdepname", Any(request.DepartmentName, request.DepartmentCode));
-            Put(head, "itaxrate", request.TaxRate, "cexch_name", Any(request.Currency, "人民币"));
-            Put(head, "cmaker", request.Maker, "breturnflag", 0, "cmemo", request.Memo);
+            IDictionary<string, object> headRow = head.Rows[0];
+            PutAll(headRow, "id", 0, "csocode", request.OrderNo, "ddate", request.OrderDate);
+            PutAll(headRow, "cbustype", "普通销售", "cstname", Any(request.SalesTypeName, request.SalesTypeCode));
+            PutAll(headRow, "ccusabbname", Any(request.CustomerName, request.CustomerCode));
+            PutAll(headRow, "cdepname", Any(request.DepartmentName, request.DepartmentCode));
+            PutAll(headRow, "itaxrate", request.TaxRate, "cexch_name", Any(request.Currency, "人民币"));
+            PutAll(headRow, "cmaker", request.Maker, "breturnflag", "0", "ufts", string.Empty);
+            PutAll(headRow, "cstcode", request.SalesTypeCode, "cdepcode", request.DepartmentCode);
+            PutAll(headRow, "ccuscode", request.CustomerCode, "ccushand", string.Empty);
+            PutAll(headRow, "cpsnophone", string.Empty, "cpsnmobilephone", string.Empty);
+            PutAll(headRow, "cattachment", string.Empty, "ccusname", Any(request.CustomerName, request.CustomerCode));
+            Put(head, "cmemo", request.Memo);
             MapSalesItems(call, request.Items, "domBody");
             call.BusinessObjects.Add(head);
             return call;
@@ -191,13 +196,26 @@ namespace Xinchuan.U8Bridge.U8
             var body = new U8BoObject(name);
             foreach (SalesOrderItem item in items)
             {
-                var row = NewBodyRow(item.LineNo, item.MaterialCode, item.MaterialName, item.Quantity, item.Unit);
-                Put(row, "dpredate", item.DeliveryDate, "dpremodate", item.DeliveryDate);
-                Put(row, "cunitid", item.UnitCode, "itaxunitprice", item.TaxUnitPrice, "itax", item.TaxAmount);
+                var row = NewSalesOrderRow(item);
                 body.Rows.Add(row);
             }
 
             call.BusinessObjects.Add(body);
+        }
+
+        private static IDictionary<string, object> NewSalesOrderRow(SalesOrderItem item)
+        {
+            var row = new Dictionary<string, object>();
+            PutAll(row, "isosid", 0, "autoid", 0, "id", 0, "irowno", item.LineNo);
+            PutAll(row, "cinvcode", item.MaterialCode, "cinvname", item.MaterialName);
+            PutAll(row, "iquantity", item.Quantity, "dpredate", item.DeliveryDate);
+            PutAll(row, "dpremodate", item.DeliveryDate, "borderbom", 0, "borderbomover", 0);
+            PutAll(row, "iinvexchrate", 1, "cunitid", item.UnitCode ?? string.Empty);
+            PutAll(row, "cinva_unit", item.Unit ?? string.Empty, "cinvm_unit", item.Unit ?? string.Empty);
+            PutAll(row, "igrouptype", 0, "cgroupcode", string.Empty, "dreleasedate", item.DeliveryDate);
+            PutAll(row, "editprop", "A", "itaxunitprice", item.TaxUnitPrice, "itax", item.TaxAmount);
+            Put(row, "isum", item.TaxAmount, "cinvstd", item.Specification);
+            return row;
         }
 
         private static void MapOutboundItems(U8BrokerCall call, IList<OutboundItem> items, string name)
@@ -254,6 +272,14 @@ namespace Xinchuan.U8Bridge.U8
                 {
                     row[key] = value;
                 }
+            }
+        }
+
+        private static void PutAll(IDictionary<string, object> row, params object[] items)
+        {
+            for (int i = 0; i + 1 < items.Length; i += 2)
+            {
+                row[Convert.ToString(items[i])] = items[i + 1] ?? string.Empty;
             }
         }
 
