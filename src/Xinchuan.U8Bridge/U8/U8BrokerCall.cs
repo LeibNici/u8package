@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MSXML2;
 using Xinchuan.U8Bridge.Models;
 
 namespace Xinchuan.U8Bridge.U8
@@ -151,7 +152,7 @@ namespace Xinchuan.U8Bridge.U8
         {
             if (kind == "dom")
             {
-                return reflection.CreateDomDocument();
+                return new DOMDocumentClass();
             }
 
             if (kind == "com")

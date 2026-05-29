@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using UFIDA.U8.U8APIFramework;
+using UFIDA.U8.U8APIFramework.Parameter;
 using Xinchuan.U8Bridge.Configuration;
 using Xinchuan.U8Bridge.Models;
 using Xinchuan.U8Bridge.Services;
@@ -22,12 +25,12 @@ namespace Xinchuan.U8Bridge.U8
 
         public BridgeResponse Invoke(string requestId, U8ApiCall call)
         {
-            object broker = null;
+            U8ApiBroker broker = null;
             try
             {
                 U8BrokerCall brokerCall = U8BrokerDocumentMapper.Map(call);
                 broker = CreateBroker(call.ApiAddress, brokerCall);
-                brokerCall.ApplyTo(broker, reflection);
+                ApplyTo(broker, brokerCall);
                 return InvokeBroker(requestId, call, broker, brokerCall);
             }
             finally
@@ -36,13 +39,10 @@ namespace Xinchuan.U8Bridge.U8
             }
         }
 
-        private object CreateBroker(string apiAddress, U8BrokerCall brokerCall)
+        private U8ApiBroker CreateBroker(string apiAddress, U8BrokerCall brokerCall)
         {
-            Type envType = reflection.ResolveType("UFIDA.U8.U8APIFramework.U8EnvContext");
-            Type addressType = reflection.ResolveType("UFIDA.U8.U8APIFramework.U8ApiAddress");
-            Type brokerType = reflection.ResolveType("UFIDA.U8.U8APIFramework.U8ApiBroker");
-            object env = Activator.CreateInstance(envType);
-            envType.InvokeMember("U8Login", BindingFlags.SetProperty, null, env, new[] { login });
+            var env = new U8EnvContext();
+            env.GetType().InvokeMember("U8Login", BindingFlags.SetProperty, null, env, new[] { login });
             if (brokerCall.VoucherType.HasValue)
             {
                 brokerCall.ContextValues["VoucherType"] = brokerCall.VoucherType.Value;
@@ -50,31 +50,72 @@ namespace Xinchuan.U8Bridge.U8
 
             foreach (var item in brokerCall.ContextValues)
             {
-                envType.InvokeMember(
-                   "SetApiContext",
-                   BindingFlags.InvokeMethod,
-                   null,
-                   env,
-                   new[] { item.Key, U8BrokerCall.ResolveValue(item.Value, reflection) });
+                env.SetApiContext(item.Key, U8BrokerCall.ResolveValue(item.Value, reflection));
             }
 
-            object address = Activator.CreateInstance(addressType, apiAddress);
-            return Activator.CreateInstance(brokerType, address, env);
+            return new U8ApiBroker(new U8ApiAddress(apiAddress), env);
+        }
+
+        private void ApplyTo(U8ApiBroker broker, U8BrokerCall brokerCall)
+        {
+            foreach (KeyValuePair<string, object> item in brokerCall.NormalValues)
+            {
+                broker.AssignNormalValue(item.Key, U8BrokerCall.ResolveValue(item.Value, reflection));
+            }
+
+            foreach (U8BoObject item in brokerCall.BusinessObjects)
+            {
+                ApplyBusinessObject(broker.GetBoParam(item.Name), item);
+            }
+
+            foreach (U8ExtBoObject item in brokerCall.ExtensionObjects)
+            {
+                ApplyExtensionObject(broker.GetExtBoEntity(item.Name), item);
+            }
+        }
+
+        private void ApplyBusinessObject(BusinessObject bo, U8BoObject item)
+        {
+            bo.RowCount = item.Rows.Count;
+            for (int row = 0; row < item.Rows.Count; row++)
+            {
+                foreach (KeyValuePair<string, object> field in item.Rows[row])
+                {
+                    bo[row][field.Key] = U8BrokerCall.ResolveValue(field.Value, reflection);
+                }
+            }
+        }
+
+        private void ApplyExtensionObject(ExtensionBusinessEntity entity, U8ExtBoObject item)
+        {
+            entity.ItemCount = item.Rows.Count;
+            for (int row = 0; row < item.Rows.Count; row++)
+            {
+                foreach (KeyValuePair<string, object> field in item.Rows[row].Fields)
+                {
+                    entity[row][field.Key] = U8BrokerCall.ResolveValue(field.Value, reflection);
+                }
+
+                foreach (KeyValuePair<string, U8ExtBoObject> child in item.Rows[row].Children)
+                {
+                    ApplyExtensionObject(entity[row].SubEntity[child.Key], child.Value);
+                }
+            }
         }
 
         private BridgeResponse InvokeBroker(
             string requestId,
             U8ApiCall call,
-            object broker,
+            U8ApiBroker broker,
             U8BrokerCall brokerCall)
         {
-            bool invokeOk = Convert.ToBoolean(reflection.Call(broker, "Invoke"));
+            bool invokeOk = broker.Invoke();
             if (!invokeOk)
             {
                 return BuildInvokeFailure(requestId, broker);
             }
 
-            object returnValue = reflection.Call(broker, "GetReturnValue");
+            object returnValue = broker.GetReturnValue();
             string message = U8BrokerResultReader.ReadMessage(returnValue, broker, reflection, brokerCall);
             if (!U8BrokerResultReader.IsSuccess(returnValue, message, brokerCall))
             {
@@ -90,10 +131,10 @@ namespace Xinchuan.U8Bridge.U8
             return BridgeResponse.Ok(requestId, "U8 API 调用成功", u8Id ?? call.BusinessNo);
         }
 
-        private BridgeResponse BuildInvokeFailure(string requestId, object broker)
+        private BridgeResponse BuildInvokeFailure(string requestId, U8ApiBroker broker)
         {
-            object exception = reflection.Call(broker, "GetException");
-            string raw = Convert.ToString(reflection.Call(broker, "GetExceptionString"));
+            object exception = broker.GetException();
+            string raw = broker.GetExceptionString();
             string message = exception == null ? raw : Convert.ToString(GetProperty(exception, "Message"));
             string typeName = exception == null ? string.Empty : exception.GetType().FullName;
             if (typeName.IndexOf("MomBizException", StringComparison.OrdinalIgnoreCase) >= 0)
@@ -114,13 +155,13 @@ namespace Xinchuan.U8Bridge.U8
             return target.GetType().InvokeMember(name, BindingFlags.GetProperty, null, target, null);
         }
 
-        private void ReleaseBroker(object broker)
+        private static void ReleaseBroker(U8ApiBroker broker)
         {
             if (broker != null)
             {
                 try
                 {
-                    reflection.Call(broker, "Release");
+                    broker.Release();
                 }
                 catch
                 {
