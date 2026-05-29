@@ -71,7 +71,7 @@ namespace Xinchuan.U8Bridge.U8
             var call = CreateSaveCall(12, "vNewID");
             var head = OneRow("domHead");
             IDictionary<string, object> headRow = head.Rows[0];
-            PutAll(headRow, "id", 0, "csocode", request.OrderNo, "ddate", request.OrderDate);
+            PutAll(headRow, "id", string.Empty, "csocode", request.OrderNo, "ddate", request.OrderDate);
             PutAll(headRow, "cbustype", "普通销售", "cstname", Any(request.SalesTypeName, request.SalesTypeCode));
             PutAll(headRow, "ccusabbname", Any(request.CustomerName, request.CustomerCode));
             PutAll(headRow, "cdepname", Any(request.DepartmentName, request.DepartmentCode));
@@ -206,7 +206,8 @@ namespace Xinchuan.U8Bridge.U8
         private static IDictionary<string, object> NewSalesOrderRow(SalesOrderItem item)
         {
             var row = new Dictionary<string, object>();
-            PutAll(row, "isosid", 0, "autoid", 0, "id", 0, "irowno", item.LineNo);
+            PutAll(row, "isosid", string.Empty, "autoid", string.Empty, "id", string.Empty);
+            PutAll(row, "irowno", item.LineNo);
             PutAll(row, "cinvcode", item.MaterialCode, "cinvname", item.MaterialName);
             PutAll(row, "iquantity", item.Quantity, "dpredate", item.DeliveryDate);
             PutAll(row, "dpremodate", item.DeliveryDate, "borderbom", 0, "borderbomover", 0);
