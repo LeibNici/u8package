@@ -1,23 +1,23 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Xinchuan.U8Bridge.Configuration;
 using Xinchuan.U8Bridge.Models;
+using Xinchuan.U8Bridge.Services;
 
 namespace Xinchuan.U8Bridge.U8
 {
     public sealed class U8BrokerRuntime
     {
-        private readonly BridgeOptions options;
         private readonly object login;
         private readonly U8Reflection reflection;
 
         public U8BrokerRuntime(BridgeOptions options, object login)
         {
-            this.options = options;
             this.login = login;
-            reflection = new U8Reflection(GetProbeDirectories(options));
+            string frameworkDirectory = ResolveEmbeddedFrameworkDirectory();
+            BridgeLogger.Info("Using embedded U8 API Framework: " + frameworkDirectory);
+            reflection = new U8Reflection(frameworkDirectory);
         }
 
         public BridgeResponse Invoke(string requestId, U8ApiCall call)
@@ -128,14 +128,16 @@ namespace Xinchuan.U8Bridge.U8
             }
         }
 
-        private static IEnumerable<string> GetProbeDirectories(BridgeOptions options)
+        private static string ResolveEmbeddedFrameworkDirectory()
         {
-            yield return AppDomain.CurrentDomain.BaseDirectory;
-            yield return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "U8APIFramework");
-            yield return Environment.GetEnvironmentVariable("U8_API_DLL_DIR");
-            yield return @"C:\U8SOFT\UFMOM\U8APIFramework";
-            yield return @"C:\U8SOFT\Interop";
-            yield return @"C:\U8SOFT\ufcomsql";
+            string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "U8APIFramework");
+            if (!Directory.Exists(directory))
+            {
+                throw new InvalidOperationException(
+                    "内置 U8APIFramework 目录不存在: " + directory);
+            }
+
+            return directory;
         }
     }
 }

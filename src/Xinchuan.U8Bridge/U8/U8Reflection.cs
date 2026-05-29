@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace Xinchuan.U8Bridge.U8
@@ -15,28 +14,20 @@ namespace Xinchuan.U8Bridge.U8
             "UFIDA.U8.MomServiceCommon"
         };
 
-        private readonly IList<string> probeDirectories;
+        private readonly string frameworkDirectory;
 
-        public U8Reflection(IEnumerable<string> probeDirectories)
+        public U8Reflection(string frameworkDirectory)
         {
-            this.probeDirectories = probeDirectories
-                .Where(path => !string.IsNullOrWhiteSpace(path))
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .ToList();
+            this.frameworkDirectory = frameworkDirectory;
+            EnsureFrameworkAssembliesExist();
             AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly;
         }
 
         public Type ResolveType(string fullName)
         {
-            Type type = Type.GetType(fullName);
-            if (type != null)
-            {
-                return type;
-            }
-
             foreach (Assembly assembly in LoadCandidateAssemblies())
             {
-                type = assembly.GetType(fullName, false);
+                Type type = assembly.GetType(fullName, false);
                 if (type != null)
                 {
                     return type;
@@ -189,21 +180,30 @@ namespace Xinchuan.U8Bridge.U8
         private Assembly ResolveAssembly(object sender, ResolveEventArgs args)
         {
             string name = new AssemblyName(args.Name).Name + ".dll";
-            return probeDirectories.Select(path => Path.Combine(path, name))
-                .Where(File.Exists)
-                .Select(TryLoadFile)
-                .FirstOrDefault(assembly => assembly != null);
+            string path = Path.Combine(frameworkDirectory, name);
+            return File.Exists(path) ? TryLoadFile(path) : null;
         }
 
         private Assembly TryLoadAssembly(string name)
         {
-            try
+            string path = Path.Combine(frameworkDirectory, name + ".dll");
+            if (File.Exists(path))
             {
-                return Assembly.Load(name);
+                return TryLoadFile(path);
             }
-            catch
+
+            return null;
+        }
+
+        private void EnsureFrameworkAssembliesExist()
+        {
+            foreach (string name in AssemblyNames)
             {
-                return ResolveAssembly(this, new ResolveEventArgs(name));
+                string path = Path.Combine(frameworkDirectory, name + ".dll");
+                if (!File.Exists(path))
+                {
+                    throw new InvalidOperationException("内置 U8APIFramework 缺少组件: " + path);
+                }
             }
         }
 
