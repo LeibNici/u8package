@@ -25,4 +25,4 @@
 
 当前官方模式已接入 `U8Login.clsLogin` 与 `U8ApiBroker`，对外统一通过 Bridge REST API 对接。业务系统不再直连 U8 数据库；客户、物料、供应商、库存、采购在途和物料价格查询由 Bridge 持有只读库配置后统一封装。
 
-Swagger 已生成所有官方唯一 API 地址的通用入口：`POST /api/u8/official/{官方地址}`。强类型业务接口继续保留原路径；尚未沉淀字段模板的官方接口可先通过通用入口传 `normalValues`、`contextValues`、`businessObjects`、`extensionObjects` 调用，现场联调稳定后再提升为强类型业务接口。
+对外推荐路径统一为 `POST /api/u8/<business-resource>/<action>`，例如 `POST /api/u8/sales-order/save`、`POST /api/u8/material-out/add`、`POST /api/u8/bom/add`。Swagger 中生成的 `POST /api/u8/official/{官方地址}` 仅保留为 deprecated/internal 兼容入口，用于老调用或内部排查；新对接不要使用 `/official/U8API/...` 作为业务路径。

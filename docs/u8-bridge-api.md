@@ -138,13 +138,17 @@ Bridge 必须按业务单号做幂等，避免重复生成 U8 单据。
 
 ## 8. API 清单
 
+对外 REST 路径统一采用 `POST /api/u8/<business-resource>/<action>`。稳定业务流程必须优先使用强类型业务接口，
+例如 `POST /api/u8/sales-order/save`、`POST /api/u8/material-out/add`、`POST /api/u8/bom/add`。
+U8 官方地址 `U8API/...` 只作为内部映射信息记录在文档和 OpenAPI 扩展字段中，不作为新系统对接路径。
+
 Swagger 按中文业务分类维护接口：系统、主数据查询、采购查询、销售管理、库存管理、生产制造-BOM、
 生产制造-生产订单等。官方 C# 示例生成的 `/api/u8/official/...` 通用入口不再统一放入“官方 U8 API”，
 而是优先使用 `x-u8-document` 作为 Swagger tag；为空时使用 `x-u8-category`；仍为空才兜底为
 `官方U8 API`。这样付款申请单源管理器、应收单核日志等官方单据/分类会在 Swagger UI 左侧归到各自分组。
 官方 C# 示例索引见 `u8-official-api-catalog.md`，Bridge REST 与官方地址对照见 `u8-bridge-official-api-map.md`。
 
-本版本同时暴露所有官方唯一 API 地址的通用入口：
+本版本仍保留所有官方唯一 API 地址的通用入口，作为 deprecated/internal 兼容入口：
 
 ```http
 POST /api/u8/official/{官方地址}
@@ -157,8 +161,9 @@ POST /api/u8/official/U8API/APApplyPay/SaveVouch
 ```
 
 通用入口直接对接 `U8ApiBroker`，请求体需按官方示例传入 `normalValues`、`contextValues`、
-`businessObjects` 或 `extensionObjects`。它用于覆盖尚未沉淀成强类型 DTO 的官方接口；稳定业务流程仍优先使用
-`sales-order/save`、`material-out/add`、`bom/add` 这类强类型接口。
+`businessObjects` 或 `extensionObjects`。它只用于旧调用兼容、内部排查或尚未沉淀 DTO 的临时验证；
+新业务对接不得把 `/api/u8/official/U8API/...` 当作推荐路径，稳定后应提升为强类型
+`/api/u8/<business-resource>/<action>` 接口。
 
 通用入口请求体示例：
 

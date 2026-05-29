@@ -107,9 +107,11 @@
     <Compile Include="U8\U8BomDocumentMapper.cs" />
     <Compile Include="U8\U8BrokerCall.cs" />
     <Compile Include="U8\U8BrokerDocumentMapper.cs" />
+    <Compile Include="U8\U8BrokerMapperBuilder.cs" />
     <Compile Include="U8\U8BrokerResultReader.cs" />
     <Compile Include="U8\U8BrokerRuntime.cs" />
     <Compile Include="U8\U8Reflection.cs" />
+    <Compile Include="U8\U8SalesOrderMapperAssertions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

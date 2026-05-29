@@ -302,6 +302,11 @@ GUI 取消“自动部署”并保存，或把配置改为 `"autoInstallEnabled"
 
 ## 当前实现状态
 
+对外推荐接口统一使用 `POST /api/u8/<business-resource>/<action>`，例如
+`POST /api/u8/sales-order/save`。`POST /api/u8/official/{官方地址}` 仅作为
+deprecated/internal 兼容入口保留给旧调用和内部排查，新对接不要使用
+`/official/U8API/...` 风格路径。
+
 已实现：
 
 * `GET /health`

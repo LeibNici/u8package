@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Xinchuan.U8Bridge.Models;
+using static Xinchuan.U8Bridge.U8.U8BrokerMapperBuilder;
 
 namespace Xinchuan.U8Bridge.U8
 {
@@ -144,22 +145,6 @@ namespace Xinchuan.U8Bridge.U8
             return components;
         }
 
-        private static U8BrokerCall CreateStockAddCall(string type)
-        {
-            var call = new U8BrokerCall { BooleanReturn = true, ReturnIdName = "VouchId" };
-            call.NormalValues["sVouchType"] = type;
-            call.NormalValues["domPosition"] = U8BrokerSpecialValue.EmptyObject();
-            call.NormalValues["cnnFrom"] = U8BrokerSpecialValue.Com("ADODB.Connection");
-            call.NormalValues["VouchId"] = string.Empty;
-            call.NormalValues["domMsg"] = U8BrokerSpecialValue.DomDocument();
-            call.NormalValues["bCheck"] = true;
-            call.NormalValues["bBeforCheckStock"] = true;
-            call.NormalValues["bIsRedVouch"] = false;
-            call.NormalValues["sAddedState"] = string.Empty;
-            call.NormalValues["bReMote"] = false;
-            return call;
-        }
-
         private static void MapMaterialAppItems(U8BrokerCall call, IList<MaterialAppItem> items)
         {
             var body = new U8BoObject("domBody");
@@ -175,42 +160,5 @@ namespace Xinchuan.U8Bridge.U8
             call.BusinessObjects.Add(body);
         }
 
-        private static U8BoObject OneRow(string name)
-        {
-            var bo = new U8BoObject(name);
-            bo.Rows.Add(new Dictionary<string, object>());
-            return bo;
-        }
-
-        private static void Put(U8BoObject bo, params object[] items)
-        {
-            Put(bo.Rows[0], items);
-        }
-
-        private static void Put(IDictionary<string, object> row, params object[] items)
-        {
-            for (int i = 0; i + 1 < items.Length; i += 2)
-            {
-                string key = Convert.ToString(items[i]);
-                object value = items[i + 1];
-                if (value != null && Convert.ToString(value).Length > 0)
-                {
-                    row[key] = value;
-                }
-            }
-        }
-
-        private static string Any(params string[] values)
-        {
-            foreach (string value in values)
-            {
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    return value;
-                }
-            }
-
-            return string.Empty;
-        }
     }
 }

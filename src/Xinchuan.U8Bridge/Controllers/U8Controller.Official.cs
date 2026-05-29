@@ -7,6 +7,9 @@ namespace Xinchuan.U8Bridge.Controllers
     {
         [HttpPost]
         [Route("official/{*apiPath}")]
+        [System.Obsolete(
+            "Use strong typed /api/u8/<business-resource>/<action> endpoints for integrations. "
+            + "This generic official route is an internal compatibility endpoint.")]
         public IHttpActionResult InvokeOfficialApi(string apiPath, OfficialApiInvokeRequest request)
         {
             if (request == null || string.IsNullOrWhiteSpace(request.BusinessNo))

@@ -6,10 +6,10 @@
 
 | 编号 | 清单能力 | 当前 Bridge 状态 | 需要确认/补充 |
 | --- | --- | --- | --- |
-| 6 | 入库单同步 U8 | `/api/u8/inbound/add` 仍为业务占位；可先用通用入口 `/api/u8/official/U8API/PuStoreIn/Add` 调官方 API | 官方序号 173；仍需确认客户现场单据类型、字段模板、业务触发点 |
-| 10 | 生产计划发布回写 U8 | 可通过 `/api/u8/official/...` 调官方 catalog 中对应地址；业务强类型接口仍待确认 | U8 接收主计划还是计划明细/排产明细，字段模板和业务触发点 |
-| 11 | 生产任务报工回写 U8 | `/api/u8/work-report/save` 仍为业务占位；可先用通用入口 `/api/u8/official/U8API/PFReport/PFReportAdd` 调官方 API | 官方序号 266；仍需确认是否等同客户现场报工、字段模板、是否仅推 `COMPLETE` |
-| 13 | 生产退料回写 U8 | 可通过 `/api/u8/official/...` 调官方 catalog 中对应地址；业务强类型接口仍待确认 | 退料对应 U8 单据类型、普通退料与总成件退库边界 |
+| 6 | 入库单同步 U8 | `/api/u8/inbound/add` 仍为业务占位；如必须验证官方字段，只能内部临时使用 deprecated `/api/u8/official/U8API/PuStoreIn/Add`，稳定后沉淀为强类型业务路径 | 官方序号 173；仍需确认客户现场单据类型、字段模板、业务触发点 |
+| 10 | 生产计划发布回写 U8 | `/api/u8/production-plan/publish` 仍为业务占位；如必须验证官方字段，只能内部临时使用 deprecated `/api/u8/official/...`，稳定后沉淀为强类型业务路径 | U8 接收主计划还是计划明细/排产明细，字段模板和业务触发点 |
+| 11 | 生产任务报工回写 U8 | `/api/u8/work-report/save` 仍为业务占位；如必须验证官方字段，只能内部临时使用 deprecated `/api/u8/official/U8API/PFReport/PFReportAdd`，稳定后沉淀为强类型业务路径 | 官方序号 266；仍需确认是否等同客户现场报工、字段模板、是否仅推 `COMPLETE` |
+| 13 | 生产退料回写 U8 | `/api/u8/material-return/add` 仍为业务占位；如必须验证官方字段，只能内部临时使用 deprecated `/api/u8/official/...`，稳定后沉淀为强类型业务路径 | 退料对应 U8 单据类型、普通退料与总成件退库边界 |
 
 ## 已有接口但需业务闭环验收
 

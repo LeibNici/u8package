@@ -6,6 +6,7 @@ using System.Threading;
 using Microsoft.Owin.Hosting;
 using Xinchuan.U8Bridge.Configuration;
 using Xinchuan.U8Bridge.Services;
+using Xinchuan.U8Bridge.U8;
 
 namespace Xinchuan.U8Bridge
 {
@@ -27,6 +28,13 @@ namespace Xinchuan.U8Bridge
 
         private static void Run(string[] args)
         {
+            if (args.Any(IsSalesOrderMapperAssertArgument))
+            {
+                U8SalesOrderMapperAssertions.AssertRelease45Sample();
+                Console.WriteLine("Sales order Release 45 mapper snapshot passed.");
+                return;
+            }
+
             bool serviceMode = args.Any(IsServiceArgument);
             string configPath = args.FirstOrDefault(arg => !IsServiceArgument(arg)) ?? "appsettings.json";
             BridgeLogger.Info("Bridge starting. Config argument: " + configPath);
@@ -52,6 +60,11 @@ namespace Xinchuan.U8Bridge
         private static bool IsServiceArgument(string arg)
         {
             return string.Equals(arg, "--service", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsSalesOrderMapperAssertArgument(string arg)
+        {
+            return string.Equals(arg, "--assert-sales-order-mapper", StringComparison.OrdinalIgnoreCase);
         }
 
         private static void WaitForStop(bool serviceMode)
