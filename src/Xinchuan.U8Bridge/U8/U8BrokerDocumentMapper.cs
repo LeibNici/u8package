@@ -76,6 +76,7 @@ namespace Xinchuan.U8Bridge.U8
             PutAll(headRow, "ccusabbname", Any(request.CustomerName, request.CustomerCode));
             PutAll(headRow, "cdepname", Any(request.DepartmentName, request.DepartmentCode));
             PutAll(headRow, "itaxrate", request.TaxRate, "cexch_name", Any(request.Currency, "人民币"));
+            PutAll(headRow, "iexchrate", 1);
             PutAll(headRow, "cmaker", request.Maker, "breturnflag", "0", "ufts", string.Empty);
             PutAll(headRow, "cstcode", request.SalesTypeCode, "cdepcode", request.DepartmentCode);
             PutAll(headRow, "ccuscode", request.CustomerCode, "ccushand", string.Empty);
