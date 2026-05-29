@@ -55,6 +55,22 @@
     <Reference Include="System.Web.Http.Owin">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.2.9\lib\net45\System.Web.Http.Owin.dll</HintPath>
     </Reference>
+    <Reference Include="Interop.MSXML2">
+      <HintPath>..\..\vendor\U8APIFramework\Interop.MSXML2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="UFIDA.U8.MomServiceCommon">
+      <HintPath>..\..\vendor\U8APIFramework\UFIDA.U8.MomServiceCommon.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="UFIDA.U8.U8APIFramework">
+      <HintPath>..\..\vendor\U8APIFramework\UFIDA.U8.U8APIFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="UFIDA.U8.U8MOMAPIFramework">
+      <HintPath>..\..\vendor\U8APIFramework\UFIDA.U8.U8MOMAPIFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\BridgeOptions.cs" />
