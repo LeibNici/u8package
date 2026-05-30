@@ -143,12 +143,18 @@ Bridge 必须按业务单号做幂等，避免重复生成 U8 单据。
 U8 官方地址 `U8API/...` 只作为内部映射信息记录在文档和 OpenAPI 扩展字段中，不作为新系统对接路径。
 
 Swagger 按中文业务分类维护接口：系统、主数据查询、采购查询、销售管理、库存管理、生产制造-BOM、
-生产制造-生产订单等。官方 C# 示例生成的 `/api/u8/official/...` 通用入口不再统一放入“官方 U8 API”，
-而是优先使用 `x-u8-document` 作为 Swagger tag；为空时使用 `x-u8-category`；仍为空才兜底为
+生产制造-生产订单等。官方 C# 示例生成的通用能力迁移为 `/api/u8/<business-resource>/<action>` alias，
+例如 `POST /api/u8/ap-apply-pay/cancel-sign` 内部调用 `U8API/APApplyPay/CancelSign`。这些 alias
+优先使用 `x-u8-document` 作为 Swagger tag；为空时使用 `x-u8-category`；仍为空才兜底为
 `官方U8 API`。这样付款申请单源管理器、应收单核日志等官方单据/分类会在 Swagger UI 左侧归到各自分组。
 官方 C# 示例索引见 `u8-official-api-catalog.md`，Bridge REST 与官方地址对照见 `u8-bridge-official-api-map.md`。
 
-本版本仍保留所有官方唯一 API 地址的通用入口，作为 deprecated/internal 兼容入口：
+迁移 alias 的生成规则：去掉 `U8API/` 前缀后，把第一个官方段作为 business-resource、剩余段作为 action；
+每段按 PascalCase/符号边界转为 kebab-case。`U8ERP_...` 地址会去掉版本前缀后再转换。已有强类型接口优先，
+例如 `U8API/SaleOrder/Save` 只保留 `POST /api/u8/sales-order/save`，不会再生成
+`/api/u8/sale-order/save` alias。
+
+本版本仍保留旧官方地址入口，作为 legacy/internal 兼容入口：
 
 ```http
 POST /api/u8/official/{官方地址}
@@ -160,12 +166,12 @@ POST /api/u8/official/{官方地址}
 POST /api/u8/official/U8API/APApplyPay/SaveVouch
 ```
 
-通用入口直接对接 `U8ApiBroker`，请求体需按官方示例传入 `normalValues`、`contextValues`、
+旧兼容入口直接对接 `U8ApiBroker`，请求体需按官方示例传入 `normalValues`、`contextValues`、
 `businessObjects` 或 `extensionObjects`。它只用于旧调用兼容、内部排查或尚未沉淀 DTO 的临时验证；
 新业务对接不得把 `/api/u8/official/U8API/...` 当作推荐路径，稳定后应提升为强类型
 `/api/u8/<business-resource>/<action>` 接口。
 
-通用入口请求体示例：
+迁移 alias 和旧兼容入口使用相同请求体，例如：
 
 ```json
 {

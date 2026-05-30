@@ -109,26 +109,29 @@ namespace Xinchuan.U8Bridge.U8
             U8ApiBroker broker,
             U8BrokerCall brokerCall)
         {
-            bool invokeOk = broker.Invoke();
-            if (!invokeOk)
+            using (BridgeRuntimeEnvironment.EnterBrokerInvocationScope())
             {
-                return BuildInvokeFailure(requestId, broker);
-            }
+                bool invokeOk = broker.Invoke();
+                if (!invokeOk)
+                {
+                    return BuildInvokeFailure(requestId, broker);
+                }
 
-            object returnValue = broker.GetReturnValue();
-            string message = U8BrokerResultReader.ReadMessage(returnValue, broker, reflection, brokerCall);
-            if (!U8BrokerResultReader.IsSuccess(returnValue, message, brokerCall))
-            {
-                return BridgeResponse.Fail(requestId, BridgeErrorCodes.U8ResultFailed, "U8 API 返回失败", message);
-            }
+                object returnValue = broker.GetReturnValue();
+                string message = U8BrokerResultReader.ReadMessage(returnValue, broker, reflection, brokerCall);
+                if (!U8BrokerResultReader.IsSuccess(returnValue, message, brokerCall))
+                {
+                    return BridgeResponse.Fail(requestId, BridgeErrorCodes.U8ResultFailed, "U8 API 返回失败", message);
+                }
 
-            string u8Id = U8BrokerResultReader.ReadId(broker, reflection, brokerCall);
-            if (brokerCall.DataReader != null)
-            {
-                return BridgeResponse.OkData(requestId, "U8 API 调用成功", brokerCall.DataReader(broker, reflection));
-            }
+                string u8Id = U8BrokerResultReader.ReadId(broker, reflection, brokerCall);
+                if (brokerCall.DataReader != null)
+                {
+                    return BridgeResponse.OkData(requestId, "U8 API 调用成功", brokerCall.DataReader(broker, reflection));
+                }
 
-            return BridgeResponse.Ok(requestId, "U8 API 调用成功", u8Id ?? call.BusinessNo);
+                return BridgeResponse.Ok(requestId, "U8 API 调用成功", u8Id ?? call.BusinessNo);
+            }
         }
 
         private BridgeResponse BuildInvokeFailure(string requestId, U8ApiBroker broker)

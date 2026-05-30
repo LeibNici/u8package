@@ -89,6 +89,7 @@
     <Compile Include="Models\U8ApiCall.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Security\ApiKeyHandler.cs" />
+    <Compile Include="Services\BridgeRuntimeEnvironment.cs" />
     <Compile Include="Services\BridgeOperationService.cs" />
     <Compile Include="Services\BridgeLogger.cs" />
     <Compile Include="Services\IdempotencyStore.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="U8\DryRunU8ApiClient.cs" />
     <Compile Include="U8\IU8ApiClient.cs" />
     <Compile Include="U8\OfficialU8ApiClient.cs" />
+    <Compile Include="U8\OfficialU8ApiAliasMap.Generated.cs" />
     <Compile Include="U8\OfficialU8BrokerMapper.cs" />
     <Compile Include="U8\U8AdvancedDocumentMapper.cs" />
     <Compile Include="U8\U8BomDocumentMapper.cs" />

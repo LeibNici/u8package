@@ -1,5 +1,6 @@
 using System.Web.Http;
 using Xinchuan.U8Bridge.Models;
+using Xinchuan.U8Bridge.U8;
 
 namespace Xinchuan.U8Bridge.Controllers
 {
@@ -11,6 +12,24 @@ namespace Xinchuan.U8Bridge.Controllers
             "Use strong typed /api/u8/<business-resource>/<action> endpoints for integrations. "
             + "This generic official route is an internal compatibility endpoint.")]
         public IHttpActionResult InvokeOfficialApi(string apiPath, OfficialApiInvokeRequest request)
+        {
+            return InvokeOfficialApiAddress(apiPath, request);
+        }
+
+        [HttpPost]
+        [Route("{*bridgePath}")]
+        public IHttpActionResult InvokeOfficialApiAlias(string bridgePath, OfficialApiInvokeRequest request)
+        {
+            if (!OfficialU8ApiAliasMap.TryGetOfficialApi(bridgePath, out var apiPath))
+            {
+                string requestId = request == null ? RequestIdHeader() : request.RequestId;
+                return Bridge(BridgeResponse.Fail(requestId, BridgeErrorCodes.RequestInvalid, "U8 Bridge 迁移路径不合法"));
+            }
+
+            return InvokeOfficialApiAddress(apiPath, request);
+        }
+
+        private IHttpActionResult InvokeOfficialApiAddress(string apiPath, OfficialApiInvokeRequest request)
         {
             if (request == null || string.IsNullOrWhiteSpace(request.BusinessNo))
             {

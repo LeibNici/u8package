@@ -28,10 +28,17 @@ namespace Xinchuan.U8Bridge
 
         private static void Run(string[] args)
         {
+            BridgeRuntimeEnvironment.InitializeForProcess();
+
             if (args.Any(IsSalesOrderMapperAssertArgument))
             {
-                U8SalesOrderMapperAssertions.AssertRelease45Sample();
-                Console.WriteLine("Sales order Release 45 mapper snapshot passed.");
+                using (BridgeRuntimeEnvironment.EnterBrokerInvocationScope())
+                {
+                    U8SalesOrderMapperAssertions.AssertRelease45Sample();
+                }
+
+                BridgeRuntimeEnvironment.AssertInitializedForMapperSnapshot();
+                Console.WriteLine("Sales order mapper and Bridge runtime environment snapshot passed.");
                 return;
             }
 
