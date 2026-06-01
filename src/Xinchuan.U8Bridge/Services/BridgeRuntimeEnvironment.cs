@@ -60,7 +60,7 @@ namespace Xinchuan.U8Bridge.Services
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Bridge temp directory initialization failed.", ex);
+                throw new BridgeRuntimeEnvironmentException("Bridge temp directory initialization failed.", ex);
             }
         }
 
@@ -72,7 +72,9 @@ namespace Xinchuan.U8Bridge.Services
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Bridge process environment setup failed: " + name, ex);
+                throw new BridgeRuntimeEnvironmentException(
+                    "Bridge process environment setup failed: " + name,
+                    ex);
             }
         }
 
@@ -84,7 +86,9 @@ namespace Xinchuan.U8Bridge.Services
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Bridge current directory setup failed during " + phase + ".", ex);
+                throw new BridgeRuntimeEnvironmentException(
+                    "Bridge current directory setup failed during " + phase + ".",
+                    ex);
             }
         }
 
@@ -92,7 +96,7 @@ namespace Xinchuan.U8Bridge.Services
         {
             if (!Directory.Exists(directory))
             {
-                throw new InvalidOperationException(name + " does not exist.");
+                throw new BridgeRuntimeEnvironmentException(name + " does not exist.");
             }
         }
 
@@ -100,7 +104,8 @@ namespace Xinchuan.U8Bridge.Services
         {
             if (!SamePath(actual, expected))
             {
-                throw new InvalidOperationException(name + " is not using the Bridge application directory.");
+                throw new BridgeRuntimeEnvironmentException(
+                    name + " is not using the Bridge application directory.");
             }
         }
 
@@ -116,7 +121,10 @@ namespace Xinchuan.U8Bridge.Services
 
         private static string Normalize(string path)
         {
-            return Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            string fullPath = Path.GetFullPath(path);
+            string root = Path.GetPathRoot(fullPath);
+            string trimmed = fullPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            return trimmed.Length < root.Length ? root : trimmed;
         }
 
         private sealed class CurrentDirectoryScope : IDisposable
@@ -140,6 +148,19 @@ namespace Xinchuan.U8Bridge.Services
                 disposed = true;
                 SetCurrentDirectory(previousDirectory, "U8 broker invocation restore");
             }
+        }
+    }
+
+    public sealed class BridgeRuntimeEnvironmentException : InvalidOperationException
+    {
+        public BridgeRuntimeEnvironmentException(string message)
+            : base(message)
+        {
+        }
+
+        public BridgeRuntimeEnvironmentException(string message, Exception innerException)
+            : base(message, innerException)
+        {
         }
     }
 }

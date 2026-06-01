@@ -126,7 +126,7 @@ Xinchuan.U8Bridge-Release-<run_number>.zip
 Release 构建会同时发布 GitHub Release，管理器默认通过 GitHub Release latest API 检测更新。
 
 当前 Actions 固定使用 `windows-2022`，避免 `windows-latest` 迁移期间影响 .NET Framework 4.8 打包稳定性。
-如果仓库存在 `vendor/U8APIFramework/`，Actions 会把完整官方 U8API Framework 目录复制到 release 包根目录，Bridge 会优先从 `程序目录\U8APIFramework` 加载 `UFIDA.U8.U8APIFramework.dll` 等依赖。
+如果仓库存在 `vendor/U8APIFramework/`，构建会把完整官方 U8API Framework 目录复制到 release 包根目录。Bridge 会从 `程序目录\U8APIFramework` 加载 `UFIDA.U8.U8APIFramework.dll` 等依赖，缺少该目录时启动后的正式 U8 API 调用会失败。
 
 ## Windows 运行与日志
 
@@ -192,7 +192,7 @@ copy .\appsettings.sample.json .\appsettings.json
 
 `subId`、`accountId`、`year`、`serial` 不需要现场用户配置。Bridge 内部默认 `subId=AS`、`serial` 为空，并会从库名
 `ufdata_100_2018` 推导账套 `100` 与年度 `2018`；如果客户库名不符合该格式，再按现场 U8 登录失败日志补充兼容逻辑。
-DLL 目录也不需要配置，release 包已随带 `U8APIFramework`，运行时会优先从程序目录加载，再回退到 U8 标准安装目录。
+DLL 目录也不需要配置，release 包已随带 `U8APIFramework`，运行时固定从程序目录加载该内置目录。
 
 `official` 模式需要满足：
 

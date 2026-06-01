@@ -22,12 +22,17 @@ namespace Xinchuan.U8Bridge.Models
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public object Data { get; set; }
 
-        public static BridgeResponse Ok(string requestId, string message, string u8Id = null)
+        public static BridgeResponse Ok(
+            string requestId,
+            string message,
+            string u8Id = null,
+            string u8Code = null)
         {
             return new BridgeResponse
             {
                 Success = true,
                 RequestId = requestId,
+                U8Code = u8Code,
                 U8Id = u8Id,
                 Message = message
             };
@@ -45,12 +50,19 @@ namespace Xinchuan.U8Bridge.Models
             };
         }
 
-        public static BridgeResponse OkData(string requestId, string message, object data)
+        public static BridgeResponse OkData(
+            string requestId,
+            string message,
+            object data,
+            string u8Id = null,
+            string u8Code = null)
         {
             return new BridgeResponse
             {
                 Success = true,
                 RequestId = requestId,
+                U8Code = u8Code,
+                U8Id = u8Id,
                 Message = message,
                 Data = data
             };

@@ -52,6 +52,25 @@ def assert_runtime_environment_contract():
             fail("tests/README.md must document runtime environment verification: " + expected)
 
 
+def assert_material_app_required_empty_fields_are_preserved():
+    mapper = read(ROOT / "src" / "Xinchuan.U8Bridge" / "U8" / "U8AdvancedDocumentMapper.cs")
+    required_snippets = [
+        'head.Rows[0]["id"] = string.Empty;',
+        'row["autoid"] = string.Empty;',
+    ]
+    for snippet in required_snippets:
+        if snippet not in mapper:
+            fail("materialapp/Add must explicitly assign required blank BO key: " + snippet)
+
+    forbidden_snippets = [
+        'Put(head, "id", string.Empty',
+        'Put(row, "autoid", string.Empty',
+    ]
+    for snippet in forbidden_snippets:
+        if snippet in mapper:
+            fail("materialapp/Add required blank BO key cannot use Put(), which skips empty strings: " + snippet)
+
+
 def csproj_compile_includes():
     namespace = {"msb": "http://schemas.microsoft.com/developer/msbuild/2003"}
     try:
@@ -67,6 +86,7 @@ def csproj_compile_includes():
 
 def main():
     assert_runtime_environment_contract()
+    assert_material_app_required_empty_fields_are_preserved()
     print("U8 Bridge runtime contract checks passed.")
 
 

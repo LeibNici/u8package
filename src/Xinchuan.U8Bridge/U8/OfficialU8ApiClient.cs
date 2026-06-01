@@ -62,6 +62,14 @@ namespace Xinchuan.U8Bridge.U8
                     "U8 COM 组件不可用",
                     ex.Message);
             }
+            catch (BridgeRuntimeEnvironmentException ex)
+            {
+                return BridgeResponse.Fail(
+                    requestId,
+                    BridgeErrorCodes.BridgeInternalError,
+                    "Bridge 运行环境异常",
+                    DescribeException(ex));
+            }
             catch (InvalidOperationException ex)
             {
                 return BridgeResponse.Fail(

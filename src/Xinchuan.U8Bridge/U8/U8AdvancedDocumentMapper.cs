@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Xinchuan.U8Bridge.Models;
 using static Xinchuan.U8Bridge.U8.U8BrokerMapperBuilder;
 
@@ -11,7 +12,8 @@ namespace Xinchuan.U8Bridge.U8
         {
             var call = CreateStockAddCall("64");
             var head = OneRow("DomHead");
-            Put(head, "id", 0, "ccode", request.ApplicationNo, "ddate", request.ApplicationDate);
+            head.Rows[0]["id"] = string.Empty;
+            Put(head, "ccode", request.ApplicationNo, "ddate", DateValue(request.ApplicationDate));
             Put(head, "crdcode", request.RdCode, "cdepcode", request.DepartmentCode);
             Put(head, "cmaker", request.Maker, "cmemo", request.Memo);
             MapMaterialAppItems(call, request.Items);
@@ -151,13 +153,36 @@ namespace Xinchuan.U8Bridge.U8
             foreach (MaterialAppItem item in items)
             {
                 var row = new Dictionary<string, object>();
-                Put(row, "autoid", 0, "irowno", item.LineNo, "cinvcode", item.MaterialCode);
+                row["autoid"] = string.Empty;
+                Put(row, "cinvcode", item.MaterialCode);
+                Put(row, "irowno", Convert.ToString(item.LineNo, CultureInfo.InvariantCulture));
                 Put(row, "cinvname", item.MaterialName, "cinvm_unit", item.Unit);
-                Put(row, "cbatch", item.BatchNo, "iquantity", item.Quantity, "dduedate", item.DueDate);
+                Put(row, "cbatch", item.BatchNo, "iquantity", Convert.ToDouble(item.Quantity));
+                Put(row, "dduedate", DateValue(item.DueDate));
                 body.Rows.Add(row);
             }
 
             call.BusinessObjects.Add(body);
+        }
+
+        private static object DateValue(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return null;
+            }
+
+            DateTime parsed;
+            if (DateTime.TryParse(
+                value,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.AssumeLocal,
+                out parsed))
+            {
+                return parsed;
+            }
+
+            return DateTime.TryParse(value, out parsed) ? parsed : (object)value;
         }
 
     }

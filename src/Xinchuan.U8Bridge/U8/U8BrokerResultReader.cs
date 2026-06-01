@@ -32,12 +32,26 @@ namespace Xinchuan.U8Bridge.U8
 
         public static string ReadId(object broker, U8Reflection reflection, U8BrokerCall call)
         {
-            if (string.IsNullOrWhiteSpace(call.ReturnIdName))
+            string id = ReadNamedId(broker, reflection, call.ReturnIdName);
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                return id;
+            }
+
+            id = ReadNamedId(broker, reflection, "vNewID");
+            return !string.IsNullOrWhiteSpace(id)
+                ? id
+                : ReadNamedId(broker, reflection, "VouchId");
+        }
+
+        private static string ReadNamedId(object broker, U8Reflection reflection, string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
             {
                 return null;
             }
 
-            return Convert.ToString(CallGetResult(broker, reflection, call.ReturnIdName));
+            return Convert.ToString(CallGetResult(broker, reflection, name));
         }
 
         private static object CallGetResult(object broker, U8Reflection reflection, string name)
