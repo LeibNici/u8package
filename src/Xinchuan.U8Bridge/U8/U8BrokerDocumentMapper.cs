@@ -117,6 +117,7 @@ namespace Xinchuan.U8Bridge.U8
             PutAll(head.Rows[0], "cexch_name", Any(request.Currency, "人民币"));
             PutAll(head.Rows[0], "iexchrate", request.ExchangeRate <= 0 ? 1 : request.ExchangeRate);
             PutAll(head.Rows[0], "itaxrate", request.TaxRate, "ivtid", 71);
+            PutAll(head.Rows[0], "cvouchtype", "05");
             PutAll(head.Rows[0], "cmaker", request.Maker, "csocode", request.OrderNo);
             PutAll(head.Rows[0], "breturnflag", "0", "cmemo", request.Memo);
             MapConsignmentItems(call, request.Items);
