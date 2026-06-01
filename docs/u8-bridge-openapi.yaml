@@ -10692,6 +10692,10 @@ components:
           type: string
         unitGroupCode:
           type: string
+        warehouseCode:
+          type: string
+        warehouseName:
+          type: string
         batchNo:
           type: string
         sourceOrderNo:

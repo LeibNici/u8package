@@ -243,6 +243,7 @@ namespace Xinchuan.U8Bridge.U8
                     item.UnitCode,
                     item.UnitGroupCode);
                 Put(row, "cbatch", item.BatchNo, "csocode", item.SourceOrderNo, "isosid", item.SourceLineNo);
+                Put(row, "cwhcode", item.WarehouseCode, "cwhname", item.WarehouseName);
                 body.Rows.Add(row);
             }
 
