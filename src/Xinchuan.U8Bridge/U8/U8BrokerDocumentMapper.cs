@@ -106,7 +106,7 @@ namespace Xinchuan.U8Bridge.U8
         {
             var call = CreateSaveCall(9, "vNewID");
             var head = OneRow("domHead");
-            PutAll(head.Rows[0], "dlid", string.Empty, "cdlcode", request.DeliveryNo);
+            PutAll(head.Rows[0], "dlid", string.Empty, "cdlcode", string.Empty);
             PutAll(head.Rows[0], "ddate", DateValue(request.DeliveryDate), "cbustype", "普通销售");
             PutAll(head.Rows[0], "cstcode", Any(request.SalesTypeCode, "01"));
             PutAll(head.Rows[0], "cstname", Any(request.SalesTypeName, request.SalesTypeCode, "普通销售"));
