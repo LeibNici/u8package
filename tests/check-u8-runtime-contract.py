@@ -94,6 +94,10 @@ def assert_official_expanded_mapper_contract():
         "失败",
         "拒绝",
         "不能",
+        "不允许",
+        "对不起",
+        "没权",
+        "权限",
         "invalid",
     ]
     for snippet in required_result_reader_snippets:

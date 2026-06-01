@@ -129,6 +129,10 @@ namespace Xinchuan.U8Bridge.U8
                 || text.IndexOf("不成功", StringComparison.OrdinalIgnoreCase) >= 0
                 || text.IndexOf("拒绝", StringComparison.OrdinalIgnoreCase) >= 0
                 || text.IndexOf("不能", StringComparison.OrdinalIgnoreCase) >= 0
+                || text.IndexOf("不允许", StringComparison.OrdinalIgnoreCase) >= 0
+                || text.IndexOf("对不起", StringComparison.OrdinalIgnoreCase) >= 0
+                || text.IndexOf("没权", StringComparison.OrdinalIgnoreCase) >= 0
+                || text.IndexOf("权限", StringComparison.OrdinalIgnoreCase) >= 0
                 || text.IndexOf("无效", StringComparison.OrdinalIgnoreCase) >= 0
                 || text.IndexOf("不存在", StringComparison.OrdinalIgnoreCase) >= 0
                 || text.IndexOf("未找到", StringComparison.OrdinalIgnoreCase) >= 0
