@@ -26,7 +26,8 @@ namespace Xinchuan.U8Bridge.Models
             string requestId,
             string message,
             string u8Id = null,
-            string u8Code = null)
+            string u8Code = null,
+            string rawMessage = null)
         {
             return new BridgeResponse
             {
@@ -34,7 +35,8 @@ namespace Xinchuan.U8Bridge.Models
                 RequestId = requestId,
                 U8Code = u8Code,
                 U8Id = u8Id,
-                Message = message
+                Message = message,
+                RawMessage = rawMessage
             };
         }
 
@@ -55,7 +57,8 @@ namespace Xinchuan.U8Bridge.Models
             string message,
             object data,
             string u8Id = null,
-            string u8Code = null)
+            string u8Code = null,
+            string rawMessage = null)
         {
             return new BridgeResponse
             {
@@ -64,6 +67,7 @@ namespace Xinchuan.U8Bridge.Models
                 U8Code = u8Code,
                 U8Id = u8Id,
                 Message = message,
+                RawMessage = rawMessage,
                 Data = data
             };
         }

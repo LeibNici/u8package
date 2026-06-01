@@ -88,9 +88,14 @@ namespace Xinchuan.U8Bridge.Models
         public string CustomerCode { get; set; }
         public string CustomerName { get; set; }
         public string DepartmentCode { get; set; }
+        public string DepartmentName { get; set; }
         public string SalesTypeCode { get; set; }
+        public string SalesTypeName { get; set; }
         [Required]
         public string Maker { get; set; }
+        public string Currency { get; set; } = "人民币";
+        public decimal ExchangeRate { get; set; } = 1;
+        public decimal TaxRate { get; set; } = 13;
         public bool AutoAudit { get; set; }
         public string Memo { get; set; }
         [Required]

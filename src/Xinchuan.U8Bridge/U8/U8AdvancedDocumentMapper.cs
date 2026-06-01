@@ -73,8 +73,8 @@ namespace Xinchuan.U8Bridge.U8
             call.ContextValues["sBillType"] = string.Empty;
             call.ContextValues["sBusType"] = Any(request.BusinessType, "普通采购");
             var head = OneRow("DomHead");
-            Put(head, "poid", request.U8Id, "cpoid", request.PurchaseOrderNo);
-            Put(head, "ufts", request.TimeStamp, "cverifier", request.Verifier);
+            PutAll(head.Rows[0], "poid", request.U8Id, "cpoid", request.PurchaseOrderNo);
+            PutAll(head.Rows[0], "ufts", request.TimeStamp, "cverifier", request.Verifier);
             call.BusinessObjects.Add(head);
             return call;
         }

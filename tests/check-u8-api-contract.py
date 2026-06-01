@@ -119,6 +119,26 @@ def assert_docs_recommend_strong_typed_paths():
         fail("OpenAPI must not repeat the legacy official compatibility note in generated operations.")
 
 
+def assert_openapi_strong_typed_schema_contract():
+    openapi = read(OPENAPI)
+    purchase_order = schema_block(openapi, "PurchaseOrderConfirmRequest", "InboundAddRequest")
+    if "businessType:" not in purchase_order or "default: 普通采购" not in purchase_order:
+        fail("OpenAPI PurchaseOrderConfirmRequest must document businessType default.")
+
+    consignment = schema_block(openapi, "ConsignmentSaveRequest", "SaleOutAddRequest")
+    for expected in ["currency:", "exchangeRate:", "taxRate:"]:
+        if expected not in consignment:
+            fail("OpenAPI ConsignmentSaveRequest is missing: " + expected)
+
+
+def schema_block(openapi, name, next_name):
+    start_marker = "    " + name + ":"
+    end_marker = "    " + next_name + ":"
+    if start_marker not in openapi or end_marker not in openapi:
+        fail("OpenAPI schema markers are missing for " + name)
+    return openapi.split(start_marker, 1)[1].split(end_marker, 1)[0]
+
+
 def parse_top_level_tags(openapi):
     before_paths = openapi.split("\npaths:", 1)[0]
     if "\ntags:" not in before_paths:
@@ -290,6 +310,7 @@ def main():
     assert_legacy_official_route_is_internal()
     assert_openapi_yaml_parses()
     assert_openapi_official_catalog_contract()
+    assert_openapi_strong_typed_schema_contract()
     assert_docs_recommend_strong_typed_paths()
     print("U8 Bridge API route contract checks passed.")
 

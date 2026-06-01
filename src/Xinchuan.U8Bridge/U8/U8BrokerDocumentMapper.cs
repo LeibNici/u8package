@@ -106,12 +106,19 @@ namespace Xinchuan.U8Bridge.U8
         {
             var call = CreateSaveCall(9, "vNewID");
             var head = OneRow("domHead");
-            Put(head, "dlid", 0, "cdlcode", request.DeliveryNo, "ddate", request.DeliveryDate);
-            Put(head, "cbustype", "普通销售", "cstcode", Any(request.SalesTypeCode, "01"));
-            Put(head, "cstname", request.SalesTypeCode, "ccuscode", request.CustomerCode);
-            Put(head, "ccusname", request.CustomerName, "ccusabbname", Any(request.CustomerName, request.CustomerCode));
-            Put(head, "cdepcode", request.DepartmentCode, "cdepname", request.DepartmentCode);
-            Put(head, "cmaker", request.Maker, "csocode", request.OrderNo, "breturnflag", 0, "cmemo", request.Memo);
+            PutAll(head.Rows[0], "dlid", string.Empty, "cdlcode", request.DeliveryNo);
+            PutAll(head.Rows[0], "ddate", DateValue(request.DeliveryDate), "cbustype", "普通销售");
+            PutAll(head.Rows[0], "cstcode", Any(request.SalesTypeCode, "01"));
+            PutAll(head.Rows[0], "cstname", Any(request.SalesTypeName, request.SalesTypeCode, "普通销售"));
+            PutAll(head.Rows[0], "ccuscode", request.CustomerCode, "ccusname", request.CustomerName);
+            PutAll(head.Rows[0], "ccusabbname", Any(request.CustomerName, request.CustomerCode));
+            PutAll(head.Rows[0], "cdepcode", request.DepartmentCode);
+            PutAll(head.Rows[0], "cdepname", Any(request.DepartmentName, request.DepartmentCode));
+            PutAll(head.Rows[0], "cexch_name", Any(request.Currency, "人民币"));
+            PutAll(head.Rows[0], "iexchrate", request.ExchangeRate <= 0 ? 1 : request.ExchangeRate);
+            PutAll(head.Rows[0], "itaxrate", request.TaxRate);
+            PutAll(head.Rows[0], "cmaker", request.Maker, "csocode", request.OrderNo);
+            PutAll(head.Rows[0], "breturnflag", "0", "cmemo", request.Memo);
             MapOutboundItems(call, request.Items, "domBody");
             call.BusinessObjects.Add(head);
             return call;
@@ -121,12 +128,15 @@ namespace Xinchuan.U8Bridge.U8
         {
             var call = CreateStockAddCall("32");
             var head = OneRow("DomHead");
-            Put(head, "id", 0, "ccode", request.OutboundNo, "ddate", request.OutboundDate);
-            Put(head, "cwhcode", request.WarehouseCode, "cwhname", request.WarehouseName);
-            Put(head, "cbustype", "普通销售", "ccuscode", request.CustomerCode);
-            Put(head, "ccusname", request.CustomerName, "ccusabbname", Any(request.CustomerName, request.CustomerCode));
-            Put(head, "cdepcode", request.DepartmentCode, "crdcode", request.RdCode, "cmaker", request.Maker);
-            Put(head, "cvouchtype", "32", "brdflag", 0, "csource", 1, "cmemo", request.Memo);
+            PutAll(head.Rows[0], "id", string.Empty, "ccode", request.OutboundNo);
+            PutAll(head.Rows[0], "ddate", DateValue(request.OutboundDate));
+            PutAll(head.Rows[0], "cwhcode", request.WarehouseCode, "cwhname", request.WarehouseName);
+            PutAll(head.Rows[0], "cbustype", "普通销售", "ccuscode", request.CustomerCode);
+            PutAll(head.Rows[0], "ccusname", request.CustomerName);
+            PutAll(head.Rows[0], "ccusabbname", Any(request.CustomerName, request.CustomerCode));
+            PutAll(head.Rows[0], "cdepcode", request.DepartmentCode, "crdcode", request.RdCode);
+            PutAll(head.Rows[0], "cmaker", request.Maker, "cvouchtype", "32");
+            PutAll(head.Rows[0], "brdflag", 0, "csource", 1, "cmemo", request.Memo);
             MapOutboundItems(call, request.Items, "domBody");
             call.BusinessObjects.Add(head);
             return call;
@@ -136,11 +146,13 @@ namespace Xinchuan.U8Bridge.U8
         {
             var call = CreateStockAddCall("11");
             var head = OneRow("DomHead");
-            Put(head, "id", 0, "ccode", request.MaterialOutNo, "ddate", request.OutDate);
-            Put(head, "cwhcode", request.WarehouseCode, "cwhname", request.WarehouseName);
-            Put(head, "crdcode", request.RdCode, "crdname", request.RdName);
-            Put(head, "cdepcode", request.DepartmentCode, "cdepname", request.DepartmentName);
-            Put(head, "cmaker", request.Maker, "cvouchtype", "11", "brdflag", 0, "cmemo", request.Memo);
+            PutAll(head.Rows[0], "id", string.Empty, "ccode", request.MaterialOutNo);
+            PutAll(head.Rows[0], "ddate", DateValue(request.OutDate));
+            PutAll(head.Rows[0], "cwhcode", request.WarehouseCode, "cwhname", request.WarehouseName);
+            PutAll(head.Rows[0], "crdcode", request.RdCode, "crdname", request.RdName);
+            PutAll(head.Rows[0], "cdepcode", request.DepartmentCode, "cdepname", request.DepartmentName);
+            PutAll(head.Rows[0], "cmaker", request.Maker, "cvouchtype", "11");
+            PutAll(head.Rows[0], "brdflag", "0", "cmemo", request.Memo);
             MapMaterialItems(call, request.Items);
             call.BusinessObjects.Add(head);
             return call;

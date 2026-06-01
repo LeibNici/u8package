@@ -112,6 +112,7 @@
     <Compile Include="U8\U8BrokerMapperBuilder.cs" />
     <Compile Include="U8\U8BrokerResultReader.cs" />
     <Compile Include="U8\U8BrokerRuntime.cs" />
+    <Compile Include="U8\U8OfficialMapperAssertions.cs" />
     <Compile Include="U8\U8Reflection.cs" />
     <Compile Include="U8\U8SalesOrderMapperAssertions.cs" />
   </ItemGroup>

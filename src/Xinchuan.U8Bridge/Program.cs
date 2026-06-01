@@ -30,15 +30,15 @@ namespace Xinchuan.U8Bridge
         {
             BridgeRuntimeEnvironment.InitializeForProcess();
 
-            if (args.Any(IsSalesOrderMapperAssertArgument))
+            if (args.Any(IsMapperAssertArgument))
             {
                 using (BridgeRuntimeEnvironment.EnterBrokerInvocationScope())
                 {
-                    U8SalesOrderMapperAssertions.AssertRelease45Sample();
+                    U8OfficialMapperAssertions.AssertExpandedSamples();
                 }
 
                 BridgeRuntimeEnvironment.AssertInitializedForMapperSnapshot();
-                Console.WriteLine("Sales order mapper and Bridge runtime environment snapshot passed.");
+                Console.WriteLine("U8 mapper and Bridge runtime environment snapshot passed.");
                 return;
             }
 
@@ -69,9 +69,10 @@ namespace Xinchuan.U8Bridge
             return string.Equals(arg, "--service", StringComparison.OrdinalIgnoreCase);
         }
 
-        private static bool IsSalesOrderMapperAssertArgument(string arg)
+        private static bool IsMapperAssertArgument(string arg)
         {
-            return string.Equals(arg, "--assert-sales-order-mapper", StringComparison.OrdinalIgnoreCase);
+            return string.Equals(arg, "--assert-u8-mappers", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(arg, "--assert-sales-order-mapper", StringComparison.OrdinalIgnoreCase);
         }
 
         private static void WaitForStop(bool serviceMode)

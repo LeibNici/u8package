@@ -29,10 +29,12 @@ U8 Bridge 测试资料放在本目录。
 
 Mapper 快照检查：
 
-* Windows/MSBuild 环境构建后运行 `Xinchuan.U8Bridge.exe --assert-sales-order-mapper`。
-* 该检查构造销售订单 `U8BrokerCall`，不登录 U8、不调用 COM broker，用于保护 Release 45 已验证字段形态。
+* Windows/MSBuild 环境构建后运行 `Xinchuan.U8Bridge.exe --assert-u8-mappers`。
+* 兼容旧参数 `--assert-sales-order-mapper`。
+* 该检查构造多类强类型写入接口 `U8BrokerCall`，不登录 U8、不调用 COM broker，用于保护 Release 45 已验证字段形态和 official 扩大测试暴露的字段类型。
 * Release 46 起，该检查还会初始化 Bridge 运行环境，确认进程当前目录固定为程序目录，并确认 `TEMP`/`TMP` 指向程序目录下的 `temp` 子目录。
-* 当前断言覆盖 `VoucherType=12`、`ReturnIdName=vNewID`、`DomConfig`、`domHead.ivtid=131507`、`domHead.iexchrate=1`、`domBody.cunitid=28`、`cgroupcode=1`、`kl/kl2=100`、`bsaleprice=true`、`bgift=false`。
+* 当前断言覆盖销售订单 `VoucherType=12`、`ReturnIdName=vNewID`、`DomConfig`、`domHead.ivtid=131507`、`domHead.iexchrate=1`、`domBody.cunitid=28`、`cgroupcode=1`、`kl/kl2=100`、`bsaleprice=true`、`bgift=false`。
+* 当前断言还覆盖发货单币种/汇率/税率、采购订单审核上下文，以及销售出库单、材料出库单、领料申请单的 `id` / `autoid` 空字符串、字符串行号、`double` 数量和 stock broker 普通参数形态。
 
 Release 46 拒绝访问排查记录：
 

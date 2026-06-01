@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Xinchuan.U8Bridge.U8
 {
@@ -45,9 +46,31 @@ namespace Xinchuan.U8Bridge.U8
             string unit)
         {
             var row = new Dictionary<string, object>();
-            Put(row, "autoid", 0, "id", 0, "irowno", lineNo, "cinvcode", code);
-            Put(row, "cinvname", name, "iquantity", quantity, "cinvm_unit", unit, "editprop", "A");
+            PutAll(row, "autoid", string.Empty, "id", string.Empty);
+            PutAll(row, "irowno", Convert.ToString(lineNo, CultureInfo.InvariantCulture));
+            PutAll(row, "cinvcode", code, "iquantity", Convert.ToDouble(quantity));
+            PutAll(row, "cinvname", name, "cinvm_unit", unit, "editprop", "A");
             return row;
+        }
+
+        public static object DateValue(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return null;
+            }
+
+            DateTime parsed;
+            if (DateTime.TryParse(
+                value,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.AssumeLocal,
+                out parsed))
+            {
+                return parsed;
+            }
+
+            return DateTime.TryParse(value, out parsed) ? parsed : (object)value;
         }
 
         public static void Put(U8BoObject bo, params object[] items)

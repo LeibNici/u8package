@@ -445,6 +445,7 @@ POST /api/u8/consignment/save
 用途：如果客户 U8 流程要求先生成销售发货单，则 WMS 发货前或发货时调用此接口。
 
 请求字段与销售出库相近，但 U8 字段映射不同，详见 `u8-bridge-field-mapping.md`。是否首期启用需业务确认。
+`departmentName`、`salesTypeName`、`currency`、`exchangeRate`、`taxRate` 为兼容新增字段；不传时 Bridge 默认按人民币、汇率 1、税率 13 生成官方发货单表头，避免 U8 汇率业务校验失败。
 
 ### 8.7 销售发货单审核
 

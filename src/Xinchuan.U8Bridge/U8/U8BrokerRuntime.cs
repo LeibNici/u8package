@@ -125,6 +125,7 @@ namespace Xinchuan.U8Bridge.U8
                 }
 
                 string u8Id = U8BrokerResultReader.ReadId(broker, reflection, brokerCall);
+                string rawMessage = string.IsNullOrWhiteSpace(message) ? null : message;
                 if (brokerCall.DataReader != null)
                 {
                     return BridgeResponse.OkData(
@@ -132,10 +133,16 @@ namespace Xinchuan.U8Bridge.U8
                         "U8 API 调用成功",
                         brokerCall.DataReader(broker, reflection),
                         u8Id ?? call.BusinessNo,
-                        call.BusinessNo);
+                        call.BusinessNo,
+                        rawMessage);
                 }
 
-                return BridgeResponse.Ok(requestId, "U8 API 调用成功", u8Id ?? call.BusinessNo, call.BusinessNo);
+                return BridgeResponse.Ok(
+                    requestId,
+                    "U8 API 调用成功",
+                    u8Id ?? call.BusinessNo,
+                    call.BusinessNo,
+                    rawMessage);
             }
         }
 

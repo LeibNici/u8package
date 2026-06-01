@@ -106,7 +106,12 @@
 | `customerCode` | `domHead[0]["ccuscode"]` | 客户编码 |
 | `customerName` | `domHead[0]["ccusname"]` / `ccusabbname` | 客户名称 / 简称 |
 | `departmentCode` | `domHead[0]["cdepcode"]` | 部门编码 |
+| `departmentName` | `domHead[0]["cdepname"]` | 部门名称；不传时回退部门编码 |
 | `salesTypeCode` | `domHead[0]["cstcode"]` | 销售类型编码 |
+| `salesTypeName` | `domHead[0]["cstname"]` | 销售类型名称；不传时回退销售类型编码 |
+| `currency` | `domHead[0]["cexch_name"]` | 币种；不传默认人民币 |
+| `exchangeRate` | `domHead[0]["iexchrate"]` | 汇率；不传或小于等于 0 时传 1 |
+| `taxRate` | `domHead[0]["itaxrate"]` | 税率；不传默认 13 |
 | `maker` | `domHead[0]["cmaker"]` | 制单人 |
 
 ### 6.2 表体建议映射
@@ -156,6 +161,7 @@
 | `memo` | `DomHead[0]["cmemo"]` | 否 | 备注 |
 | - | `DomHead[0]["cvouchtype"]` | 是 | 单据类型 |
 | - | `DomHead[0]["brdflag"]` | 是 | 收发标志，取值待确认 |
+| - | `DomHead[0]["id"]` | 是 | 新增按官方示例传空字符串，不传数字 0 |
 
 ### 7.3 表体映射
 
@@ -166,6 +172,7 @@
 | `items[].quantity` | `domBody[i]["iquantity"]` | 是 | 数量 |
 | `items[].unit` | `domBody[i]["cinvm_unit"]` | 是 | 主计量单位 |
 | `items[].memo` | `domBody[i]["cbmemo"]` | 否 | 行备注 |
+| - | `domBody[i]["autoid"]` / `id` | 是 | 新增按官方示例传空字符串 |
 | - | `domBody[i]["editprop"]` | 是 | 新增传 `A` |
 
 ## 8. 销售出库单审核
@@ -204,6 +211,7 @@
 | `sourceNo` | `DomHead[0]["cmpocode"]` | 待确认 | 生产订单号或业务号，需 U8 顾问确认 |
 | `productCode` | `DomHead[0]["cpspcode"]` | 待确认 | 产品编码 |
 | `memo` | `DomHead[0]["cmemo"]` | 否 | 备注 |
+| - | `DomHead[0]["id"]` | 是 | 新增按官方示例传空字符串，不传数字 0 |
 
 ### 9.3 表体映射
 
@@ -215,6 +223,7 @@
 | `items[].batchNo` | `domBody[i]["cBatch"]` 或批次相关字段 | 待确认 | 需按 U8 字段实际名称确认 |
 | `items[].workOrderNo` | `domBody[i]["csourcemocode"]` | 待确认 | 源生产订单号 |
 | `items[].sourceDetailId` | `domBody[i]["isourcemodetailsid"]` | 待确认 | 源订单子表标识 |
+| - | `domBody[i]["autoid"]` / `id` | 是 | 新增按官方示例传空字符串 |
 | - | `domBody[i]["editprop"]` | 是 | 新增传 `A` |
 
 ## 10. 领料申请单新增
