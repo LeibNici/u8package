@@ -130,6 +130,14 @@ def assert_openapi_strong_typed_schema_contract():
         if expected not in consignment:
             fail("OpenAPI ConsignmentSaveRequest is missing: " + expected)
 
+    outbound_item = schema_block(openapi, "OutboundItem", "MaterialOutItem")
+    if "unitCode:" not in outbound_item:
+        fail("OpenAPI OutboundItem must document unitCode.")
+
+    material_out_item = schema_block(openapi, "MaterialOutItem", "MaterialAppItem")
+    if "unitCode:" not in material_out_item:
+        fail("OpenAPI MaterialOutItem must document unitCode.")
+
 
 def schema_block(openapi, name, next_name):
     start_marker = "    " + name + ":"

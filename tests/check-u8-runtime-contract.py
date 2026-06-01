@@ -121,6 +121,8 @@ def assert_official_expanded_mapper_contract():
         '"autoid", string.Empty, "id", string.Empty',
         'Convert.ToString(lineNo, CultureInfo.InvariantCulture)',
         "Convert.ToDouble(quantity)",
+        '"iinvexchrate", 1d, "cunitid", resolvedUnitCode',
+        '"cassunit", resolvedUnitCode, "cinva_unit", unit',
     ]:
         if snippet not in builder:
             fail("stock body row must preserve official add-field shapes: " + snippet)

@@ -43,13 +43,17 @@ namespace Xinchuan.U8Bridge.U8
             string code,
             string name,
             decimal quantity,
-            string unit)
+            string unit,
+            string unitCode = null)
         {
             var row = new Dictionary<string, object>();
+            string resolvedUnitCode = Any(unitCode, UnitCodeFromName(unit));
             PutAll(row, "autoid", string.Empty, "id", string.Empty);
             PutAll(row, "irowno", Convert.ToString(lineNo, CultureInfo.InvariantCulture));
             PutAll(row, "cinvcode", code, "iquantity", Convert.ToDouble(quantity));
             PutAll(row, "cinvname", name, "cinvm_unit", unit, "editprop", "A");
+            PutAll(row, "iinvexchrate", 1d, "cunitid", resolvedUnitCode);
+            PutAll(row, "cassunit", resolvedUnitCode, "cinva_unit", unit);
             return row;
         }
 
@@ -110,6 +114,21 @@ namespace Xinchuan.U8Bridge.U8
             }
 
             return string.Empty;
+        }
+
+        private static string UnitCodeFromName(string unit)
+        {
+            switch (unit)
+            {
+                case "件":
+                    return "02";
+                case "台":
+                    return "04";
+                case "套":
+                    return "28";
+                default:
+                    return string.Empty;
+            }
         }
     }
 }

@@ -217,6 +217,7 @@ namespace Xinchuan.U8Bridge.Models
         public string MaterialName { get; set; }
         public decimal Quantity { get; set; }
         public string Unit { get; set; }
+        public string UnitCode { get; set; }
         public string BatchNo { get; set; }
         public string SourceOrderNo { get; set; }
         public int? SourceLineNo { get; set; }
@@ -230,6 +231,7 @@ namespace Xinchuan.U8Bridge.Models
         public string MaterialName { get; set; }
         public decimal Quantity { get; set; }
         public string Unit { get; set; }
+        public string UnitCode { get; set; }
         public string BatchNo { get; set; }
         public string WorkOrderNo { get; set; }
         public string SourceDetailId { get; set; }

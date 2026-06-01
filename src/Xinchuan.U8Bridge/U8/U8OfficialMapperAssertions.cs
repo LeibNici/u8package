@@ -182,6 +182,10 @@ namespace Xinchuan.U8Bridge.U8
             AssertValue("domBody.id", body["id"], string.Empty);
             AssertValue("domBody.irowno", body["irowno"], "1");
             AssertValue("domBody.iquantity type", body["iquantity"].GetType(), typeof(double));
+            AssertValue("domBody.iinvexchrate", body["iinvexchrate"], 1d);
+            AssertValue("domBody.cunitid", body["cunitid"], string.Empty);
+            AssertValue("domBody.cassunit", body["cassunit"], string.Empty);
+            AssertValue("domBody.cinva_unit", body["cinva_unit"], "pcs");
             AssertValue("domBody.editprop", body["editprop"], "A");
         }
 

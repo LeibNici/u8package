@@ -233,7 +233,13 @@ namespace Xinchuan.U8Bridge.U8
             var body = new U8BoObject(name);
             foreach (OutboundItem item in items)
             {
-                var row = NewBodyRow(item.LineNo, item.MaterialCode, item.MaterialName, item.Quantity, item.Unit);
+                var row = NewBodyRow(
+                    item.LineNo,
+                    item.MaterialCode,
+                    item.MaterialName,
+                    item.Quantity,
+                    item.Unit,
+                    item.UnitCode);
                 Put(row, "cbatch", item.BatchNo, "csocode", item.SourceOrderNo, "isosid", item.SourceLineNo);
                 body.Rows.Add(row);
             }
@@ -246,7 +252,13 @@ namespace Xinchuan.U8Bridge.U8
             var body = new U8BoObject("domBody");
             foreach (MaterialOutItem item in items)
             {
-                var row = NewBodyRow(item.LineNo, item.MaterialCode, item.MaterialName, item.Quantity, item.Unit);
+                var row = NewBodyRow(
+                    item.LineNo,
+                    item.MaterialCode,
+                    item.MaterialName,
+                    item.Quantity,
+                    item.Unit,
+                    item.UnitCode);
                 Put(row, "cbatch", item.BatchNo, "cmocode", item.WorkOrderNo, "imoseq", item.SourceDetailId);
                 body.Rows.Add(row);
             }
