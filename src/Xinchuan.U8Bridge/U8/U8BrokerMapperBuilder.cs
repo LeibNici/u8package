@@ -38,7 +38,29 @@ namespace Xinchuan.U8Bridge.U8
             return bo;
         }
 
-        public static IDictionary<string, object> NewBodyRow(
+        public static IDictionary<string, object> NewDispatchBodyRow(
+            int lineNo,
+            string code,
+            string name,
+            decimal quantity,
+            string unit,
+            string unitCode = null,
+            string unitGroupCode = null)
+        {
+            var row = new Dictionary<string, object>();
+            string resolvedUnitCode = Any(unitCode, UnitCodeFromName(unit));
+            PutAll(row, "idlsid", string.Empty, "cinvcode", code);
+            PutAll(row, "cinvname", name, "iquantity", Convert.ToDouble(quantity));
+            PutAll(row, "editprop", "A", "irowno", Convert.ToString(lineNo, CultureInfo.InvariantCulture));
+            PutAll(row, "cunitid", resolvedUnitCode, "cinva_unit", unit, "cinvm_unit", unit);
+            PutAll(row, "cgroupcode", Any(unitGroupCode, "1"), "igrouptype", 0);
+            PutAll(row, "fstockquano", string.Empty, "fcanusequano", string.Empty);
+            PutAll(row, "bneedsign", string.Empty, "bsignover", string.Empty);
+            PutAll(row, "bneedloss", string.Empty, "flossrate", string.Empty);
+            return row;
+        }
+
+        public static IDictionary<string, object> NewStockBodyRow(
             int lineNo,
             string code,
             string name,
@@ -52,8 +74,10 @@ namespace Xinchuan.U8Bridge.U8
             PutAll(row, "irowno", Convert.ToString(lineNo, CultureInfo.InvariantCulture));
             PutAll(row, "cinvcode", code, "iquantity", Convert.ToDouble(quantity));
             PutAll(row, "cinvname", name, "cinvm_unit", unit, "editprop", "A");
-            PutAll(row, "iinvexchrate", 1d, "cunitid", resolvedUnitCode);
+            PutAll(row, "iinvexchrate", 1d);
             PutAll(row, "cassunit", resolvedUnitCode, "cinva_unit", unit);
+            PutAll(row, "cbsysbarcode", string.Empty, "iavaquantity", string.Empty);
+            PutAll(row, "iavanum", string.Empty, "ipresent", string.Empty);
             return row;
         }
 

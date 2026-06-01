@@ -118,14 +118,19 @@ def assert_official_expanded_mapper_contract():
 
     builder = read(ROOT / "src" / "Xinchuan.U8Bridge" / "U8" / "U8BrokerMapperBuilder.cs")
     for snippet in [
+        '"idlsid", string.Empty, "cinvcode", code',
+        '"cgroupcode", Any(unitGroupCode, "1"), "igrouptype", 0',
         '"autoid", string.Empty, "id", string.Empty',
         'Convert.ToString(lineNo, CultureInfo.InvariantCulture)',
         "Convert.ToDouble(quantity)",
-        '"iinvexchrate", 1d, "cunitid", resolvedUnitCode',
+        '"iinvexchrate", 1d',
         '"cassunit", resolvedUnitCode, "cinva_unit", unit',
     ]:
         if snippet not in builder:
             fail("stock body row must preserve official add-field shapes: " + snippet)
+
+    if '"iinvexchrate", 1d, "cunitid", resolvedUnitCode' in builder:
+        fail("stock body row must not write dispatch-only cunitid.")
 
 
 def csproj_compile_includes():

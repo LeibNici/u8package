@@ -10690,6 +10690,8 @@ components:
           type: string
         unitCode:
           type: string
+        unitGroupCode:
+          type: string
         batchNo:
           type: string
         sourceOrderNo:
@@ -10732,6 +10734,8 @@ components:
         materialName:
           type: string
         unit:
+          type: string
+        unitCode:
           type: string
         batchNo:
           type: string

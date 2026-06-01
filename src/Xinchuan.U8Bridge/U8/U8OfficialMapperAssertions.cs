@@ -81,7 +81,8 @@ namespace Xinchuan.U8Bridge.U8
                         MaterialCode = "M001",
                         MaterialName = "MaterialA",
                         Quantity = 2,
-                        Unit = "pcs"
+                        Unit = "pcs",
+                        UnitCode = "02"
                     }
                 }
             };
@@ -110,6 +111,7 @@ namespace Xinchuan.U8Bridge.U8
                         MaterialName = "MaterialA",
                         Quantity = 2,
                         Unit = "pcs",
+                        UnitCode = "02",
                         DueDate = "2026-06-02"
                     }
                 }
@@ -147,7 +149,8 @@ namespace Xinchuan.U8Bridge.U8
                     MaterialCode = "M001",
                     MaterialName = "MaterialA",
                     Quantity = 2,
-                    Unit = "pcs"
+                    Unit = "pcs",
+                    UnitCode = "02"
                 }
             };
         }
@@ -163,6 +166,14 @@ namespace Xinchuan.U8Bridge.U8
             AssertValue("domHead.iexchrate", head["iexchrate"], 1m);
             AssertValue("domHead.itaxrate", head["itaxrate"], 13m);
             AssertValue("domHead.breturnflag", head["breturnflag"], "0");
+            IDictionary<string, object> body = FindFirstRow(call, "domBody");
+            AssertValue("domBody.idlsid", body["idlsid"], string.Empty);
+            AssertValue("domBody.irowno", body["irowno"], "1");
+            AssertValue("domBody.iquantity type", body["iquantity"].GetType(), typeof(double));
+            AssertValue("domBody.cunitid", body["cunitid"], "02");
+            AssertValue("domBody.cgroupcode", body["cgroupcode"], "1");
+            AssertValue("domBody.igrouptype", body["igrouptype"], 0);
+            AssertValue("domBody.editprop", body["editprop"], "A");
         }
 
         private static void AssertStockAddShape(U8BrokerCall call, string vouchType)
@@ -183,10 +194,13 @@ namespace Xinchuan.U8Bridge.U8
             AssertValue("domBody.irowno", body["irowno"], "1");
             AssertValue("domBody.iquantity type", body["iquantity"].GetType(), typeof(double));
             AssertValue("domBody.iinvexchrate", body["iinvexchrate"], 1d);
-            AssertValue("domBody.cunitid", body["cunitid"], string.Empty);
-            AssertValue("domBody.cassunit", body["cassunit"], string.Empty);
+            AssertValue("domBody.cassunit", body["cassunit"], "02");
             AssertValue("domBody.cinva_unit", body["cinva_unit"], "pcs");
             AssertValue("domBody.editprop", body["editprop"], "A");
+            if (body.ContainsKey("cunitid"))
+            {
+                throw new InvalidOperationException("stock add body must not include dispatch cunitid.");
+            }
         }
 
         private static void AssertMaterialAppShape()
@@ -199,6 +213,8 @@ namespace Xinchuan.U8Bridge.U8
             AssertValue("domBody.autoid", body["autoid"], string.Empty);
             AssertValue("domBody.irowno", body["irowno"], "1");
             AssertValue("domBody.iquantity type", body["iquantity"].GetType(), typeof(double));
+            AssertValue("domBody.cassunit", body["cassunit"], "02");
+            AssertValue("domBody.iinvexchrate", body["iinvexchrate"], 1d);
             if (body.ContainsKey("id") || body.ContainsKey("editprop"))
             {
                 throw new InvalidOperationException("materialapp/Add must not inherit stock id/editprop body fields.");

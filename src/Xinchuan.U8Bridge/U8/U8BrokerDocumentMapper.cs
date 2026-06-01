@@ -116,10 +116,10 @@ namespace Xinchuan.U8Bridge.U8
             PutAll(head.Rows[0], "cdepname", Any(request.DepartmentName, request.DepartmentCode));
             PutAll(head.Rows[0], "cexch_name", Any(request.Currency, "人民币"));
             PutAll(head.Rows[0], "iexchrate", request.ExchangeRate <= 0 ? 1 : request.ExchangeRate);
-            PutAll(head.Rows[0], "itaxrate", request.TaxRate);
+            PutAll(head.Rows[0], "itaxrate", request.TaxRate, "ivtid", 71);
             PutAll(head.Rows[0], "cmaker", request.Maker, "csocode", request.OrderNo);
             PutAll(head.Rows[0], "breturnflag", "0", "cmemo", request.Memo);
-            MapOutboundItems(call, request.Items, "domBody");
+            MapConsignmentItems(call, request.Items);
             call.BusinessObjects.Add(head);
             return call;
         }
@@ -136,8 +136,8 @@ namespace Xinchuan.U8Bridge.U8
             PutAll(head.Rows[0], "ccusabbname", Any(request.CustomerName, request.CustomerCode));
             PutAll(head.Rows[0], "cdepcode", request.DepartmentCode, "crdcode", request.RdCode);
             PutAll(head.Rows[0], "cmaker", request.Maker, "cvouchtype", "32");
-            PutAll(head.Rows[0], "brdflag", 0, "csource", 1, "cmemo", request.Memo);
-            MapOutboundItems(call, request.Items, "domBody");
+            PutAll(head.Rows[0], "brdflag", 0, "csource", "发货单", "cmemo", request.Memo);
+            MapSaleOutItems(call, request.Items);
             call.BusinessObjects.Add(head);
             return call;
         }
@@ -152,7 +152,8 @@ namespace Xinchuan.U8Bridge.U8
             PutAll(head.Rows[0], "crdcode", request.RdCode, "crdname", request.RdName);
             PutAll(head.Rows[0], "cdepcode", request.DepartmentCode, "cdepname", request.DepartmentName);
             PutAll(head.Rows[0], "cmaker", request.Maker, "cvouchtype", "11");
-            PutAll(head.Rows[0], "brdflag", "0", "cmemo", request.Memo);
+            PutAll(head.Rows[0], "brdflag", "0", "csource", "库存", "cbustype", "领料");
+            PutAll(head.Rows[0], "cmemo", request.Memo);
             MapMaterialItems(call, request.Items);
             call.BusinessObjects.Add(head);
             return call;
@@ -228,19 +229,40 @@ namespace Xinchuan.U8Bridge.U8
             return row;
         }
 
-        private static void MapOutboundItems(U8BrokerCall call, IList<OutboundItem> items, string name)
+        private static void MapConsignmentItems(U8BrokerCall call, IList<OutboundItem> items)
         {
-            var body = new U8BoObject(name);
+            var body = new U8BoObject("domBody");
             foreach (OutboundItem item in items)
             {
-                var row = NewBodyRow(
+                var row = NewDispatchBodyRow(
+                    item.LineNo,
+                    item.MaterialCode,
+                    item.MaterialName,
+                    item.Quantity,
+                    item.Unit,
+                    item.UnitCode,
+                    item.UnitGroupCode);
+                Put(row, "cbatch", item.BatchNo, "csocode", item.SourceOrderNo, "isosid", item.SourceLineNo);
+                body.Rows.Add(row);
+            }
+
+            call.BusinessObjects.Add(body);
+        }
+
+        private static void MapSaleOutItems(U8BrokerCall call, IList<OutboundItem> items)
+        {
+            var body = new U8BoObject("domBody");
+            foreach (OutboundItem item in items)
+            {
+                var row = NewStockBodyRow(
                     item.LineNo,
                     item.MaterialCode,
                     item.MaterialName,
                     item.Quantity,
                     item.Unit,
                     item.UnitCode);
-                Put(row, "cbatch", item.BatchNo, "csocode", item.SourceOrderNo, "isosid", item.SourceLineNo);
+                Put(row, "cbatch", item.BatchNo, "cbdlcode", item.SourceOrderNo);
+                Put(row, "idlsid", item.SourceLineNo, "isodid", item.SourceLineNo);
                 body.Rows.Add(row);
             }
 
@@ -252,14 +274,15 @@ namespace Xinchuan.U8Bridge.U8
             var body = new U8BoObject("domBody");
             foreach (MaterialOutItem item in items)
             {
-                var row = NewBodyRow(
+                var row = NewStockBodyRow(
                     item.LineNo,
                     item.MaterialCode,
                     item.MaterialName,
                     item.Quantity,
                     item.Unit,
                     item.UnitCode);
-                Put(row, "cbatch", item.BatchNo, "cmocode", item.WorkOrderNo, "imoseq", item.SourceDetailId);
+                Put(row, "cbatch", item.BatchNo, "cmocode", item.WorkOrderNo);
+                Put(row, "csourcemocode", item.WorkOrderNo, "isourcemodetailsid", item.SourceDetailId);
                 body.Rows.Add(row);
             }
 

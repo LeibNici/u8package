@@ -157,6 +157,8 @@ namespace Xinchuan.U8Bridge.U8
                 Put(row, "cinvcode", item.MaterialCode);
                 Put(row, "irowno", Convert.ToString(item.LineNo, CultureInfo.InvariantCulture));
                 Put(row, "cinvname", item.MaterialName, "cinvm_unit", item.Unit);
+                Put(row, "cinva_unit", item.Unit, "cassunit", item.UnitCode);
+                Put(row, "iinvexchrate", 1d);
                 Put(row, "cbatch", item.BatchNo, "iquantity", Convert.ToDouble(item.Quantity));
                 Put(row, "dduedate", DateValue(item.DueDate));
                 body.Rows.Add(row);
